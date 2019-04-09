@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
-import PlayerCard from './PlayerCard'
+import React, {Component} from 'react';
+import {StyleSheet, View, Text} from 'react-native';
+import PlayerCard from '../PlayerCard/PlayerCard';
 
 
 // This class determines everything to do with the Question Card

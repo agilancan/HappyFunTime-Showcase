@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, View } from "react-native";
-import PlayerCard from "./PlayerCard";
+import PlayerCard from "../PlayerCard/PlayerCard";
 
 export default class LobbyGame extends Component {
     render() {

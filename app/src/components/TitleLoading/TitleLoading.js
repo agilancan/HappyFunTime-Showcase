@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Text } from "react-native";
-import PlayerCard from "./PlayerCard";
+import PlayerCard from "../PlayerCard/PlayerCard";
 
 export default class TitleLoading extends Component {
     render() {

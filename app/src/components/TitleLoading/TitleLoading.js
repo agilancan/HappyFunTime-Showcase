@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Text } from "react-native";
 import PlayerCard from "./PlayerCard";
 
-export default class LobbyGame extends Component {
+export default class TitleLoading extends Component {
     render() {
         return (
             <View style={styles.container}>
@@ -42,6 +42,7 @@ export default class LobbyGame extends Component {
                     <PlayerCard transform={[{ rotate: '3deg' }]} />
                     <PlayerCard borderColor={'#B2DF6D'} backgroundColor={'#B2DF6D'} />
                 </View>
+                <Text style={styles.titleText}>Happy{'\n'}Fun{'\n'}Time</Text>
             </View>
         );
     }
@@ -65,6 +66,19 @@ const styles = StyleSheet.create({
         backgroundColor: "#FFFFFF",
         margin: '0%',
         padding: '0%',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        position: 'relative',
+    },
+    titleText: {
+        color: 'rgba(0, 0, 0, 0.87)',
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        fontFamily: 'Zhang QA',
+        fontSize: 145,
+        fontWeight: 'normal',
+        textAlign: 'right',
+        letterSpacing: 1,
+        position: 'absolute'
     }
 });

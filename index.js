@@ -5,8 +5,8 @@ import { Navigation } from "react-native-navigation";
 
 //const initialState = { firebase: {} };
 //const store = EvoPassStore(initialState);
-import Welcome from "./app/src/components/Welcome/Welcome";
-Navigation.registerComponent("Welcome", () => Welcome);
+import AgilanApp from "./app/src/components/AgilanApp/AgilanApp";
+Navigation.registerComponent("AgilanApp", () => AgilanApp);
 
 Navigation.events().registerAppLaunchedListener(() => {
   Navigation.setRoot({
@@ -15,7 +15,7 @@ Navigation.events().registerAppLaunchedListener(() => {
         children: [
           {
             component: {
-              name: "Welcome"
+              name: "AgilanApp"
             }
           }
         ]

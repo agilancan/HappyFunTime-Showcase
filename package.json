@@ -8,6 +8,7 @@
     "android": "cd ./android && ./gradlew app:assembleDebug && ./gradlew installDebug"
   },
   "dependencies": {
+    "@terrylinla/react-native-sketch-canvas": "^0.8.0",
     "firebase": "^5.9.3",
     "react": "16.6.0-alpha.8af6728",
     "react-native": "0.57.4",

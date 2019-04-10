@@ -1,12 +1,11 @@
-import React from 'react';
-import {View, Image, Dimensions, Text, Linking } from "react-native";
+import React from "react";
+import { View, Image, Dimensions, Text, Linking } from "react-native";
 import Lobby from "../Lobby/Lobby";
-//import QuestionCard from "../QuestionCard/QuestionCard";
+import QuestionCard from "../QuestionCard/QuestionCard";
 import AnswerCard from "../AnswerCard/AnswerCard";
 import AnswerCardPicked from "../AnswerCardPicked/AnswerCardPicked";
 import TitleLoading from "../TitleLoading/TitleLoading";
 import DrawCard from "../DrawCard/DrawCard";
-
 
 export default class Welcome extends React.Component {
   static options(passProps) {
@@ -27,14 +26,13 @@ export default class Welcome extends React.Component {
   }
 
   render() {
-        return (
-            //<Lobby />
-            //<QuestionCard />  
-            //<AnswerCard />  
-            //<AnswerCardPicked />  
-            <TitleLoading />  
-            //<DrawCard />
-        );
-    }
+    return (
+      //<Lobby />
+      <QuestionCard />
+      //<AnswerCard />
+      //<AnswerCardPicked />
+      //<TitleLoading />
+      //<DrawCard />
+    );
+  }
 }
-

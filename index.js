@@ -8,9 +8,6 @@ const initialState = { firebase: {} };
 const store = AppStore(initialState);
 AppScreens(store, Provider);
 
-//import AgilanApp from "./app/src/components/AgilanApp/AgilanApp";
-//import Welcome from "./app/src/components/Welcome/Welcome";
-
 export default function App() {
   Navigation.setRoot({
     root: {
@@ -18,7 +15,7 @@ export default function App() {
         children: [
           {
             component: {
-              name: "Welcome"
+              name: "AgilanApp"
             }
           }
         ]

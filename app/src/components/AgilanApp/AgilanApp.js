@@ -2,6 +2,7 @@ import React from "react";
 import { View, Image, Dimensions, Text, Linking } from "react-native";
 import Lobby from "../Lobby/Lobby";
 import QuestionCard from "../QuestionCard/QuestionCard";
+import MainMenu from "../MainMenu/MainMenu";
 import AnswerCard from "../AnswerCard/AnswerCard";
 import AnswerCardPicked from "../AnswerCardPicked/AnswerCardPicked";
 import TitleLoading from "../TitleLoading/TitleLoading";
@@ -28,11 +29,12 @@ export default class Welcome extends React.Component {
   render() {
     return (
       //<Lobby />
-      <QuestionCard />
+      //<QuestionCard />
       //<AnswerCard />
       //<AnswerCardPicked />
       //<TitleLoading />
       //<DrawCard />
+      <MainMenu />
     );
   }
 }

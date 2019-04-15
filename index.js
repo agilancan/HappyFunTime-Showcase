@@ -8,7 +8,7 @@ import { Navigation } from "react-native-navigation";
 import AgilanApp from "./app/src/components/AgilanApp/AgilanApp";
 import Welcome from "./app/src/components/Welcome/Welcome";
 
-Navigation.registerComponent("Welcome", () => Welcome);
+Navigation.registerComponent("AgilanApp", () => AgilanApp);
 
 Navigation.events().registerAppLaunchedListener(() => {
   Navigation.setRoot({
@@ -17,7 +17,7 @@ Navigation.events().registerAppLaunchedListener(() => {
         children: [
           {
             component: {
-              name: "Welcome"
+              name: "AgilanApp"
             }
           }
         ]

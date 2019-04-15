@@ -26,7 +26,7 @@ export default class Welcome extends React.Component {
         <View style={{ flex: 1, flexDirection: "row" }}>
           <SketchCanvas
             style={{ flex: 1 }}
-            strokeColor={"red"}
+            strokeColor={"black"}
             strokeWidth={7}
           />
         </View>

@@ -1,16 +1,17 @@
-// import { Provider } from "react-redux";
+import { Provider } from "react-redux";
 import { Navigation } from "react-native-navigation";
-//import AppScreens from "./App/src/navigation/AppScreens";
+import AppScreens from "./app/src/navigation/AppScreens";
+import AppStore from "./app/src/redux/store/AppStore";
 //import EvoPassStore from "./app/src/redux/store/EvoPassStore";
 
-//const initialState = { firebase: {} };
-//const store = EvoPassStore(initialState);
-import AgilanApp from "./app/src/components/AgilanApp/AgilanApp";
-import Welcome from "./app/src/components/Welcome/Welcome";
+const initialState = { firebase: {} };
+const store = AppStore(initialState);
+AppScreens(store, Provider);
 
-Navigation.registerComponent("Welcome", () => Welcome);
+//import AgilanApp from "./app/src/components/AgilanApp/AgilanApp";
+//import Welcome from "./app/src/components/Welcome/Welcome";
 
-Navigation.events().registerAppLaunchedListener(() => {
+export default function App() {
   Navigation.setRoot({
     root: {
       stack: {
@@ -24,4 +25,6 @@ Navigation.events().registerAppLaunchedListener(() => {
       }
     }
   });
-});
+}
+
+App();

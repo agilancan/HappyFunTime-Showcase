@@ -1,4 +1,4 @@
-package com.happyfuntimes;
+package com.doohickey.happyfuntimes;
 
 import android.app.Application;
 
@@ -8,6 +8,11 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
+
+import io.invertase.firebase.RNFirebasePackage;
+import io.invertase.firebase.storage.RNFirebaseStoragePackage; // Firebase Storage
+import io.invertase.firebase.firestore.RNFirebaseFirestorePackage;
+import io.invertase.firebase.auth.RNFirebaseAuthPackage;
 
 import com.reactnativenavigation.NavigationApplication;
 import com.reactnativenavigation.react.NavigationReactNativeHost;
@@ -40,7 +45,11 @@ public class MainApplication extends NavigationApplication implements ReactAppli
 
   protected List<ReactPackage> getPackages() {
         return Arrays.<ReactPackage>asList(
-            new SketchCanvasPackage()
+            new SketchCanvasPackage(),
+            new RNFirebasePackage(),
+            new RNFirebaseAuthPackage(),
+            new RNFirebaseStoragePackage(),
+            new RNFirebaseFirestorePackage()
                 /*new SvgPackage(),
                 new MainReactPackage(),
             new SketchCanvasPackage(),
@@ -52,16 +61,7 @@ public class MainApplication extends NavigationApplication implements ReactAppli
                 new StripeReactPackage(),
                 new FBSDKPackage(mCallbackManager),
                 new RNGoogleSigninPackage(),
-                new RNFirebasePackage(),
-                new RNFirebaseAnalyticsPackage(),
-                new RNFirebaseAuthPackage(),
-                new RNFirebaseRemoteConfigPackage(),
-                new RNFirebaseDatabasePackage(),
-                new RNFirebaseMessagingPackage(),
-                new RNFirebaseNotificationsPackage(),
-                new RNFirebasePerformancePackage(),
-                new RNFirebaseStoragePackage(),
-                new RNFirebaseFirestorePackage(),
+                
                 new VectorIconsPackage(),
                 new RNCameraPackage()*/
         );

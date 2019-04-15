@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "244044054509",
+    "firebase_url": "https://happyfuntimes-28813.firebaseio.com",
+    "project_id": "happyfuntimes-28813",
+    "storage_bucket": "happyfuntimes-28813.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:244044054509:android:a272ac5f33e6ea66",
+        "android_client_info": {
+          "package_name": "com.doohickey.happyfuntimes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "244044054509-t51ol2lnvb5f3hd7hhr1ifvi4obj439m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvawmt4rKq2ahA5azoN2m29HzrRwENdqg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "244044054509-t51ol2lnvb5f3hd7hhr1ifvi4obj439m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

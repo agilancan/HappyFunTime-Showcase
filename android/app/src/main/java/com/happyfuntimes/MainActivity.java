@@ -1,4 +1,4 @@
-package com.happyfuntimes;
+package com.doohickey.happyfuntimes;
 import android.content.Intent;
 import com.reactnativenavigation.NavigationActivity;
 

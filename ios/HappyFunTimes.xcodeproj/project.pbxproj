@@ -38,6 +38,22 @@
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
 		AFF21367A94F4382A7F8677A /* libRNSketchCanvas.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0450D2361D3B424A8CCDB5F2 /* libRNSketchCanvas.a */; };
+		19DC53DEEC5441749478F10A /* libRNFirebase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B12098244D64A998185C4A5 /* libRNFirebase.a */; };
+		49AFB882CA0E4792AAEECCC5 /* libReactNativeNavigation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BF12E7FFC7B34FD4860A2602 /* libReactNativeNavigation.a */; };
+		87F91E26DCA04ED09DC46D19 /* ReactNativeNavigationTests.xctest in Resources */ = {isa = PBXBuildFile; fileRef = CED9EF0A8C434A47BA846150 /* ReactNativeNavigationTests.xctest */; };
+		9966E8E2BBD1457E8FCAF4C8 /* Roboto-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 789EF8080A3D4166B5AF590C /* Roboto-Black.ttf */; };
+		7EA6DFFE1797487E9E096BB6 /* Roboto-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3ABC1600C68C4BDEB0207BC3 /* Roboto-BlackItalic.ttf */; };
+		30473B5154C442A8957424E4 /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BFA7FBD86D9E4A169A95A1E3 /* Roboto-Bold.ttf */; };
+		85DA4F0CB00148EFAD1CF365 /* Roboto-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9B1236BD1A904903AE6E90AF /* Roboto-BoldItalic.ttf */; };
+		960BB85081024CED85D4EFD0 /* Roboto-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 143B92050E6F4BAD9EB82E32 /* Roboto-Italic.ttf */; };
+		4AB9B209F1F24DBBB83E44C8 /* Roboto-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5300314ABFA1428E810A7368 /* Roboto-Light.ttf */; };
+		047DD112440A4D6286966A02 /* Roboto-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E3C482E7E70A43FF9C607838 /* Roboto-LightItalic.ttf */; };
+		D38C3E451D3342ADB21B3DBA /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 95982F437D1B443FBFBA2075 /* Roboto-Medium.ttf */; };
+		CB597C0033CF443D90CCB881 /* Roboto-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A13618AFD78F4CD1BD40EB83 /* Roboto-MediumItalic.ttf */; };
+		17BC53DDF3DA449E83DA7FD2 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B178E781A4484F12B5A44DB2 /* Roboto-Regular.ttf */; };
+		14165CE89BAB421493B3B1A8 /* Roboto-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AD0FFE38D4DB40B4B52BD832 /* Roboto-Thin.ttf */; };
+		6319B1D40BB643068196AEC2 /* Roboto-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 00646FE59B0B42FE83159E10 /* Roboto-ThinItalic.ttf */; };
+		DB5B8E534DF146A8A41F8890 /* ZHANGQA_.TTF in Resources */ = {isa = PBXBuildFile; fileRef = E1B3BC4860CB4601A652AC80 /* ZHANGQA_.TTF */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -345,6 +361,24 @@
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
 		7E152024BF614F688364A9D9 /* RNSketchCanvas.xcodeproj */ = {isa = PBXFileReference; name = "RNSketchCanvas.xcodeproj"; path = "../node_modules/@terrylinla/react-native-sketch-canvas/ios/RNSketchCanvas/RNSketchCanvas.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		0450D2361D3B424A8CCDB5F2 /* libRNSketchCanvas.a */ = {isa = PBXFileReference; name = "libRNSketchCanvas.a"; path = "libRNSketchCanvas.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		5895B772B67E418683BF30B9 /* RNFirebase.xcodeproj */ = {isa = PBXFileReference; name = "RNFirebase.xcodeproj"; path = "../node_modules/react-native-firebase/ios/RNFirebase.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		1B12098244D64A998185C4A5 /* libRNFirebase.a */ = {isa = PBXFileReference; name = "libRNFirebase.a"; path = "libRNFirebase.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		FF312B34015547A6B7AFAE28 /* ReactNativeNavigation.xcodeproj */ = {isa = PBXFileReference; name = "ReactNativeNavigation.xcodeproj"; path = "../node_modules/react-native-navigation/lib/ios/ReactNativeNavigation.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		BF12E7FFC7B34FD4860A2602 /* libReactNativeNavigation.a */ = {isa = PBXFileReference; name = "libReactNativeNavigation.a"; path = "libReactNativeNavigation.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		CED9EF0A8C434A47BA846150 /* ReactNativeNavigationTests.xctest */ = {isa = PBXFileReference; name = "ReactNativeNavigationTests.xctest"; path = "ReactNativeNavigationTests.xctest"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.cfbundle; explicitFileType = undefined; includeInIndex = 0; };
+		789EF8080A3D4166B5AF590C /* Roboto-Black.ttf */ = {isa = PBXFileReference; name = "Roboto-Black.ttf"; path = "../app/assets/fonts/Roboto-Black.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		3ABC1600C68C4BDEB0207BC3 /* Roboto-BlackItalic.ttf */ = {isa = PBXFileReference; name = "Roboto-BlackItalic.ttf"; path = "../app/assets/fonts/Roboto-BlackItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		BFA7FBD86D9E4A169A95A1E3 /* Roboto-Bold.ttf */ = {isa = PBXFileReference; name = "Roboto-Bold.ttf"; path = "../app/assets/fonts/Roboto-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		9B1236BD1A904903AE6E90AF /* Roboto-BoldItalic.ttf */ = {isa = PBXFileReference; name = "Roboto-BoldItalic.ttf"; path = "../app/assets/fonts/Roboto-BoldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		143B92050E6F4BAD9EB82E32 /* Roboto-Italic.ttf */ = {isa = PBXFileReference; name = "Roboto-Italic.ttf"; path = "../app/assets/fonts/Roboto-Italic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		5300314ABFA1428E810A7368 /* Roboto-Light.ttf */ = {isa = PBXFileReference; name = "Roboto-Light.ttf"; path = "../app/assets/fonts/Roboto-Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		E3C482E7E70A43FF9C607838 /* Roboto-LightItalic.ttf */ = {isa = PBXFileReference; name = "Roboto-LightItalic.ttf"; path = "../app/assets/fonts/Roboto-LightItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		95982F437D1B443FBFBA2075 /* Roboto-Medium.ttf */ = {isa = PBXFileReference; name = "Roboto-Medium.ttf"; path = "../app/assets/fonts/Roboto-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		A13618AFD78F4CD1BD40EB83 /* Roboto-MediumItalic.ttf */ = {isa = PBXFileReference; name = "Roboto-MediumItalic.ttf"; path = "../app/assets/fonts/Roboto-MediumItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		B178E781A4484F12B5A44DB2 /* Roboto-Regular.ttf */ = {isa = PBXFileReference; name = "Roboto-Regular.ttf"; path = "../app/assets/fonts/Roboto-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		AD0FFE38D4DB40B4B52BD832 /* Roboto-Thin.ttf */ = {isa = PBXFileReference; name = "Roboto-Thin.ttf"; path = "../app/assets/fonts/Roboto-Thin.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		00646FE59B0B42FE83159E10 /* Roboto-ThinItalic.ttf */ = {isa = PBXFileReference; name = "Roboto-ThinItalic.ttf"; path = "../app/assets/fonts/Roboto-ThinItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		E1B3BC4860CB4601A652AC80 /* ZHANGQA_.TTF */ = {isa = PBXFileReference; name = "ZHANGQA_.TTF"; path = "../app/assets/fonts/ZHANGQA_.TTF"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -373,6 +407,9 @@
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
 				AFF21367A94F4382A7F8677A /* libRNSketchCanvas.a in Frameworks */,
+				19DC53DEEC5441749478F10A /* libRNFirebase.a in Frameworks */,
+				49AFB882CA0E4792AAEECCC5 /* libReactNativeNavigation.a in Frameworks */,
+				87F91E26DCA04ED09DC46D19 /* ReactNativeNavigationTests.xctest in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -560,6 +597,8 @@
 				00C302DF1ABCB9EE00DB3ED1 /* RCTVibration.xcodeproj */,
 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
 				7E152024BF614F688364A9D9 /* RNSketchCanvas.xcodeproj */,
+				5895B772B67E418683BF30B9 /* RNFirebase.xcodeproj */,
+				FF312B34015547A6B7AFAE28 /* ReactNativeNavigation.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -581,6 +620,7 @@
 				00E356EF1AD99517003FC87E /* HappyFunTimesTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
+				56EB1E02B26F431292483F35 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -606,6 +646,27 @@
 			);
 			name = Products;
 			sourceTree = "<group>";
+		};
+		56EB1E02B26F431292483F35 /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				789EF8080A3D4166B5AF590C /* Roboto-Black.ttf */,
+				3ABC1600C68C4BDEB0207BC3 /* Roboto-BlackItalic.ttf */,
+				BFA7FBD86D9E4A169A95A1E3 /* Roboto-Bold.ttf */,
+				9B1236BD1A904903AE6E90AF /* Roboto-BoldItalic.ttf */,
+				143B92050E6F4BAD9EB82E32 /* Roboto-Italic.ttf */,
+				5300314ABFA1428E810A7368 /* Roboto-Light.ttf */,
+				E3C482E7E70A43FF9C607838 /* Roboto-LightItalic.ttf */,
+				95982F437D1B443FBFBA2075 /* Roboto-Medium.ttf */,
+				A13618AFD78F4CD1BD40EB83 /* Roboto-MediumItalic.ttf */,
+				B178E781A4484F12B5A44DB2 /* Roboto-Regular.ttf */,
+				AD0FFE38D4DB40B4B52BD832 /* Roboto-Thin.ttf */,
+				00646FE59B0B42FE83159E10 /* Roboto-ThinItalic.ttf */,
+				E1B3BC4860CB4601A652AC80 /* ZHANGQA_.TTF */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -1053,6 +1114,19 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+				9966E8E2BBD1457E8FCAF4C8 /* Roboto-Black.ttf in Resources */,
+				7EA6DFFE1797487E9E096BB6 /* Roboto-BlackItalic.ttf in Resources */,
+				30473B5154C442A8957424E4 /* Roboto-Bold.ttf in Resources */,
+				85DA4F0CB00148EFAD1CF365 /* Roboto-BoldItalic.ttf in Resources */,
+				960BB85081024CED85D4EFD0 /* Roboto-Italic.ttf in Resources */,
+				4AB9B209F1F24DBBB83E44C8 /* Roboto-Light.ttf in Resources */,
+				047DD112440A4D6286966A02 /* Roboto-LightItalic.ttf in Resources */,
+				D38C3E451D3342ADB21B3DBA /* Roboto-Medium.ttf in Resources */,
+				CB597C0033CF443D90CCB881 /* Roboto-MediumItalic.ttf in Resources */,
+				17BC53DDF3DA449E83DA7FD2 /* Roboto-Regular.ttf in Resources */,
+				14165CE89BAB421493B3B1A8 /* Roboto-Thin.ttf in Resources */,
+				6319B1D40BB643068196AEC2 /* Roboto-ThinItalic.ttf in Resources */,
+				DB5B8E534DF146A8A41F8890 /* ZHANGQA_.TTF in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1188,10 +1262,15 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\@terrylinla\react-native-sketch-canvas\ios\RNSketchCanvas/**",
+					"$(SRCROOT)\..\node_modules\react-native-firebase\ios\RNFirebase/**",
+					"$(SRCROOT)\..\node_modules\react-native-navigation\lib\ios/**",
 				);
 			};
 			name = Debug;
@@ -1214,10 +1293,15 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\@terrylinla\react-native-sketch-canvas\ios\RNSketchCanvas/**",
+					"$(SRCROOT)\..\node_modules\react-native-firebase\ios\RNFirebase/**",
+					"$(SRCROOT)\..\node_modules\react-native-navigation\lib\ios/**",
 				);
 			};
 			name = Release;
@@ -1241,6 +1325,8 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\@terrylinla\react-native-sketch-canvas\ios\RNSketchCanvas/**",
+					"$(SRCROOT)\..\node_modules\react-native-firebase\ios\RNFirebase/**",
+					"$(SRCROOT)\..\node_modules\react-native-navigation\lib\ios/**",
 				);
 			};
 			name = Debug;
@@ -1263,6 +1349,8 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\@terrylinla\react-native-sketch-canvas\ios\RNSketchCanvas/**",
+					"$(SRCROOT)\..\node_modules\react-native-firebase\ios\RNFirebase/**",
+					"$(SRCROOT)\..\node_modules\react-native-navigation\lib\ios/**",
 				);
 			};
 			name = Release;
@@ -1293,10 +1381,15 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\@terrylinla\react-native-sketch-canvas\ios\RNSketchCanvas/**",
+					"$(SRCROOT)\..\node_modules\react-native-firebase\ios\RNFirebase/**",
+					"$(SRCROOT)\..\node_modules\react-native-navigation\lib\ios/**",
 				);
 			};
 			name = Debug;
@@ -1327,10 +1420,15 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\@terrylinla\react-native-sketch-canvas\ios\RNSketchCanvas/**",
+					"$(SRCROOT)\..\node_modules\react-native-firebase\ios\RNFirebase/**",
+					"$(SRCROOT)\..\node_modules\react-native-navigation\lib\ios/**",
 				);
 			};
 			name = Release;
@@ -1360,10 +1458,15 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\@terrylinla\react-native-sketch-canvas\ios\RNSketchCanvas/**",
+					"$(SRCROOT)\..\node_modules\react-native-firebase\ios\RNFirebase/**",
+					"$(SRCROOT)\..\node_modules\react-native-navigation\lib\ios/**",
 				);
 			};
 			name = Debug;
@@ -1393,10 +1496,15 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\@terrylinla\react-native-sketch-canvas\ios\RNSketchCanvas/**",
+					"$(SRCROOT)\..\node_modules\react-native-firebase\ios\RNFirebase/**",
+					"$(SRCROOT)\..\node_modules\react-native-navigation\lib\ios/**",
 				);
 			};
 			name = Release;

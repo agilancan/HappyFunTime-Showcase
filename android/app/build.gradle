@@ -155,6 +155,8 @@ configurations.all {
 }
 
 dependencies {
+    compile project(':react-native-firebase')
+    compile project(':@terrylinla_react-native-sketch-canvas')
     implementation project(':@terrylinla_react-native-sketch-canvas')
     implementation project(':react-native-firebase')
     implementation 'com.android.support:multidex:1.0.1'

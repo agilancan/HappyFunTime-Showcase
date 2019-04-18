@@ -7,6 +7,7 @@ import AnswerCard from "../AnswerCard/AnswerCard";
 import AnswerCardPicked from "../AnswerCardPicked/AnswerCardPicked";
 import TitleLoading from "../TitleLoading/TitleLoading";
 import DrawCard from "../DrawCard/DrawCard";
+import AccountName from "../AccountName/AccountName";
 
 export default class Welcome extends React.Component {
   static options(passProps) {
@@ -35,6 +36,7 @@ export default class Welcome extends React.Component {
       //<TitleLoading />
       //<DrawCard />
       <MainMenu />
+      //<AccountName />
     );
   }
 }

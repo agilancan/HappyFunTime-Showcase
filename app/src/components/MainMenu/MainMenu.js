@@ -28,7 +28,11 @@ export default class MainMenu extends Component {
                 <View style={styles.innerContainer1}>
                     <Text style={styles.innerContainer1Text}>Breath in ... breath out{'/n'}… good ... draw … :)</Text>
                     <View style={styles.innerContainer1Right}>
-                        <View style={styles.innerContainer1Box}><PlayerCard style={{margin: 10}}/></View>
+                        <View style={styles.innerContainer1Box}>
+                            <View style={styles.innerContainer1BoxInner}>
+                                <PlayerCard />
+                            </View>
+                        </View>
                         <Image style={styles.leaderboard} source={require('../../../assets/Leaderboard/round_list_black_18dp.png')} />
                     </View>  
                 </View>
@@ -42,10 +46,10 @@ export default class MainMenu extends Component {
                 </View>  
                 <View style={styles.innerContainer4}>
                     <TouchableOpacity style={styles.innerContainer4Facebook} onPress={() => alert('This works!!!!')}>
-                        <Text style={styles.innerContainer3Text}>F</Text>
+                        <Text style={styles.innerContainer4Text}>F</Text>
                     </TouchableOpacity>  
                     <TouchableOpacity style={styles.innerContainer4Google} onPress={() => alert('This works!!!!')}>
-                        <Text style={styles.innerContainer3Text}>G</Text>
+                        <Text style={styles.innerContainer4Text}>G</Text>
                     </TouchableOpacity>    
                 </View>
                 <View style={styles.innerContainer5}>  
@@ -88,7 +92,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     innerContainer1Text: {
-        flex: 2,
+        flex: 3,
         flexDirection: 'row',
         color: "#000000",
         justifyContent: "center",
@@ -98,28 +102,28 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     innerContainer1Box: {
-        flex: 1,
-        flexDirection: 'row',
-        resizeMode: 'contain',
+        flex: 2,
         backgroundColor: "#000000",
-        justifyContent: "center",
-        alignItems: "center",
-        aspectRatio: 1,
-        margin: 10,
-        //padding: 10
+        padding: '5%',
+        margin: '2%'
+    },
+    innerContainer1BoxInner: {
+        flex: 1,
+        backgroundColor: "#FFFFFF",
+        padding: '5%'
     },
     leaderboard: {
         flex: 2,
         aspectRatio: 1,
     },
     innerContainer2: {
-        flex: 1,
+        flex: 1.5,
         backgroundColor: "#FFFFFF",
         justifyContent: "center",
         alignItems: "center",
     },
     innerContainer3: {
-        flex: 1,
+        flex: 0.8,
         backgroundColor: "#FFFFFF",
         justifyContent: "center",
         alignItems: "center",
@@ -130,57 +134,56 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         borderWidth: 5,
-        borderRadius: 21,
-        borderColor: "black",
+        borderRadius: 100,
+        borderColor: "#000000",
         borderStyle: "dashed",
-        aspectRatio: 1,
-        margin: 10,
-        height: 42,
-        width: 150
+        aspectRatio: 1.5,
     },
     innerContainer3Text: {
-        flex: 2,
-        flexDirection: 'row',
-        color: "black",
-        justifyContent: "center",
-        alignItems: "center",
+        color: "#000000",
         //fontFamily: 'Roboto',
-        fontSize: 25,
+        fontSize: 16,
         fontWeight: 'bold',
-        textAlign: 'center'
+        textAlign: 'center',
     },
     innerContainer4: {
-        flex: 1,
+        flex: 1.1,
         flexDirection: 'row',
         backgroundColor: "#FFFFFF",
         justifyContent: "center",
         alignItems: "center",
     },
     innerContainer4Facebook: {
-        flex: 1,
+        flex: 0.2,
         backgroundColor: "white",
         justifyContent: "center",
         alignItems: "center",
         borderWidth: 5,
-        borderRadius: 21,
-        borderColor: "black",
+        borderRadius: 100,
+        borderColor: "#000000",
         borderStyle: "dashed",
         margin: 10,
-        height: 42,
-        width: 42
+        aspectRatio: 1
     },
     innerContainer4Google: {
-        flex: 1,
-        backgroundColor: "white",
+        flex: 0.2,
+        backgroundColor: "#FFFFFF",
         justifyContent: "center",
         alignItems: "center",
         borderWidth: 5,
-        borderColor: "black",
+        borderRadius: 100,
+        borderColor: "#000000",
         borderStyle: "dashed",
         margin: 10,
-        width: 50,
-        height: 50,
-        borderRadius: 50 / 2,
+        aspectRatio: 1,
+    },
+    innerContainer4Text: {
+        color: "black",
+        //fontFamily: 'Roboto',
+        fontSize: 40,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        margin: '10%'
     },
     innerContainer5: {
         flex: 1,
@@ -189,20 +192,15 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     innerContainer5Button: {
-        flex: 1,
+        flex: 0.6,
         backgroundColor: "black",
         justifyContent: "center",
         alignItems: "center",
-        borderRadius: 30,
-        height: 50,
-        width: 150,
-        //paddingTop: 100
+        aspectRatio: 3,
+        borderRadius: 100,
     },
     innerContainer5Text: {
-        flexDirection: 'row',
         color: "white",
-        justifyContent: "center",
-        alignItems: "center",
         fontFamily: 'Roboto',
         fontSize: 16,
         fontWeight: 'bold',
@@ -214,43 +212,53 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         backgroundColor: "#FFFFFF",
         alignItems: "center",
-        paddingTop: 10,
-        paddingLeft: 100,
-        paddingRight: 100,
+        paddingTop: '1%',
+        paddingLeft: '20%',
+        paddingRight: '20%',
     },
     innerContainer6Thin1: {
         flex: 1,
         backgroundColor: "#F3CBFF",
         height: '100%',
         width: '30%',
-        marginTop: '50%'
+        marginTop: '50%',
+        marginLeft: '1%',
+        marginRight: '1%'
     },
     innerContainer6Thin2: {
         flex: 1,
         backgroundColor: "#B2DF6D",
         height: '100%',
         width: '30%',
-        marginTop: '50%'
+        marginTop: '50%',
+        marginLeft: '1%',
+        marginRight: '1%'
     },
     innerContainer6Thin3: {
         flex: 1,
         backgroundColor: "#FFC767",
         height: '100%',
         width: '30%',
-        marginTop: '50%'
+        marginTop: '50%',
+        marginLeft: '1%',
+        marginRight: '1%'
     },
     innerContainer6Thin4: {
         flex: 1,
         backgroundColor: "#94E5FF",
         height: '100%',
         width: '30%',
-        marginTop: '50%'
+        marginTop: '50%',
+        marginLeft: '1%',
+        marginRight: '1%'
     },
     innerContainer6Thin5: {
         flex: 1,
         backgroundColor: "#FFE66A",
         height: '100%',
         width: '30%',
-        marginTop: '50%'
+        marginTop: '50%',
+        marginLeft: '1%',
+        marginRight: '1%'
     },
 });

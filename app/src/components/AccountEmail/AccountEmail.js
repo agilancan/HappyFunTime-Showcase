@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
-import { scale } from '../../utility/Scale';
+import { scale, verticalScale } from '../../utility/Scale';
 
 
 // This class determines everything to do with the Question Card
-export default class AccountName extends Component {
+export default class AccountEmail extends Component {
     static options(passProps) {
         return {
             statusBar: {
@@ -26,11 +26,11 @@ export default class AccountName extends Component {
         return (
             <View style={styles.outerContainer}>
                 <View style={styles.innerContainer1}>
-                    <Text style={styles.innerContainer1Text}>What's your name?</Text>
+                    <Text style={styles.innerContainer1Text}>What's your email?</Text>
                 </View>
                 <View style={styles.innerContainer2}>
                     <TouchableOpacity style={styles.innerContainer2Button} onPress={() => alert('This works!!!!')}>
-                        <Text style={styles.innerContainer2Text}>DISPLAY NAME</Text>
+                        <Text style={styles.innerContainer2Text}>EMAIL ADDRESS</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.innerContainer3}>
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
         flex: 0.8,
         backgroundColor: "#FFFFFF",
         aspectRatio: 3,
-        borderBottomWidth: scale(1),
+        borderBottomWidth: verticalScale(1),
         borderColor: "rgba(0, 0, 0, 0.12)",
         marginBottom: "85%",
     },
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#B2DF6D",
         height: '100%',
         width: '30%',
-        marginTop: '100%',
+        marginTop: '150%',
         marginLeft: '1%',
         marginRight: '1%'
     },

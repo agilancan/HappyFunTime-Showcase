@@ -8,6 +8,13 @@ import AnswerCardPicked from "../AnswerCardPicked/AnswerCardPicked";
 import TitleLoading from "../TitleLoading/TitleLoading";
 import DrawCard from "../DrawCard/DrawCard";
 import AccountName from "../AccountName/AccountName";
+import LogginPassword from "../LogginPassword/LogginPassword";
+import LogginPasswordForgot from "../LogginPasswordForgot/LogginPasswordForgot";
+import AccountEmail from "../AccountEmail/AccountEmail";
+import AccountPassword from "../AccountPassword/AccountPassword";
+import AccountExist from "../AccountExist/AccountExist";
+import GlobalScore from "../Leaderboard/GlobalScore";
+import Leaderboard from "../Leaderboard/Leaderboard";
 
 export default class Welcome extends React.Component {
   static options(passProps) {
@@ -35,8 +42,15 @@ export default class Welcome extends React.Component {
       //<AnswerCardPicked />
       //<TitleLoading />
       //<DrawCard />
-      <MainMenu />
+      //<MainMenu />
       //<AccountName />
+      //<LogginPassword />
+      //<LogginPasswordForgot />
+      //<AccountEmail />
+      //<AccountPassword /> //Need to add the back button
+      //<AccountExist /> //Need to add back button
+      //<GlobalScore />
+      <Leaderboard /> //Need to add back button
     );
   }
 }

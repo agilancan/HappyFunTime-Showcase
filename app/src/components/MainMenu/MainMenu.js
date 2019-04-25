@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Text, Image, Button, TouchableOpacity } from "react-native";
 import PlayerCard from "../PlayerCard/PlayerCard";
+import { scale } from '../../utility/Scale';
+
 
 
 // This class determines everything to do with the Question Card
@@ -26,18 +28,18 @@ export default class MainMenu extends Component {
         return (
             <View style={styles.outerContainer}>
                 <View style={styles.innerContainer1}>
-                    <Text style={styles.innerContainer1Text}>Breath in ... breath out{'/n'}… good ... draw … :)</Text>
+                    <Text style={styles.innerContainer1Text}>Breath in ... breath out {'\n'} ... good ... draw … :)</Text>
                     <View style={styles.innerContainer1Right}>
                         <View style={styles.innerContainer1Box}>
                             <View style={styles.innerContainer1BoxInner}>
-                                <PlayerCard />
+                                <PlayerCard style={styles.playerCard}/>
                             </View>
                         </View>
-                        <Image style={styles.leaderboard} source={require('../../../assets/Leaderboard/round_list_black_18dp.png')} />
+                        <Image style={styles.leaderboard} source={require('../../../assets/Leaderboard/round_list_black_24dp.png')} />
                     </View>  
                 </View>
                 <View style={styles.innerContainer2}>
-                    <Image style={styles.leaderboard} source={require('../../../assets/Play/round_play_circle_filled_black_48dp.png')} />  
+                    <Image style={styles.playButton} source={require('../../../assets/Play/round_play_circle_filled_black_48dp.png')} />  
                 </View>
                 <View style={styles.innerContainer3}>
                     <TouchableOpacity style={styles.innerContainer3Box} onPress={()=> alert('This works!!!!')}>
@@ -46,7 +48,7 @@ export default class MainMenu extends Component {
                 </View>  
                 <View style={styles.innerContainer4}>
                     <TouchableOpacity style={styles.innerContainer4Facebook} onPress={() => alert('This works!!!!')}>
-                        <Text style={styles.innerContainer4Text}>F</Text>
+                        <Text style={styles.innerContainer4Text}>f</Text>
                     </TouchableOpacity>  
                     <TouchableOpacity style={styles.innerContainer4Google} onPress={() => alert('This works!!!!')}>
                         <Text style={styles.innerContainer4Text}>G</Text>
@@ -54,7 +56,7 @@ export default class MainMenu extends Component {
                 </View>
                 <View style={styles.innerContainer5}>  
                     <TouchableOpacity style={styles.innerContainer5Button} onPress={() => alert('This works!!!!')}>
-                        <Text style={styles.innerContainer5Text}>CREATE ACCOUNT</Text>
+                        <Text style={styles.innerContainer5Text}>Create Account</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.innerContainer6}>
@@ -79,7 +81,7 @@ const styles = StyleSheet.create({
         padding: "0%"
     },
     innerContainer1: {
-        flex: 1,
+        flex: 2,
         flexDirection: 'row',
         backgroundColor: "#FFFFFF",
         justifyContent: "center",
@@ -88,42 +90,53 @@ const styles = StyleSheet.create({
     innerContainer1Right: {
         flex: 1,
         backgroundColor: "#FFFFFF",
-        //justifyContent: "center",
         alignItems: "center",
     },
     innerContainer1Text: {
         flex: 3,
         flexDirection: 'row',
         color: "#000000",
-        justifyContent: "center",
-        alignItems: "center",
-        fontFamily: 'Roboto',
-        fontSize: 25,
-        fontWeight: 'bold'
+        fontFamily: 'roboto',
+        fontSize: scale(25),
+        fontWeight: 'bold',
+        paddingBottom: scale(20),
+        marginLeft: scale(10)
     },
     innerContainer1Box: {
-        flex: 2,
+        flex: 2.5,
         backgroundColor: "#000000",
-        padding: '5%',
-        margin: '2%'
+        borderWidth: scale(4),
+        margin: scale(20),
     },
     innerContainer1BoxInner: {
         flex: 1,
         backgroundColor: "#FFFFFF",
         padding: '5%'
     },
+    playerCard: {
+        flex: 1,
+        resizeMode: 'contain'
+    },
     leaderboard: {
-        flex: 2,
-        aspectRatio: 1,
+        flex: 3,
+        resizeMode: 'contain',
+        height: scale(50),
+        width: scale(50)
+    },
+    playButton: {
+        flex: 3,
+        resizeMode: 'contain',
+        height: scale(100),
+        width: scale(100)
     },
     innerContainer2: {
-        flex: 1.5,
+        flex: 1.3,
         backgroundColor: "#FFFFFF",
         justifyContent: "center",
         alignItems: "center",
     },
     innerContainer3: {
-        flex: 0.8,
+        flex: 1,
         backgroundColor: "#FFFFFF",
         justifyContent: "center",
         alignItems: "center",
@@ -133,54 +146,60 @@ const styles = StyleSheet.create({
         backgroundColor: "#FFFFFF",
         justifyContent: "center",
         alignItems: "center",
-        borderWidth: 5,
-        borderRadius: 100,
+        borderWidth: scale(4),
+        borderRadius: scale(100),
         borderColor: "#000000",
         borderStyle: "dashed",
-        aspectRatio: 1.5,
+        marginTop: scale(30),
+        marginBottom: scale(5),
+        paddingTop: scale(20),
+        paddingBottom: scale(20),
     },
     innerContainer3Text: {
         color: "#000000",
-        //fontFamily: 'Roboto',
-        fontSize: 16,
+        fontSize: scale(16),
         fontWeight: 'bold',
         textAlign: 'center',
+        paddingLeft: scale(40),
+        paddingRight: scale(40),
+        aspectRatio: 7,
+        letterSpacing: scale(1)
     },
     innerContainer4: {
-        flex: 1.1,
+        flex: 1.5,
         flexDirection: 'row',
         backgroundColor: "#FFFFFF",
         justifyContent: "center",
         alignItems: "center",
     },
     innerContainer4Facebook: {
-        flex: 0.2,
+        flex: 0.14,
         backgroundColor: "white",
         justifyContent: "center",
         alignItems: "center",
-        borderWidth: 5,
-        borderRadius: 100,
+        borderWidth: scale(4),
+        borderRadius: scale(100),
         borderColor: "#000000",
         borderStyle: "dashed",
-        margin: 10,
-        aspectRatio: 1
+        margin: scale(10),
+        aspectRatio: 1,
+        marginRight: 40
     },
     innerContainer4Google: {
-        flex: 0.2,
+        flex: 0.14,
         backgroundColor: "#FFFFFF",
         justifyContent: "center",
         alignItems: "center",
-        borderWidth: 5,
-        borderRadius: 100,
+        borderWidth: scale(4),
+        borderRadius: scale(100),
         borderColor: "#000000",
         borderStyle: "dashed",
-        margin: 10,
+        margin: scale(10),
         aspectRatio: 1,
     },
     innerContainer4Text: {
         color: "black",
-        //fontFamily: 'Roboto',
-        fontSize: 40,
+        fontSize: scale(35),
         fontWeight: 'bold',
         textAlign: 'center',
         margin: '10%'
@@ -196,16 +215,15 @@ const styles = StyleSheet.create({
         backgroundColor: "black",
         justifyContent: "center",
         alignItems: "center",
-        aspectRatio: 3,
-        borderRadius: 100,
+        aspectRatio: 5,
+        borderRadius: scale(100),
     },
     innerContainer5Text: {
-        color: "white",
-        fontFamily: 'Roboto',
-        fontSize: 16,
+        color: "#FFFFFF",
+        fontSize: scale(16),
         fontWeight: 'bold',
-        //lineHeight: 19,
-        //letterSpacing: 60
+        textAlign: 'center',
+        letterSpacing: scale(1)
     },
     innerContainer6: {
         flex: 2,
@@ -213,8 +231,8 @@ const styles = StyleSheet.create({
         backgroundColor: "#FFFFFF",
         alignItems: "center",
         paddingTop: '1%',
-        paddingLeft: '20%',
-        paddingRight: '20%',
+        paddingLeft: '27%',
+        paddingRight: '27%',
     },
     innerContainer6Thin1: {
         flex: 1,

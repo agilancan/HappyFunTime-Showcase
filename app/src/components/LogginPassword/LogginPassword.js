@@ -1,16 +1,16 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
-import { scale } from '../../utility/Scale';
+import { scale, verticalScale } from '../../utility/Scale';
 
 
 // This class determines everything to do with the Question Card
-export default class AccountName extends Component {
+export default class LogginPassword extends Component {
     static options(passProps) {
         return {
             statusBar: {
                 backgroundColor: "transparent",
                 drawBehind: true,
-                visible: true,
+                visible: false,
                 style: "dark"
             },
             topBar: {
@@ -26,18 +26,14 @@ export default class AccountName extends Component {
         return (
             <View style={styles.outerContainer}>
                 <View style={styles.innerContainer1}>
-                    <Text style={styles.innerContainer1Text}>What's your name?</Text>
+                    <Text style={styles.innerContainer1Text}>Your password?</Text>
                 </View>
                 <View style={styles.innerContainer2}>
                     <TouchableOpacity style={styles.innerContainer2Button} onPress={() => alert('This works!!!!')}>
-                        <Text style={styles.innerContainer2Text}>DISPLAY NAME</Text>
+                        <Text style={styles.innerContainer2Text}>ENTER PASSWORD</Text>
                     </TouchableOpacity>
                 </View>
-                <View style={styles.innerContainer3}>
-                    <View style={styles.innerContainer3Thin1} />
-                    <View style={styles.innerContainer3Thin2} />
-                    <View style={styles.innerContainer3Thin3} />
-                </View>
+                <Text style={styles.innerContainer3Text}>Forgot password?</Text>
                 <View>
                     <TouchableOpacity>
                         <View style={styles.floatingActionButton}/>
@@ -77,7 +73,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#FFFFFF",
     },
     innerContainer2Button: {
-        flex: 0.8,
+        flex: 0.9,
         backgroundColor: "#FFFFFF",
         aspectRatio: 3,
         borderBottomWidth: scale(1),
@@ -102,32 +98,16 @@ const styles = StyleSheet.create({
         paddingLeft: '35%',
         paddingRight: '36%',
     },
-    innerContainer3Thin1: {
-        flex: 1,
-        backgroundColor: "#F3CBFF",
-        height: '100%',
-        width: '30%',
-        marginTop: '150%',
-        marginLeft: '1%',
-        marginRight: '1%'
-    },
-    innerContainer3Thin2: {
-        flex: 1,
-        backgroundColor: "#B2DF6D",
-        height: '100%',
-        width: '30%',
-        marginTop: '100%',
-        marginLeft: '1%',
-        marginRight: '1%'
-    },
-    innerContainer3Thin3: {
-        flex: 1,
-        backgroundColor: "#FFC767",
-        height: '100%',
-        width: '30%',
-        marginTop: '100%',
-        marginLeft: '1%',
-        marginRight: '1%'
+    innerContainer3Text: {
+        color: "rgba(0, 0, 0, 0.87)",
+        fontFamily: 'roboto',
+        fontSize: scale(14),
+        fontWeight: '400',
+        lineHeight: scale(19),
+        letterSpacing: scale(1.5),
+        marginTop: "20%",
+        textAlign: 'center',
+        paddingBottom: "10%"
     },
     floatingActionButton: {
         width: scale(56),

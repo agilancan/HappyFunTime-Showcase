@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { scale } from '../../utility/Scale';
-
+//Need to duplicate the password field, and add the text related to the character requirements
 
 // This class determines everything to do with the Question Card
-export default class AccountName extends Component {
+export default class AccountEmail extends Component {
     static options(passProps) {
         return {
             statusBar: {
@@ -26,12 +26,20 @@ export default class AccountName extends Component {
         return (
             <View style={styles.outerContainer}>
                 <View style={styles.innerContainer1}>
-                    <Text style={styles.innerContainer1Text}>What's your name?</Text>
+                    <Text style={styles.innerContainer1Text}>Create a password.</Text>
                 </View>
                 <View style={styles.innerContainer2}>
                     <TouchableOpacity style={styles.innerContainer2Button} onPress={() => alert('This works!!!!')}>
-                        <Text style={styles.innerContainer2Text}>DISPLAY NAME</Text>
+                        <Text style={styles.innerContainer2Text}>NEW PASSWORD</Text>
                     </TouchableOpacity>
+                </View>
+                <View style={styles.innerContainer25}>
+                    <TouchableOpacity style={styles.innerContainer2Button2} onPress={() => alert('This works!!!!')}>
+                        <Text style={styles.innerContainer2Text2}>RE-ENTER NEW PASSWORD</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.innerContainer26}>
+                    <Text style={styles.innerContainer26Text}>Your password must be 8 or more characters long. Try making it longer or add symbols like !, #, or %.</Text>
                 </View>
                 <View style={styles.innerContainer3}>
                     <View style={styles.innerContainer3Thin1} />
@@ -59,7 +67,7 @@ const styles = StyleSheet.create({
         paddingRight: "5%"
     },
     innerContainer1: {
-        flex: 2,
+        flex: 1.8,
         flexDirection: 'row',
         backgroundColor: "#FFFFFF",
     },
@@ -70,19 +78,31 @@ const styles = StyleSheet.create({
         transform: [{ rotate: '354deg' }],
         marginTop: '20%',
         lineHeight: scale(54),
-        letterSpacing: scale(1)
+        letterSpacing: scale(0.8)
     },
     innerContainer2: {
-        flex: 6,
+        flex: 1.5,
         backgroundColor: "#FFFFFF",
+        flexDirection: 'column'
+    },
+    innerContainer25: {
+        flex: 2,
+        backgroundColor: "#FFFFFF",
+        flexDirection: 'column',
+    },
+    innerContainer26: {
+        flex: 2,
+    },
+    innerContainer26Text: {
+        fontSize: scale(14),
+        color: "rgba(0, 0, 0, 0.87)",
+        lineHeight: scale(19),
+        fontWeight: '300',
     },
     innerContainer2Button: {
-        flex: 0.8,
         backgroundColor: "#FFFFFF",
-        aspectRatio: 3,
         borderBottomWidth: scale(1),
         borderColor: "rgba(0, 0, 0, 0.12)",
-        marginBottom: "85%",
     },
     innerContainer2Text: {
         color: "rgba(0, 0, 0, 0.87)",
@@ -91,14 +111,29 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         lineHeight: scale(19),
         letterSpacing: scale(1.5),
-        marginTop: "20%"
+        marginTop: "20%",
+        paddingBottom: scale(20)
+    },
+    innerContainer2Button2: {
+        backgroundColor: "#FFFFFF",
+        borderBottomWidth: scale(1),
+        borderColor: "rgba(0, 0, 0, 0.12)",
+    },
+    innerContainer2Text2: {
+        color: "rgba(0, 0, 0, 0.87)",
+        fontFamily: 'roboto',
+        fontSize: scale(16),
+        fontWeight: '500',
+        lineHeight: scale(19),
+        letterSpacing: scale(1.5),
+        marginTop: "15%",
+        paddingBottom: scale(20)
     },
     innerContainer3: {
-        flex: 1.5,
+        flex: 1.7,
         flexDirection: 'row',
         backgroundColor: "#FFFFFF",
         alignItems: "center",
-        paddingTop: '0%',
         paddingLeft: '35%',
         paddingRight: '36%',
     },
@@ -116,7 +151,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#B2DF6D",
         height: '100%',
         width: '30%',
-        marginTop: '100%',
+        marginTop: '150%',
         marginLeft: '1%',
         marginRight: '1%'
     },
@@ -125,7 +160,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#FFC767",
         height: '100%',
         width: '30%',
-        marginTop: '100%',
+        marginTop: '150%',
         marginLeft: '1%',
         marginRight: '1%'
     },

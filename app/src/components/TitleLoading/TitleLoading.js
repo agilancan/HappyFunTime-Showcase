@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import PlayerCard from "../PlayerCard/PlayerCard";
+import { scale } from '../../utility/Scale';
+
 
 export default class TitleLoading extends Component {
     render() {
@@ -72,13 +74,12 @@ const styles = StyleSheet.create({
     titleText: {
         color: 'rgba(0, 0, 0, 0.87)',
         flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        fontFamily: 'Zhang QA',
-        fontSize: 145,
-        fontWeight: 'normal',
+        fontFamily: 'zhang_qa',
+        fontSize: scale(159),
         textAlign: 'right',
-        letterSpacing: 1,
-        position: 'absolute'
+        letterSpacing: scale(1),
+        position: 'absolute',
+        paddingLeft: scale(10),
+        lineHeight: scale(188),
     }
 });

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {StyleSheet, View} from 'react-native';
 import PropTypes from 'prop-types';
+import { scale } from '../../utility/Scale';
 
 
 // This class determines everything to do with the Posted Notes
@@ -34,13 +35,12 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         aspectRatio: 1,
-        height: 100,
-        width: 100,
-        borderWidth: 1,
-        borderTopLeftRadius: 0,
-        borderTopRightRadius: 1,
-        borderBottomLeftRadius: 5,
-        borderBottomRightRadius: 2,
+        height: scale(100),
+        width: scale(100),
+        borderWidth: scale(1),
+        borderTopLeftRadius: scale(0),
+        borderTopRightRadius: scale(1),
+        borderBottomLeftRadius: scale(5),
         margin: "3%",
         padding: '0%'
     }

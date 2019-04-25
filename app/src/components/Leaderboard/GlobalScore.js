@@ -28,7 +28,6 @@ const styles = StyleSheet.create({
     outerContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        //justifyContent: 'space-evenly'
     },
     rankContainer: {
         flex: 1,
@@ -52,7 +51,6 @@ const styles = StyleSheet.create({
     playerCard: {
         flex: 1,
         resizeMode: 'contain',
-        //marginRight: scale(50)
     },
     playerName: {
         flex: 2,

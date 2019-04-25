@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
         transform: [{ rotate: '354deg' }],
         marginTop: '20%',
         lineHeight: scale(54),
-        letterSpacing: scale(0.3)
+        letterSpacing: scale(0.1)
     },
     innerContainer2: {
         flex: 6,

@@ -15,6 +15,12 @@ import AccountPassword from "../AccountPassword/AccountPassword";
 import AccountExist from "../AccountExist/AccountExist";
 import GlobalScore from "../Leaderboard/GlobalScore";
 import Leaderboard from "../Leaderboard/Leaderboard";
+import Tutorial1 from "../Tutorial1/Tutorial1";
+import Tutorial2 from "../Tutorial2/Tutorial2";
+import Tutorial3 from "../Tutorial3/Tutorial3";
+import Tutorial4 from "../Tutorial4/Tutorial4";
+import Tutorial5 from "../Tutorial5/Tutorial5";
+
 
 export default class Welcome extends React.Component {
   static options(passProps) {
@@ -50,7 +56,12 @@ export default class Welcome extends React.Component {
       //<AccountPassword /> //Need to add the back button
       //<AccountExist /> //Need to add back button
       //<GlobalScore />
-      <Leaderboard /> //Need to add back button
+      //<Leaderboard /> //Need to add back button
+      //<Tutorial1 /> 
+      //<Tutorial2 /> 
+      //<Tutorial3 /> 
+      //<Tutorial4 /> 
+      <Tutorial5 /> 
     );
   }
 }

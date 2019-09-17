@@ -1,0 +1,49 @@
+{
+  "parser": "babel-eslint",
+  "extends": ["prettier"],
+  "plugins": ["react", "jsx-a11y", "import"],
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true,
+      "classes": true,
+      "legacyDecorators": true
+    }
+  },
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "rules": {
+    "react/jsx-filename-extension": [
+      "error",
+      {
+        "extensions": [".js", ".jsx"]
+      }
+    ],
+    "global-require": "off",
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": true,
+        "optionalDependencies": false,
+        "peerDependencies": false
+      }
+    ],
+    "max-len": [
+      2,
+      {
+        "code": 125,
+        "tabWidth": 4,
+        "ignoreUrls": true
+      }
+    ],
+    "linebreak-style": 0,
+    "comma-dangle": ["error", "never"],
+    "no-mixed-operators": [
+      "error",
+      {
+        "groups": [["&", "|", "^", "~", "<<", ">>", ">>>"], ["&&", "||"]]
+      }
+    ]
+  }
+}

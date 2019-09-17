@@ -1,12 +1,11 @@
-import { applyMiddleware, compose, createStore } from "redux";
-import RNFirebase from "react-native-firebase";
-import { logger } from "redux-logger";
-import "firebase/firestore";
-import { reactReduxFirebase } from "react-redux-firebase";
-import { reduxFirestore } from "redux-firestore";
-import { AsyncStorage } from "react-native";
+import { compose, createStore } from 'redux';
+import RNFirebase from 'react-native-firebase';
+import 'firebase/firestore';
+import { reactReduxFirebase } from 'react-redux-firebase';
+import { reduxFirestore } from 'redux-firestore';
+import AsyncStorage from '@react-native-community/async-storage';
 
-import makeRootReducer from "../reducers/reducers";
+import makeRootReducer from '../reducers/reducers';
 
 const reactNativeFirebaseConfig = {
   debug: false

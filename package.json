@@ -3,36 +3,61 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "build": "babel src/ -d lib/",
+    "start": "react-native start",
     "test": "jest",
+    "lint": "eslint",
+    "babel-version": "babel --version",
+    "babel-node-version": "babel-node --version",
+    "flow": "flow",
+    "flow start": "flow start",
+    "flow stop": "flow stop",
+    "flow status": "flow status",
+    "flow coverage": "flow coverage",
     "android": "cd ./android && ./gradlew app:assembleDebug && ./gradlew installDebug"
   },
   "dependencies": {
-    "@terrylinla/react-native-sketch-canvas": "^0.8.0",
-    "firebase": "^5.9.3",
-    "react": "^16.8.6",
-    "react-native": "0.57.4",
-    "react-native-firebase": "^5.2.5",
-    "react-native-navigation": "^2.17.0",
-    "react-redux": "^7.0.2",
-    "react-redux-firebase": "^2.2.6",
+    "@gigasz/react-native-sketch-canvas": "^0.8.3",
+    "@react-native-community/async-storage": "^1.6.1",
+    "@react-native-community/viewpager": "^1.1.7",
+    "firebase": "^5.5.7",
+    "jetifier": "^1.6.3",
+    "prop-types": "^15.7.2",
+    "react": "^16.6.0",
+    "react-native": "^0.60.5",
+    "react-native-fbsdk": "^1.0.1",
+    "react-native-firebase": "^5.5.6",
+    "react-native-google-signin": "^2.0.0",
+    "react-native-navigation": "3.2.0-snapshot.506",
+    "react-native-vector-icons": "^6.6.0",
+    "react-redux": "5.1.1",
+    "react-redux-firebase": "2.3.0",
+    "react-redux-form": "^1.16.13",
     "redux": "^4.0.1",
-    "redux-firestore": "^0.7.3",
-    "redux-form": "^8.2.0",
-    "redux-logger": "^3.0.6"
+    "redux-firestore": "^0.8.0",
+    "redux-form": "^8.2.6"
   },
   "devDependencies": {
-    "babel-jest": "24.7.1",
-    "jest": "24.7.1",
-    "metro-react-native-babel-preset": "0.53.1",
-    "react-test-renderer": "16.6.0-alpha.8af6728"
+    "@babel/cli": "^7.1.2",
+    "@babel/core": "^7.5.5",
+    "@babel/plugin-proposal-decorators": "^7.1.2",
+    "@babel/preset-flow": "^7.0.0",
+    "@babel/runtime": "^7.5.5",
+    "@react-native-community/eslint-config": "^0.0.5",
+    "babel-eslint": "^10.0.1",
+    "babel-jest": "^24.8.0",
+    "eslint": "^6.2.1",
+    "eslint-config-prettier": "^6.3.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.14.3",
+    "eslint-plugin-react-hooks": "1.7.0",
+    "flow-bin": "^0.101.0",
+    "jest": "^24.8.0",
+    "metro-react-native-babel-preset": "^0.56.0",
+    "react-test-renderer": "16.8.6"
   },
   "jest": {
     "preset": "react-native"
-  },
-  "rnpm": {
-    "assets": [
-      "../app/assets/fonts/"
-    ]
   }
 }

@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         margin: "0%",
-        padding: "0%",
+        padding: "0%"
     },
     questionDrawing: {
         backgroundColor: "white",
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         marginTop: "2%",
         paddingTop: "4%",
-        paddingBottom: "0%",
+        paddingBottom: "0%"
     },
     loadingText: {
         color: 'rgba(0, 0, 0, 0.87)',

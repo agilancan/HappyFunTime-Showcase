@@ -1,11 +1,19 @@
 package com.doohickey.happyfuntimes;
-import android.content.Intent;
+import android.os.Bundle;
+import androidx.annotation.Nullable;
+import android.widget.ImageView;
 import com.reactnativenavigation.NavigationActivity;
 
 public class MainActivity extends NavigationActivity {
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        // MainApplication.getCallbackManager().onActivityResult(requestCode, resultCode, data);
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setSplashLayout();
+    }
+
+    private void setSplashLayout() {
+        ImageView img = new ImageView(this);
+        img.setImageDrawable(getDrawable(R.drawable.launch_screen));
+        setContentView(img);
     }
 }

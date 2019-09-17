@@ -1,22 +1,19 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext {
-        buildToolsVersion = "27.0.3"
-        minSdkVersion = 19
-        compileSdkVersion = 27
-        targetSdkVersion = 26
-        supportLibVersion = "27.1.1"
-    }
     repositories {
         google()
         mavenLocal()
         mavenCentral()
         jcenter()
+        maven { url 'https://maven.fabric.io/public' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.4'
-        classpath 'com.google.gms:google-services:4.0.1'
+        classpath 'com.android.tools.build:gradle:3.5.0'
+        classpath 'com.google.gms:google-services:4.3.0'
+        classpath 'io.fabric.tools:gradle:1.28.1'
+        classpath 'com.google.firebase:perf-plugin:1.2.1'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.41"
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -26,14 +23,18 @@ buildscript {
 allprojects {
     repositories {
         google()
-        mavenCentral()
         mavenLocal()
-        jcenter()
+        mavenCentral()
+        jcenter()   
         maven {
             // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
             url "$rootDir/../node_modules/react-native/android"
         }
-        maven { url 'https://jitpack.io' }
+        maven { url("$rootDir/../node_modules/jsc-android/dist") }
+        maven { url 'https://maven.fabric.io/public' }
+        maven { url "https://jitpack.io" }
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+        maven { url "$rootDir/../../node_modules/detox/Detox-android" }        
     }
 }
 
@@ -44,7 +45,8 @@ subprojects { subproject ->
                 variantFilter { variant ->
                     def names = variant.flavors*.name
                     if (names.contains("reactNative51") || names.contains("reactNative55") || 
-                        names.contains("reactNative56")) {
+                        names.contains("reactNative56") || names.contains("reactNative57") ||
+                        names.contains("reactNative57_5")) {
                         setIgnore(true)
                     }
                 }
@@ -53,8 +55,10 @@ subprojects { subproject ->
     }
 }
 
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '4.4'
-    distributionUrl = distributionUrl.replace("bin", "all")
+ext {
+    buildToolsVersion = "28.0.3"
+    minSdkVersion = 19
+    compileSdkVersion = 28
+    targetSdkVersion = 28
+    supportLibVersion = "28.0.0"
 }

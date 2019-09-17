@@ -3,7 +3,6 @@ import { StyleSheet, View, Text } from "react-native";
 import PlayerCard from "../PlayerCard/PlayerCard";
 import { scale } from '../../utility/Scale';
 
-
 export default class TitleLoading extends Component {
     render() {
         return (
@@ -69,7 +68,7 @@ const styles = StyleSheet.create({
         margin: '0%',
         padding: '0%',
         justifyContent: 'space-between',
-        position: 'relative',
+        position: 'relative'
     },
     titleText: {
         color: 'rgba(0, 0, 0, 0.87)',
@@ -80,6 +79,6 @@ const styles = StyleSheet.create({
         letterSpacing: scale(1),
         position: 'absolute',
         paddingLeft: scale(10),
-        lineHeight: scale(188),
+        lineHeight: scale(188)
     }
 });

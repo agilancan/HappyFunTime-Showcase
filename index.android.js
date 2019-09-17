@@ -9,14 +9,8 @@ Navigation.events().registerAppLaunchedListener(() => {
   AppScreens(store, Provider);
   Navigation.setRoot({
     root: {
-      stack: {
-        children: [
-          {
-            component: {
-              name: 'App'
-            }
-          }
-        ]
+      component: {
+        name: 'App'
       }
     }
   });

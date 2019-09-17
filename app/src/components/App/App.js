@@ -1,12 +1,19 @@
 import React from "react";
-import { View, Image, Dimensions, Text, Linking, YellowBox } from "react-native";
-import MainMenu from "../MainMenu/MainMenu";
-import { isEmpty, firestoreConnect } from 'react-redux-firebase';
+import { View, Image, Dimensions, Text, Linking, Alert, YellowBox } from "react-native";
+import { firestoreConnect } from 'react-redux-firebase';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
 import firebase from 'react-native-firebase';
 import { Navigation } from 'react-native-navigation';
 
-@firestoreConnect()
-export default class App extends React.Component {
+
+import MainMenu from "../MainMenu/MainMenu";
+import Lobby from '../Lobby/Lobby';
+import GLOBAL from '../../Globals';
+
+const { GAMESTATE } = GLOBAL;
+
+class App extends React.Component {
     static options(passProps) {
         YellowBox.ignoreWarnings([
             'Warning: componentWillMount is deprecated',
@@ -29,23 +36,22 @@ export default class App extends React.Component {
         };
     }
 
-    signInAnonymously = () => {
-        return this.props.firebase
-            .auth()
-            .signInAnonymously()
-            .then((user) => {
-                console.log('anonymous user: ', user);
-                Navigation.push(this.props.componentId, {
-                    component: {
-                        name: 'Tutorial'
-                    }
-                });
-            });
-    }
-
     render() {
-        return (
-            <MainMenu signInAnonymously={this.signInAnonymously} />
-        );
+        const { GameReducer } = this.props;
+        const { gameState } = GameReducer;
+        switch (gameState) {
+            case GAMESTATE.LOGIN:
+                return (<MainMenu />);
+            case GAMESTATE.LOBBY:
+                return (<Lobby />)
+            default:
+                return null;
+        }
+
     }
 }
+function mapStateToProps(state) {
+    const { GameReducer } = state;
+    return { GameReducer };
+}
+export default compose(firestoreConnect(), connect(mapStateToProps))(App);

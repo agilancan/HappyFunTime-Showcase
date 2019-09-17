@@ -8,7 +8,12 @@ import { scale } from '../../utility/Scale';
 export default class PlayerCard extends Component {
     render() {
         return (
-            <View style={{ ...styles.postedNote, backgroundColor: this.props.backgroundColor, borderColor: this.props.borderColor, transform: this.props.transform }} />
+            <View style={{
+                ...styles.postedNote,
+                backgroundColor: this.props.backgroundColor,
+                borderColor: this.props.borderColor,
+                transform: this.props.transform
+            }} />
         );
     }
 }

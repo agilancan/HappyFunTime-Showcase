@@ -4,15 +4,16 @@ import {
     View,
     Text,
     Image,
-    Button,
     TouchableOpacity
 } from 'react-native';
+import { Navigation } from 'react-native-navigation';
+import { firestoreConnect } from 'react-redux-firebase';
 import PropTypes from 'prop-types';
 
 import PlayerCard from '../PlayerCard/PlayerCard';
 import { scale } from '../../utility/Scale';
 
-// This class determines everything to do with the Question Card
+@firestoreConnect()
 export default class MainMenu extends Component {
     static options(passProps) {
         return {
@@ -29,6 +30,32 @@ export default class MainMenu extends Component {
             },
             passProps
         };
+    }
+
+    signInAnonymously = () => {
+        return this.props.firebase
+            .auth()
+            .signInAnonymously()
+            .then((user) => {
+                console.log('anonymous user: ', user);
+                Navigation.showModal({
+                    stack: {
+                        children: [{
+                            component: {
+                                name: 'Tutorial'
+                            }
+                        }]
+                    }
+                });
+            });
+    }
+
+    signIn = () => {
+        Navigation.showModal({
+            component: {
+                name: 'Login'
+            }
+        })
     }
 
     render() {
@@ -54,7 +81,7 @@ export default class MainMenu extends Component {
                         />
                     </View>
                 </View>
-                <TouchableOpacity onPress={this.props.signInAnonymously} style={styles.innerContainer2}>
+                <TouchableOpacity onPress={this.signInAnonymously} style={styles.innerContainer2}>
                     <Image
                         style={styles.playButton}
                         source={require('../../../assets/Play/round_play_circle_filled_black_48dp.png')}
@@ -63,7 +90,7 @@ export default class MainMenu extends Component {
                 <View style={styles.innerContainer3}>
                     <TouchableOpacity
                         style={styles.innerContainer3Box}
-                        onPress={() => alert('This works!!!!')}
+                        onPress={this.signIn}
                     >
                         <Text style={styles.innerContainer3Text}>SIGN IN</Text>
                     </TouchableOpacity>
@@ -91,20 +118,16 @@ export default class MainMenu extends Component {
                     </TouchableOpacity>
                 </View>
                 <View style={styles.innerContainer6}>
-                    <View style={styles.innerContainer6Thin1} />
-                    <View style={styles.innerContainer6Thin2} />
-                    <View style={styles.innerContainer6Thin3} />
-                    <View style={styles.innerContainer6Thin4} />
-                    <View style={styles.innerContainer6Thin5} />
+                    <View style={{ ...styles.bar, backgroundColor: "#F3CBFF" }} />
+                    <View style={{ ...styles.bar, backgroundColor: "#B2DF6D" }} />
+                    <View style={{ ...styles.bar, backgroundColor: "#FFC767" }} />
+                    <View style={{ ...styles.bar, backgroundColor: "#94E5FF" }} />
+                    <View style={{ ...styles.bar, backgroundColor: "#FFE66A" }} />
                 </View>
             </View>
         );
     }
 }
-MainMenu.propTypes = {
-    signInAnonymously: PropTypes.func.isRequired
-};
-
 
 // All the styles
 const styles = StyleSheet.create({
@@ -268,49 +291,12 @@ const styles = StyleSheet.create({
         paddingLeft: '27%',
         paddingRight: '27%'
     },
-    innerContainer6Thin1: {
+    bar: {
         flex: 1,
-        backgroundColor: '#F3CBFF',
         height: '100%',
         width: '30%',
-        marginTop: '50%',
         marginLeft: '1%',
-        marginRight: '1%'
-    },
-    innerContainer6Thin2: {
-        flex: 1,
-        backgroundColor: '#B2DF6D',
-        height: '100%',
-        width: '30%',
-        marginTop: '50%',
-        marginLeft: '1%',
-        marginRight: '1%'
-    },
-    innerContainer6Thin3: {
-        flex: 1,
-        backgroundColor: '#FFC767',
-        height: '100%',
-        width: '30%',
-        marginTop: '50%',
-        marginLeft: '1%',
-        marginRight: '1%'
-    },
-    innerContainer6Thin4: {
-        flex: 1,
-        backgroundColor: '#94E5FF',
-        height: '100%',
-        width: '30%',
-        marginTop: '50%',
-        marginLeft: '1%',
-        marginRight: '1%'
-    },
-    innerContainer6Thin5: {
-        flex: 1,
-        backgroundColor: '#FFE66A',
-        height: '100%',
-        width: '30%',
-        marginTop: '50%',
-        marginLeft: '1%',
-        marginRight: '1%'
+        marginRight: '1%',
+        marginTop: '33.3%'
     }
 });

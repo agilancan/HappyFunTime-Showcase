@@ -1,10 +1,9 @@
 import React, { PureComponent } from "react";
 import PropTypes from 'prop-types';
-import { StyleSheet, View, Text, Image } from "react-native";
+import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import { scale } from '../../utility/Scale';
-import { NavigateNextBlackCircle56 } from '../Buttons/NavigateNextButton';
-
 // This class determines everything to do with the Question Card
 export default class TutorialContainer extends PureComponent {
     render() {
@@ -25,7 +24,9 @@ export default class TutorialContainer extends PureComponent {
                     <View style={{ ...styles.bar, marginTop: barMargins[4], backgroundColor: "#FFE66A" }} />
                 </View>
                 <View>
-                    {NavigateNextBlackCircle56(pushPage)}
+                    <TouchableOpacity onPress={pushPage} style={styles.pushPageButton}>
+                        <Icon name="navigate-next" size={scale(30)} color="#FFF" />
+                    </TouchableOpacity>
                 </View>
             </View>
         );
@@ -96,5 +97,16 @@ const styles = StyleSheet.create({
         width: '30%',
         marginLeft: '1%',
         marginRight: '1%'
+    },
+    pushPageButton: {
+        width: scale(56),
+        height: scale(56),
+        borderRadius: scale(30),
+        backgroundColor: 'rgba(0, 0, 0, 0.87)',
+        position: 'absolute',
+        bottom: scale(16.9),
+        right: scale(1),
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 });

@@ -4,6 +4,7 @@ import { isEmpty, firestoreConnect } from 'react-redux-firebase';
 import ViewPager from "@react-native-community/viewpager";
 import firebase from 'react-native-firebase';
 import { Navigation } from 'react-native-navigation';
+import PropTypes from 'prop-types';
 
 import TutorialContainer from './TutorialContainer';
 
@@ -41,9 +42,20 @@ export default class Tutorial extends React.Component {
 
     pushPage = () => {
         const { currentPageIndex } = this.state;
-        const pageIndex = this.pages.props.children.length > currentPageIndex + 1 ? currentPageIndex + 1 : currentPageIndex;
-        this.setState({ currentPageIndex: pageIndex });
-        this.pages.setPage(pageIndex);
+        const { componentId } = this.props;
+        if (currentPageIndex === this.pages.props.children.length - 1) {
+            Navigation.push(componentId, {
+                component: {
+                    name: 'DrawAvatar'
+                }
+            })
+        } else {
+            const pageIndex = this.pages.props.children.length > currentPageIndex + 1
+                ? currentPageIndex + 1 : currentPageIndex;
+            this.setState({ currentPageIndex: pageIndex });
+            this.pages.setPage(pageIndex);
+        }
+
     }
 
     render() {

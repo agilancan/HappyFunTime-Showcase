@@ -77,6 +77,7 @@ public class MainApplication extends NavigationApplication implements ReactAppli
     @Override
     public List<ReactPackage> createAdditionalReactPackages() {
         List<ReactPackage> packages = new ArrayList<>();
+        packages.add(new SketchCanvasPackage());
         packages.add(new RNCViewPagerPackage());
         packages.add(new AsyncStoragePackage());
         packages.add(new FBSDKPackage());

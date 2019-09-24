@@ -15,23 +15,6 @@ import { scale } from '../../utility/Scale';
 
 @firestoreConnect()
 export default class MainMenu extends Component {
-    static options(passProps) {
-        return {
-            statusBar: {
-                backgroundColor: 'transparent',
-                drawBehind: true,
-                visible: true,
-                style: 'dark'
-            },
-            topBar: {
-                visible: false,
-                drawBehind: true,
-                animate: false
-            },
-            passProps
-        };
-    }
-
     signInAnonymously = () => {
         return this.props.firebase
             .auth()
@@ -48,6 +31,14 @@ export default class MainMenu extends Component {
                     }
                 });
             });
+    }
+
+    createAccount = () => {
+        Navigation.showModal({
+            component: {
+                name: 'Register'
+            }
+        })
     }
 
     signIn = () => {
@@ -111,8 +102,8 @@ export default class MainMenu extends Component {
                 </View>
                 <View style={styles.innerContainer5}>
                     <TouchableOpacity
+                        onPress={this.createAccount}
                         style={styles.innerContainer5Button}
-                        onPress={() => alert('This works!!!!')}
                     >
                         <Text style={styles.innerContainer5Text}>Create Account</Text>
                     </TouchableOpacity>

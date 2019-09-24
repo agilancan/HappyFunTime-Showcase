@@ -1,55 +1,42 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
-import { scale } from '../../utility/Scale';
+import PropTypes from 'prop-types';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
+import { scale, verticalScale } from '../../utility/Scale';
 
-// This class determines everything to do with the Question Card
-export default class AccountName extends Component {
-    static options(passProps) {
-        return {
-            statusBar: {
-                backgroundColor: "transparent",
-                drawBehind: true,
-                visible: true,
-                style: "dark"
-            },
-            topBar: {
-                visible: false,
-                drawBehind: true,
-                animate: false
-            },
-            passProps
-        };
-    }
-
+export default class LoginTemplate extends PureComponent {
     render() {
+        const { titleText, textInputPlaceholder, barMargins, pushPage, type } = this.props;
         return (
             <View style={styles.outerContainer}>
                 <View style={styles.innerContainer1}>
-                    <Text style={styles.innerContainer1Text}>What's your name?</Text>
+                    <Text style={styles.innerContainer1Text}>{titleText}</Text>
                 </View>
                 <View style={styles.innerContainer2}>
                     <TouchableOpacity style={styles.innerContainer2Button} onPress={() => alert('This works!!!!')}>
-                        <Text style={styles.innerContainer2Text}>DISPLAY NAME</Text>
+                        <Text style={styles.innerContainer2Text}>{textInputPlaceholder}</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.innerContainer3}>
-                    <View style={styles.innerContainer3Thin1} />
-                    <View style={styles.innerContainer3Thin2} />
-                    <View style={styles.innerContainer3Thin3} />
+                    <View style={{ ...styles.bar, marginTop: barMargins[0], backgroundColor: "#F3CBFF" }} />
+                    <View style={{ ...styles.bar, marginTop: barMargins[1], backgroundColor: "#B2DF6D" }} />
                 </View>
                 <View>
-                    <TouchableOpacity>
-                        <View style={styles.floatingActionButton}/>
+                    <TouchableOpacity onPress={pushPage} style={styles.pushPageButton}>
+                        <Icon name="navigate-next" size={scale(30)} color="#FFF" />
                     </TouchableOpacity>
                 </View>
             </View>
         );
     }
 }
+LoginTemplate.propTypes = {
+    titleText: PropTypes.string.isRequired,
+    textInputPlaceholder: PropTypes.string.isRequired,
+    pushPage: PropTypes.func.isRequired
+};
 
-
-// All the styles
 const styles = StyleSheet.create({
     outerContainer: {
         backgroundColor: "#FFFFFF",
@@ -61,11 +48,11 @@ const styles = StyleSheet.create({
     innerContainer1: {
         flex: 2,
         flexDirection: 'row',
-        backgroundColor: "#FFFFFF",
+        backgroundColor: "#FFFFFF"
     },
     innerContainer1Text: {
         fontFamily: 'roboto_condensed_bold_italic',
-        fontSize:  scale(43),
+        fontSize: scale(43),
         color: "rgba(0, 0, 0, 0.87)",
         transform: [{ rotate: '354deg' }],
         marginTop: '20%',
@@ -74,15 +61,15 @@ const styles = StyleSheet.create({
     },
     innerContainer2: {
         flex: 6,
-        backgroundColor: "#FFFFFF",
+        backgroundColor: "#FFFFFF"
     },
     innerContainer2Button: {
         flex: 0.8,
         backgroundColor: "#FFFFFF",
         aspectRatio: 3,
-        borderBottomWidth: scale(1),
+        borderBottomWidth: verticalScale(1),
         borderColor: "rgba(0, 0, 0, 0.12)",
-        marginBottom: "85%",
+        marginBottom: "85%"
     },
     innerContainer2Text: {
         color: "rgba(0, 0, 0, 0.87)",
@@ -100,42 +87,24 @@ const styles = StyleSheet.create({
         alignItems: "center",
         paddingTop: '0%',
         paddingLeft: '35%',
-        paddingRight: '36%',
+        paddingRight: '36%'
     },
-    innerContainer3Thin1: {
+    bar: {
         flex: 1,
-        backgroundColor: "#F3CBFF",
         height: '100%',
         width: '30%',
-        marginTop: '150%',
         marginLeft: '1%',
         marginRight: '1%'
     },
-    innerContainer3Thin2: {
-        flex: 1,
-        backgroundColor: "#B2DF6D",
-        height: '100%',
-        width: '30%',
-        marginTop: '100%',
-        marginLeft: '1%',
-        marginRight: '1%'
-    },
-    innerContainer3Thin3: {
-        flex: 1,
-        backgroundColor: "#FFC767",
-        height: '100%',
-        width: '30%',
-        marginTop: '100%',
-        marginLeft: '1%',
-        marginRight: '1%'
-    },
-    floatingActionButton: {
+    pushPageButton: {
         width: scale(56),
         height: scale(56),
         borderRadius: scale(30),
         backgroundColor: 'rgba(0, 0, 0, 0.87)',
         position: 'absolute',
         bottom: scale(16.9),
-        right: scale(1), 
-    },
+        right: scale(1),
+        justifyContent: 'center',
+        alignItems: 'center'
+    }
 });

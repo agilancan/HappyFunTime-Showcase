@@ -4,7 +4,7 @@ import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import { scale } from '../../utility/Scale';
-// This class determines everything to do with the Question Card
+
 export default class TutorialContainer extends PureComponent {
     render() {
         const { containerText, imgPath, pushPage, barMargins } = this.props;

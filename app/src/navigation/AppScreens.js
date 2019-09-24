@@ -3,6 +3,7 @@ import App from '../components/App/App';
 import Lobby from '../components/Lobby/Lobby';
 import Tutorial from '../components/Tutorial/Tutorial';
 import DrawAvatar from '../components/DrawAvatar/DrawAvatar';
+import Register from '../components/Register/Register';
 import Login from '../components/Login/Login';
 
 const AppScreens = (store, Provider) => {
@@ -11,6 +12,7 @@ const AppScreens = (store, Provider) => {
   Navigation.registerComponentWithRedux('Lobby', () => Lobby, Provider, store);
   Navigation.registerComponentWithRedux('Tutorial', () => Tutorial, Provider, store);
   Navigation.registerComponentWithRedux('DrawAvatar', () => DrawAvatar, Provider, store);
+  Navigation.registerComponentWithRedux('Register', () => Register, Provider, store);
   Navigation.registerComponentWithRedux('Login', () => Login, Provider, store);
 };
 export default AppScreens;

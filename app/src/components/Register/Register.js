@@ -1,19 +1,14 @@
-import React from "react";
-import { View } from "react-native";
+import React, { Component } from "react";
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { firestoreConnect } from 'react-redux-firebase';
 import ViewPager from "@react-native-community/viewpager";
 import { Navigation } from 'react-native-navigation';
 
-import TutorialTemplate from './TutorialTemplate';
+import RegisterTemplate from './RegisterTemplate';
+import { scale, verticalScale } from '../../utility/Scale';
 
-const tutorial1Img = require('../../../assets/Tutorial1/tutorial1.png');
-const tutorial2Img = require('../../../assets/Tutorial2/tutorial2.png');
-const tutorial3Img = require('../../../assets/Tutorial3/tutorial3.png');
-const tutorial4Img = require('../../../assets/Tutorial4/tutorial4.png');
-const tutorial5Img = require('../../../assets/Tutorial5/tutorial5.png');
 
-@firestoreConnect()
-export default class Tutorial extends React.Component {
+export default class Register extends Component {
     static options(passProps) {
         return {
             statusBar: {
@@ -68,38 +63,30 @@ export default class Tutorial extends React.Component {
                 initialPage={0}
                 scrollEnabled={false}>
                 <View key="1">
-                    <TutorialTemplate
-                        containerText={'JOIN 28 OTHERS IN\nAN ELIMINATION BATTLE'}
-                        imgPath={tutorial1Img}
+                    <RegisterTemplate
+                        titleText={"What's your name?"}
+                        textInputPlaceholder={'DISPLAY NAME'}
                         pushPage={this.pushPage}
-                        barMargins={['33.3%', '0%', '0%', '0%', '0%']} />
+                        barMargins={['150%', '100%', '100%']}
+                        type="name" />
                 </View>
                 <View key="2">
-                    <TutorialTemplate containerText={'ASK AND RESPOND\nWITH DRAWINGS'}
-                        imgPath={tutorial2Img}
+                    <RegisterTemplate
+                        titleText={"What's your email?"}
+                        textInputPlaceholder={'EMAIL ADDRESS'}
                         pushPage={this.pushPage}
-                        barMargins={['33.3%', '33.3%', '0%', '0%', '0%']} />
+                        barMargins={['150%', '150%', '100%']}
+                        type="email" />
                 </View>
                 <View key="3">
-                    <TutorialTemplate containerText={'TRY TO GET THE\nMOST VOTES'}
-                        imgPath={tutorial3Img}
+                    <RegisterTemplate
+                        titleText={"Create a password."}
+                        textInputPlaceholder={undefined}
                         pushPage={this.pushPage}
-                        barMargins={['33.3%', '33.3%', '33.3%', '0%', '0%']} />
-                </View>
-                <View key="4">
-                    <TutorialTemplate containerText={'LAST ONE\nALIVE WINS!'}
-                        imgPath={tutorial4Img}
-                        pushPage={this.pushPage}
-                        barMargins={['33.3%', '33.3%', '33.3%', '33.3%', '0%']} />
-                </View>
-                <View key="5">
-                    <TutorialTemplate containerText={'Most importantly...\nrelax...and have fun :)'}
-                        imgPath={tutorial5Img}
-                        pushPage={this.pushPage}
-                        barMargins={['33.3%', '33.3%', '33.3%', '33.3%', '33.3%']} />
+                        barMargins={['150%', '150%', '150%']}
+                        type="password" />
                 </View>
             </ViewPager>
-
         );
     }
 }

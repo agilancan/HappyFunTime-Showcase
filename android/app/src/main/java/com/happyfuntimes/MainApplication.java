@@ -18,6 +18,7 @@ import io.invertase.firebase.RNFirebasePackage;
 import io.invertase.firebase.analytics.RNFirebaseAnalyticsPackage;
 import io.invertase.firebase.auth.RNFirebaseAuthPackage; // Firebase Auth
 import io.invertase.firebase.config.RNFirebaseRemoteConfigPackage; // Firebase Remote Config
+import io.invertase.firebase.database.RNFirebaseDatabasePackage;
 import io.invertase.firebase.messaging.RNFirebaseMessagingPackage; // Firebase Cloud Messaging
 import io.invertase.firebase.perf.RNFirebasePerformancePackage; // Firebase Performance
 import io.invertase.firebase.storage.RNFirebaseStoragePackage; // Firebase Storage
@@ -87,6 +88,7 @@ public class MainApplication extends NavigationApplication implements ReactAppli
         packages.add(new RNFirebaseAnalyticsPackage());
         packages.add(new RNFirebaseAuthPackage());
         packages.add(new RNFirebaseRemoteConfigPackage());
+        packages.add(new RNFirebaseDatabasePackage());
         packages.add(new RNFirebaseMessagingPackage());
         packages.add(new RNFirebaseNotificationsPackage());
         packages.add(new RNFirebasePerformancePackage());

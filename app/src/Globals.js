@@ -11,6 +11,7 @@ export default {
         LOBBY_STATUS: {
             PENDING: 'Pending',
             IN_PROGRESS: 'InProgress',
+            FINISHED_NO_PLAYERS: 'FinishedNoPlayers',
             FINISHED: 'Finished'
         },
         LOBBY_MIN_USERS: 5

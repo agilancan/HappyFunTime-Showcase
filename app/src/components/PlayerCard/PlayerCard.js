@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Image, Text } from 'react-native';
 import PropTypes from 'prop-types';
 import { scale } from '../../utility/Scale';
 
@@ -7,13 +7,19 @@ import { scale } from '../../utility/Scale';
 // This class determines everything to do with the Posted Notes
 export default class PlayerCard extends Component {
     render() {
+        const { user } = this.props;
         return (
             <View style={{
                 ...styles.postedNote,
                 backgroundColor: this.props.backgroundColor,
                 borderColor: this.props.borderColor,
                 transform: this.props.transform
-            }} />
+            }} >
+                {user !== undefined ? <Image
+                    style={{ ...styles.imageNote, transform: this.props.transform }}
+                    resizeMode={'contain'}
+                    source={{ uri: user.avatarURL }} /> : <Text style={styles.waitingTxt}>Waiting...</Text>}
+            </View>
         );
     }
 }
@@ -23,13 +29,15 @@ export default class PlayerCard extends Component {
 PlayerCard.defaultProps = {
     backgroundColor: "#94E5FF",
     borderColor: "#94E5FF",
-    transform: [{ rotate: '0deg' }]
+    transform: [{ rotate: '0deg' }],
+    user: undefined
 }
 
 PlayerCard.propTypes = {
     backgroundColor: PropTypes.string.isRequired,
     borderColor: PropTypes.string.isRequired,
-    transform: PropTypes.any.isRequired
+    transform: PropTypes.any.isRequired,
+    user: PropTypes.object
 };
 
 
@@ -48,6 +56,15 @@ const styles = StyleSheet.create({
         borderBottomLeftRadius: scale(5),
         margin: "3%",
         padding: '0%'
+    },
+    imageNote: {
+        position: 'absolute',
+        height: scale(100),
+        width: scale(100)
+    },
+    waitingTxt: {
+        fontSize: scale(20),
+        color: '#000'
     }
 });
 

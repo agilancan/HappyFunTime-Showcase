@@ -15,11 +15,6 @@ const { GAMESTATE, DATABASE } = GLOBAL;
 
 class App extends React.Component {
     static options(passProps) {
-        YellowBox.ignoreWarnings([
-            'Warning: componentWillMount is deprecated',
-            'Warning: componentWillReceiveProps is deprecated',
-            'Warning: componentWillUpdate is deprecated'
-        ]);
         return {
             statusBar: {
                 backgroundColor: "transparent",
@@ -38,6 +33,14 @@ class App extends React.Component {
 
     constructor(props) {
         super(props);
+        YellowBox.ignoreWarnings([
+            'Warning: componentWillMount is deprecated',
+            'Warning: componentWillReceiveProps is deprecated',
+            'Warning: componentWillUpdate is deprecated'
+        ]);
+        this.state = {
+            //lobbyInfo: undefined
+        }
         this.lobbyRef = undefined;
     }
 
@@ -57,6 +60,7 @@ class App extends React.Component {
         if (this.props.GameReducer.gameState !== nextProps.GameReducer.gameState) {
             if (nextProps.GameReducer.gameState === GAMESTATE.LOBBY) {
                 if (this.lobbyRef === undefined) {
+                    console.log('gets here')
                     this.findLobby();
                     return true;
                 }
@@ -71,21 +75,18 @@ class App extends React.Component {
                 console.log('onAuthStateChanged user', user);
                 const uid = this.props.firebase.auth().currentUser.uid;
                 const userStatusDatabaseRef = this.props.firebase.database().ref('/status/' + uid);
-                const isOfflineForDatabase = {
-                    state: 'offline',
-                    last_changed: firebase.database.ServerValue.TIMESTAMP
-                };
-
-                const isOnlineForDatabase = {
-                    state: 'online',
-                    last_changed: firebase.database.ServerValue.TIMESTAMP
-                };
                 this.props.firebase.database().ref('.info/connected').on('value', (snapshot) => {
                     if (snapshot.val() == false) {
                         return;
                     };
-                    userStatusDatabaseRef.onDisconnect().set(isOfflineForDatabase).then(() => {
-                        userStatusDatabaseRef.set(isOnlineForDatabase);
+                    userStatusDatabaseRef.onDisconnect().set({
+                        state: 'offline',
+                        last_changed: firebase.database.ServerValue.TIMESTAMP
+                    }).then(() => {
+                        userStatusDatabaseRef.set({
+                            state: 'online',
+                            last_changed: firebase.database.ServerValue.TIMESTAMP
+                        });
                     });
                 });
             }
@@ -93,21 +94,54 @@ class App extends React.Component {
     }
 
     findLobby = () => {
+        const { GameReducer } = this.props;
         const { currentUser } = this.props.firebase.auth();
         const lobbiesRef = this.props.firebase.firestore()
             .collection(DATABASE.LOBBIES);
+
+        const updateUserAndStartListener = (ref) => {
+            this.props.firebase.firestore()
+                .collection(DATABASE.USERS)
+                .doc(currentUser.uid)
+                .update({
+                    currentGameID: ref.id
+                })
+                .catch(err => console.log('user game id update error ', err))
+
+            this.lobbyRef = lobbiesRef
+                .doc(ref.id)
+                .onSnapshot(docSnapshot => {
+                    this.onLobbyChange(docSnapshot);
+                })
+        }
+        console.log('lobbiesRef ', lobbiesRef);
         lobbiesRef
             .where("status", '==', DATABASE.LOBBY_STATUS.PENDING)
             .limit(1)
             .get()
             .then(snapshot => {
-                if (snapshot.length > 0) {
-                    //snapshot[0].doc.id
-                    //Add user to existing lobby here
+                const user = {
+                    uid: currentUser.uid,
+                    avatarURL: currentUser.photoURL,
+                    inGame: true,
+                    questionCount: 0,
+                    points: 0
+                };
+                console.log('lobby snapshot ', snapshot);
+                if (snapshot._docs.length > 0) {
+                    lobbiesRef
+                        .doc(snapshot._docs[0].id)
+                        .update({
+                            users: firebase.firestore.FieldValue.arrayUnion(user)
+                        })
+                        .then(ref => {
+                            updateUserAndStartListener(snapshot._docs[0])
+                        })
+                        .catch(err => console.log('join lobby error ', err))
                 } else {
                     lobbiesRef
                         .add({
-                            users: [],
+                            users: [user],
                             hostUserID: currentUser.uid,
                             minUsers: DATABASE.LOBBY_MIN_USERS,
                             currentQuestion: undefined,
@@ -115,19 +149,7 @@ class App extends React.Component {
                             status: DATABASE.LOBBY_STATUS.PENDING
                         })
                         .then(ref => {
-                            this.props.firebase.firestore()
-                                .collection(DATABASE.USERS)
-                                .doc(currentUser.uid)
-                                .update({
-                                    currentGameID: ref.id
-                                })
-                                .catch(err => console.log('user game id update error ', err))
-
-                            this.lobbyRef = lobbiesRef
-                                .doc(ref.id)
-                                .onSnapshot(docSnapshot => {
-                                    this.onLobbyChange(docSnapshot);
-                                })
+                            updateUserAndStartListener(ref)
                         })
                         .catch(err => console.log('add lobby error ', err))
                 }
@@ -136,7 +158,21 @@ class App extends React.Component {
     }
 
     onLobbyChange = (snapshot) => {
-        console.log('lobby snapshot ', snapshot);
+        const lobbyInfo = snapshot.data();
+
+        //This starts the game
+        if (lobbyInfo.status === DATABASE.LOBBY_STATUS.PENDING &&
+            lobbyInfo.minUsers >= lobbyInfo.users.length &&
+            lobbyInfo.hostUserID === this.props.firebase.auth().currentUser.uid) {
+            this.props.firebase.firestore()
+                .collection(DATABASE.LOBBIES)
+                .doc(snapshot.id)
+                .update({
+                    status: DATABASE.LOBBY_STATUS.IN_PROGRESS
+                })
+                .catch(err => console.log('game start send error', err))
+        }
+        this.props.dispatch({ type: 'SET_LOBBY_INFO', lobbyInfo });
     }
 
     render() {

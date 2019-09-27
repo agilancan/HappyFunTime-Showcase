@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { Navigation } from 'react-native-navigation';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { compose } from 'redux';
+import firebase from 'react-native-firebase';
 import { firestoreConnect } from 'react-redux-firebase';
 
 import Global from '../../Globals';
@@ -40,7 +41,7 @@ class DrawAvatar extends Component {
             .child('avatar.jpg')
             .putFile(path)
             .then((uploadedFile) => {
-                const { uid, displayName, pictureURL } = currentUser;
+                const { uid, displayName, providerId } = currentUser;
                 currentUser
                     .updateProfile({
                         photoURL: uploadedFile.downloadURL
@@ -52,9 +53,12 @@ class DrawAvatar extends Component {
                             .set({
                                 uid,
                                 displayName,
-                                online: true,
+                                status: "online",
                                 avatarURL: uploadedFile.downloadURL,
-                                currentGameID: undefined
+                                currentGameID: undefined,
+                                providerId,
+                                created: firebase.firestore.FieldValue.serverTimestamp(),
+                                lastChanged: firebase.firestore.FieldValue.serverTimestamp()
                             })
                             .catch(err => console.log('user profile update error ', err))
                         dispatch({ type: 'SET_GAME_STATE_LOBBY' });
@@ -78,10 +82,10 @@ class DrawAvatar extends Component {
                             return {
                                 folder: 'HFT',
                                 filename: "avatar",
-                                transparent: false,
+                                transparent: true,
                                 includeImage: false,
                                 cropToImageSize: false,
-                                imageType: 'jpg'
+                                imageType: 'png'
                             }
                         }}
                         onSketchSaved={(success, path) => {
@@ -117,7 +121,7 @@ class DrawAvatar extends Component {
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        onPress={() => this.sketchRef.save('jpg', false, 'HFT', 'avatar', false, false, false)}
+                        onPress={() => this.sketchRef.save('png', true, 'HFT', 'avatar', false, false, false)}
                         style={{
                             ...styles.circleButton,
                             backgroundColor: '#000'

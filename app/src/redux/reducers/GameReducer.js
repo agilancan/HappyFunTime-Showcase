@@ -1,7 +1,10 @@
 import GLOBAL from '../../Globals';
 const GameReducer = (
     state = {
-        gameState: GLOBAL.GAMESTATE.LOGIN
+        gameState: GLOBAL.GAMESTATE.LOGIN,
+        lobbyInfo: {
+            users: []
+        }
     },
     action
 ) => {
@@ -17,6 +20,12 @@ const GameReducer = (
                 ...state,
                 gameState: GLOBAL.GAMESTATE.LOBBY
             };
+        }
+        case 'SET_LOBBY_INFO': {
+            return {
+                ...state,
+                lobbyInfo: action.lobbyInfo
+            }
         }
         default:
             return state;

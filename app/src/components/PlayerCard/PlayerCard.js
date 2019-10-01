@@ -7,13 +7,19 @@ import { scale } from '../../utility/Scale';
 // This class determines everything to do with the Posted Notes
 export default class PlayerCard extends Component {
     render() {
-        const { user } = this.props;
+        const { user, backgroundColor, borderColor, transform } = this.props;
+        let bColor = backgroundColor;
+        if (user !== undefined) {
+            if (!user.inGame) {
+                bColor = '#FF0000';
+            }
+        }
         return (
             <View style={{
                 ...styles.postedNote,
-                backgroundColor: this.props.backgroundColor,
-                borderColor: this.props.borderColor,
-                transform: this.props.transform
+                backgroundColor: bColor,
+                borderColor,
+                transform
             }} >
                 {user !== undefined ? <Image
                     style={{ ...styles.imageNote, transform: this.props.transform }}

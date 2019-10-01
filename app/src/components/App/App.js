@@ -39,6 +39,8 @@ class App extends React.Component {
             'Warning: componentWillUpdate is deprecated'
         ]);
         this.state = {
+            overlayType: 'LobbyMsgOverlay'
+            //round: 0,
             //lobbyInfo: undefined
         }
         this.lobbyRef = undefined;
@@ -125,6 +127,7 @@ class App extends React.Component {
                     avatarURL: currentUser.photoURL,
                     inGame: true,
                     questionCount: 0,
+                    currentVote: null,
                     points: 0
                 };
                 console.log('lobby snapshot ', snapshot);
@@ -144,9 +147,14 @@ class App extends React.Component {
                             users: [user],
                             hostUserID: currentUser.uid,
                             minUsers: DATABASE.LOBBY_MIN_USERS,
-                            currentQuestion: undefined,
-                            questions: [],
-                            status: DATABASE.LOBBY_STATUS.PENDING
+                            currentQA: { q: undefined, a1: undefined, a2: undefined },
+                            currentQUID: undefined,
+                            currentA1UID: undefined,
+                            currentA2UID: undefined,
+                            QAList: [],
+                            status: DATABASE.LOBBY_STATUS.PENDING,
+                            round: 0,
+                            state: 0
                         })
                         .then(ref => {
                             updateUserAndStartListener(ref)
@@ -157,22 +165,182 @@ class App extends React.Component {
             .catch(err => console.log('get lobby error ', err))
     }
 
+    chooseRandomInGameUser = (lobbyInfo, users, excludedUsers = []) => {
+        const inGameUsers = users.filter(user => { return user.inGame && !excludedUsers.includes(user.uid) });
+        const inGameIndex = Math.floor(Math.random() * inGameUsers.length);
+        return inGameUsers[inGameIndex];
+    }
+
     onLobbyChange = (snapshot) => {
+        const { GameReducer } = this.props;
         const lobbyInfo = snapshot.data();
 
-        //This starts the game
-        if (lobbyInfo.status === DATABASE.LOBBY_STATUS.PENDING &&
-            lobbyInfo.minUsers >= lobbyInfo.users.length &&
-            lobbyInfo.hostUserID === this.props.firebase.auth().currentUser.uid) {
-            this.props.firebase.firestore()
+
+        const info = { ...lobbyInfo, id: snapshot.id };
+        this.props.dispatch({ type: 'SET_LOBBY_INFO', lobbyInfo: info });
+
+        if (lobbyInfo.hostUserID === this.props.firebase.auth().currentUser.uid) {
+            const lobbyRef = this.props.firebase.firestore()
                 .collection(DATABASE.LOBBIES)
-                .doc(snapshot.id)
-                .update({
-                    status: DATABASE.LOBBY_STATUS.IN_PROGRESS
-                })
-                .catch(err => console.log('game start send error', err))
+                .doc(snapshot.id);
+            //This starts the game
+            if (lobbyInfo.status === DATABASE.LOBBY_STATUS.PENDING &&
+                lobbyInfo.minUsers <= lobbyInfo.users.length) {
+                const chosenQUser = this.chooseRandomInGameUser(lobbyInfo, lobbyInfo.users);
+                const chosenA1User = this.chooseRandomInGameUser(lobbyInfo, lobbyInfo.users, [chosenQUser.uid]);
+                const chosenA2User = this.chooseRandomInGameUser(lobbyInfo, lobbyInfo.users, [chosenQUser.uid, chosenA1User.uid]);
+                lobbyRef
+                    .update({
+                        status: DATABASE.LOBBY_STATUS.IN_PROGRESS,
+                        currentQUID: chosenQUser.uid,
+                        currentA1UID: chosenA1User.uid,
+                        currentA2UID: chosenA2User.uid
+                    })
+                    .catch(err => console.log('game start send error', err))
+            }
+
+            //if votes match user count then start next round
+            //does not check for dropped users, change for later
+            if (lobbyInfo.status === DATABASE.LOBBY_STATUS.IN_PROGRESS &&
+                GameReducer.lobbyInfo.users !== lobbyInfo.users) {
+
+                let a1Votes = 0;
+                let a2Votes = 0;
+
+                lobbyInfo.users.forEach(user => {
+                    if (user.currentVote === "a1") {
+                        a1Votes++;
+                    } else if (user.currentVote === "a2") {
+                        a2Votes++;
+                    }
+                });
+                console.log('user change', a1Votes, a2Votes, lobbyInfo, a1Votes + a2Votes >= lobbyInfo.users.length - 3);
+                if (a1Votes + a2Votes >= lobbyInfo.users.length - 3) {
+                    const chosenQUser = this.chooseRandomInGameUser(lobbyInfo, lobbyInfo.users);
+                    const chosenA1User = this.chooseRandomInGameUser(lobbyInfo, lobbyInfo.users, [chosenQUser.uid]);
+                    const chosenA2User = this.chooseRandomInGameUser(lobbyInfo, lobbyInfo.users, [chosenQUser.uid, chosenA1User.uid]);
+                    const updateUsers = lobbyInfo.users;
+                    const a1Index = lobbyInfo.users.findIndex((user) => user.uid === lobbyInfo.currentA1UID);
+                    const a2Index = lobbyInfo.users.findIndex((user) => user.uid === lobbyInfo.currentA2UID);
+                    updateUsers[a1Index].points = a1Votes;
+                    updateUsers[a2Index].points = a2Votes;
+                    if (a1Votes > a2Votes) {
+                        updateUsers[a2Index].inGame = false;
+                    } else if (a1Votes < a2Votes) {
+                        updateUsers[a1Index].inGame = false;
+                    }
+                    lobbyInfo.users.forEach((element, index, array) => {
+                        updateUsers[index].currentVote = null;
+                    });
+                    lobbyRef.update({
+                        users: updateUsers,
+                        currentQUID: chosenQUser.uid,
+                        currentA1UID: chosenA1User.uid,
+                        currentA2UID: chosenA2User.uid,
+                        state: 0,
+                        round: lobbyInfo.round + 1,
+                        currentQA: {
+                            a1: undefined,
+                            a2: undefined,
+                            q: undefined
+                        }
+                    })
+                }
+            }
         }
-        this.props.dispatch({ type: 'SET_LOBBY_INFO', lobbyInfo });
+
+
+        if (lobbyInfo.state === 0) { //drawing question
+            if (lobbyInfo.status === DATABASE.LOBBY_STATUS.IN_PROGRESS &&
+                lobbyInfo.currentQUID === this.props.firebase.auth().currentUser.uid &&
+                this.state.overlayType !== 'DrawQuestion') {
+                this.setState({ overlayType: 'DrawQuestion' })
+                Navigation.dismissOverlay(this.props.componentId);
+                this.currentOverLay = 'DrawQuestion';
+                Navigation.showOverlay({
+                    component: {
+                        name: 'DrawQuestion',
+                        id: 'DrawQuestion',
+                        options: {
+                            overlay: {
+                                interceptTouchOutside: true
+                            }
+                        }
+                    }
+                });
+            }
+        } else if (lobbyInfo.state === 1) { //drawing answers
+            console.log('state 1 info', lobbyInfo, this.props.firebase.auth().currentUser, this.currentOverLay);
+            if (lobbyInfo.currentA1UID === this.props.firebase.auth().currentUser.uid ||
+                lobbyInfo.currentA2UID === this.props.firebase.auth().currentUser.uid) {
+                if (lobbyInfo.currentQA.a1 === null &&
+                    lobbyInfo.currentA1UID === this.props.firebase.auth().currentUser.uid
+                ) {
+                    Navigation.dismissOverlay(this.currentOverLay);
+                    this.currentOverLay = 'DrawAnswer';
+                    Navigation.showOverlay({
+                        component: {
+                            name: 'DrawAnswer',
+                            id: 'DrawAnswer',
+                            options: {
+                                overlay: {
+                                    interceptTouchOutside: true
+                                }
+                            }
+                        }
+                    });
+                } else if (lobbyInfo.currentQA.a2 === null &&
+                    lobbyInfo.currentA2UID === this.props.firebase.auth().currentUser.uid) {
+                    Navigation.dismissOverlay(this.currentOverLay);
+                    this.currentOverLay = 'DrawAnswer';
+                    Navigation.showOverlay({
+                        component: {
+                            name: 'DrawAnswer',
+                            id: 'DrawAnswer',
+                            options: {
+                                overlay: {
+                                    interceptTouchOutside: true
+                                }
+                            }
+                        }
+                    });
+                } else if (this.currentOverLay !== 'VoteAnswer') {
+                    Navigation.dismissOverlay(this.currentOverLay);
+                    this.currentOverLay = 'VoteAnswer';
+                    Navigation.showOverlay({
+                        component: {
+                            name: 'VoteAnswer',
+                            id: 'VoteAnswer',
+                            options: {
+                                overlay: {
+                                    interceptTouchOutside: true
+                                }
+                            }
+                        }
+                    });
+                }
+            } else {
+                if (this.currentOverLay !== 'VoteAnswer') {
+                    Navigation.dismissOverlay(this.currentOverLay);
+                    this.currentOverLay = 'VoteAnswer';
+                    Navigation.showOverlay({
+                        component: {
+                            name: 'VoteAnswer',
+                            id: 'VoteAnswer',
+                            options: {
+                                overlay: {
+                                    interceptTouchOutside: true
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+        } else if (lobbyInfo.state === 2) { //voting then next round, reset state here    
+        }
+
+
+
     }
 
     render() {

@@ -14,6 +14,6 @@ export default {
             FINISHED_NO_PLAYERS: 'FinishedNoPlayers',
             FINISHED: 'Finished'
         },
-        LOBBY_MIN_USERS: 5
+        LOBBY_MIN_USERS: 4
     }
 };

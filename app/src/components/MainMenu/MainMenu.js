@@ -88,16 +88,7 @@ export default class MainMenu extends Component {
                 </View>
                 <View style={styles.innerContainer4}>
                     <TouchableOpacity
-                        onPress={() => {
-                            const { uid } = this.props.firebase.auth().currentUser;
-                            this.props.firebase.auth().signOut().then(() => {
-                                this.props.firebase.database().ref('/status/' + uid)
-                                    .onDisconnect().set({
-                                        state: 'offline',
-                                        last_changed: firebase.database.ServerValue.TIMESTAMP
-                                    })
-                            })
-                        }}
+                        onPress={() => { }}
                         style={styles.innerContainer4Facebook}
                     >
                         <Text style={styles.innerContainer4Text}>f</Text>

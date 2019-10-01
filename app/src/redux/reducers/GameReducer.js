@@ -3,7 +3,10 @@ const GameReducer = (
     state = {
         gameState: GLOBAL.GAMESTATE.LOGIN,
         lobbyInfo: {
-            users: []
+            users: [],
+            round: 0,
+            status: undefined,
+            inGame: true
         }
     },
     action

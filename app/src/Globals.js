@@ -14,6 +14,12 @@ export default {
             FINISHED_NO_PLAYERS: 'FinishedNoPlayers',
             FINISHED: 'Finished'
         },
-        LOBBY_MIN_USERS: 4
-    }
+        LOBBY_MIN_USERS: 2
+    },
+    QUESTIONS: [
+        'Serious goldfish out for vengence',
+        'A tree on the prowl',
+        'Pencil at a crime scene',
+        'Morning face'
+    ]
 };

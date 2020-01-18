@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { SketchCanvas } from '@gigasz/react-native-sketch-canvas';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import CountdownCircle from 'react-native-countdown-circle'
 
 import Globals from '../../Globals';
 import { scale, verticalScale } from '../../utility/Scale';
@@ -15,66 +14,40 @@ const { DATABASE } = Globals;
 class DrawAnswer extends Component {
     uploadAnswer = (path, type) => {
         const { lobbyInfo } = this.props.GameReducer;
-        const { users, hostUserID } = lobbyInfo;
         this.props.firebase.storage()
             .ref(DATABASE.LOBBIES)
             .child(lobbyInfo.id)
-            .child('answer' + this.props.firebase.auth().currentUser.uid + '.jpg')
+            .child('answer' + 'type' + '.jpg')
             .putFile(path)
             .then((uploadedFile) => {
                 const lobbyRef = this.props.firebase.firestore()
                     .collection(DATABASE.LOBBIES)
                     .doc(lobbyInfo.id);
 
-                const index = users.findIndex(user => user.uid === this.props.firebase.auth().currentUser.uid);
-                users[index] = { ...users[index], votingEnabled: true, currentDrawingURL: uploadedFile.downloadURL };
-                if (this.props.firebase.auth().currentUser.uid === hostUserID) {
+                if (lobbyInfo.currentA1UID === this.props.firebase.auth().currentUser.uid) {
                     lobbyRef.update({
-                        users,
-                        startNextState: true
-                    });
+                        "currentQA.a1": uploadedFile.downloadURL
+                    })
                 } else {
                     lobbyRef.update({
-                        users
-                    });
+                        "currentQA.a2": uploadedFile.downloadURL
+                    })
                 }
-
             })
-    }
-
-    uploadNoAnswer = () => {
-        const { lobbyInfo } = this.props.GameReducer;
-        const { users, hostUserID } = lobbyInfo;
-        const lobbyRef = this.props.firebase.firestore()
-            .collection(DATABASE.LOBBIES)
-            .doc(lobbyInfo.id);
-
-        const index = users.findIndex(user => user.uid === this.props.firebase.auth().currentUser.uid);
-        users[index] = { ...users[index], votingEnabled: false, interactionEnabled: false, currentDrawingURL: undefined };
-        if (this.props.firebase.auth().currentUser.uid === hostUserID) {
-            lobbyRef.update({
-                users,
-                startNextState: true
-            });
-        } else {
-            lobbyRef.update({
-                users
-            });
-        }
     }
     render() {
         const { lobbyInfo } = this.props.GameReducer;
-        const { users, minUsers, status, currentQ, hostUserID } = lobbyInfo;
-        const timer = hostUserID === this.props.firebase.auth().currentUser.uid ? 30 : 30;
+        const { users, minUsers, status, currentQA } = lobbyInfo;
         console.log('drawanswer lobbyInfo', lobbyInfo);
         return (
             <View style={styles.container}>
                 <View style={{
                     backgroundColor: '#fff',
+                    position: 'absolute',
                     alignSelf: 'center',
                     justifyContent: 'center',
                     justifyContent: 'center',
-                    marginVertical: scale(16),
+                    top: scale(16),
                     borderRadius: 50,
                     height: scale(100),
                     width: scale(150),
@@ -82,10 +55,10 @@ class DrawAnswer extends Component {
                     borderColor: '#000'
                 }}>
                     <Text style={{ color: '#000', fontSize: scale(16), textAlign: 'center' }}>
-                        {lobbyInfo.currentQ}
+                        {lobbyInfo.currentQA.q}
                     </Text>
                 </View>
-                <View style={{ ...styles.drawCard, overflow: 'visible' }}>
+                <View style={{ ...styles.drawCard, overflow: 'visible', marginTop: verticalScale(98) }}>
                     <SketchCanvas
                         ref={(ref) => {
                             if (this.sketchRef === undefined) {
@@ -103,7 +76,12 @@ class DrawAnswer extends Component {
                             }
                         }}
                         onSketchSaved={(success, path) => {
-                            this.uploadAnswer(path, '1');
+                            if (lobbyInfo.currentA1UID === this.props.firebase.auth().currentUser.uid) {
+                                this.uploadAnswer(path, '1');
+                            } else {
+                                this.uploadAnswer(path, '2');
+                            }
+
                         }}
                         style={styles.drawCard}
                         strokeColor="black"
@@ -134,37 +112,16 @@ class DrawAnswer extends Component {
                             <Icon name="replay" size={scale(30)} color="#000" />
                         </View>
                     </TouchableOpacity>
-                    <View
-                        onPress={() => {
-                            if (this.sketchRef.getPaths().length > 0) {
-                                this.sketchRef.save('png', true, 'HFT', 'answer', false, false, false);
-                            } else {
-                                this.uploadNoAnswer();
-                            }
-                            //this.sketchRef.save('png', true, 'HFT', 'answer', false, false, false)
-                        }}
+                    <TouchableOpacity
+                        onPress={() => this.sketchRef.save('png', true, 'HFT', 'answer', false, false, false)}
                         style={{
                             ...styles.circleButton,
                             backgroundColor: '#000'
                         }} >
-                        <CountdownCircle
-                            seconds={timer}
-                            radius={30}
-                            borderWidth={8}
-                            color="#ff003f"
-                            bgColor="#fff"
-                            textStyle={{ fontSize: scale(30) }}
-                            onTimeElapsed={() => {
-                                if (this.sketchRef.getPaths().length > 0) {
-                                    this.sketchRef.save('png', true, 'HFT', 'answer', false, false, false);
-                                } else {
-                                    this.uploadNoAnswer();
-                                }
-                            }} />
-                        {/*<Icon name="play-arrow" size={scale(30)} color="#FFF" /> */}
-                    </View>
+                        <Icon name="play-arrow" size={scale(30)} color="#FFF" />
+                    </TouchableOpacity>
                 </View>
-            </View >
+            </View>
         );
 
     }
@@ -177,12 +134,9 @@ export default compose(firestoreConnect(), connect(mapStateToProps))(DrawAnswer)
 
 const styles = StyleSheet.create({
     container: {
-        position: 'absolute',
-        alignSelf: 'center',
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center',
-        opacity: 0.8
+        alignItems: 'center'
     },
     innerContainer: {
         width: scale(255.36),

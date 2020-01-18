@@ -22,7 +22,7 @@ export default class PlayerCard extends Component {
                 transform
             }} >
                 {user !== undefined ? <Image
-                    style={{ ...styles.imageNote, transform: this.props.transform }}
+                    style={{ ...styles.imageNote, transform }}
                     resizeMode={'contain'}
                     source={{ uri: user.avatarURL }} /> : <Text style={styles.waitingTxt}>Waiting...</Text>}
             </View>
@@ -65,11 +65,11 @@ const styles = StyleSheet.create({
     },
     imageNote: {
         position: 'absolute',
-        height: scale(100),
-        width: scale(100)
+        height: scale(80),
+        width: scale(80)
     },
     waitingTxt: {
-        fontSize: scale(20),
+        fontSize: scale(16),
         color: '#000'
     }
 });

@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { Navigation } from 'react-native-navigation';
 
+import VoteAnswer from '../VoteAnswer/VoteAnswer';
+import DrawAnswer from '../Draw/DrawAnswer';
 import { scale } from '../../utility/Scale';
 import PlayerCard from "../PlayerCard/PlayerCard";
 import Globals from '../../Globals';
@@ -13,13 +15,19 @@ const { DATABASE } = Globals;
 
 class Lobby extends Component {
     msg = () => {
-        const { users, minUsers, status } = this.props.GameReducer.lobbyInfo;
-        if (this.props.GameReducer.lobbyInfo.status === undefined) return null;
-        if (status !== DATABASE.LOBBY_STATUS.PENDING) return null;
+        const { users, minUsers, status, state } = this.props.GameReducer.lobbyInfo;
+        if (status === undefined) return null;
         if (status === DATABASE.LOBBY_STATUS.PENDING && users.length < minUsers) {
             return (
                 <View style={{
-                    position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    opacity: 0.8
                 }}>
                     <View style={styles.msgContainer}>
                         <View style={styles.msgInnerContainer}>
@@ -31,17 +39,13 @@ class Lobby extends Component {
 
             );
         }
-        return (
-            <View style={{
-                position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'
-            }}>
-                <View style={styles.msgContainer}>
-                    <View style={styles.msgInnerContainer}>
-                        <Text style={{ color: '#000' }}>Waiting for Question...</Text>
-                    </View>
-                </View>
-            </View>
-        );
+        if (state === 1 && status === DATABASE.LOBBY_STATUS.IN_PROGRESS) {
+            return <DrawAnswer style={{ position: 'absolute', opacity: 0.8 }} />
+        }
+        if (state === 2 && status === DATABASE.LOBBY_STATUS.IN_PROGRESS) {
+            return <VoteAnswer style={{ position: 'absolute', opacity: 0.8 }} />;
+        }
+        return null;
     }
     render() {
         const { lobbyInfo } = this.props.GameReducer;

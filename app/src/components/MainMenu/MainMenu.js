@@ -25,7 +25,7 @@ export default class MainMenu extends Component {
                     stack: {
                         children: [{
                             component: {
-                                name: 'Tutorial'
+                                name: 'DrawAvatar'
                             }
                         }]
                     }

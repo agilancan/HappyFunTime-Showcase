@@ -1,6 +1,24 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-admin.initializeApp();
+
+var serviceAccount = require("./happyfuntimes-28813-3a26185f7393.json");
+
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: "https://happyfuntimes-28813.firebaseio.com"
+});
+
+const QUESTIONS = [
+    'Serious goldfish out for vengence',
+    'A tree knocking on wood',
+    'Pencil at a crime scene',
+    'Morning face',
+    'Night time scary things',
+    'Cheese robbing a mouse',
+    'A humble whale fishing',
+    'Confused duck in the desert',
+    'Caterpillar having an existential crisis'
+]
 
 exports.onUserStatusChanged = functions.database.ref('/status/{uid}').onUpdate(
     async (change, context) => {
@@ -46,7 +64,7 @@ exports.onUserInfoChanged = functions.firestore.document('Users/{uid}')
                                     if (doc.data().hostUserID !== params.uid) {
                                         batch.update(lobbyRef, {
                                             users: inGameUsers,
-                                            hostUserID: inGameUsers[0]
+                                            hostUserID: inGameUsers[0].uid
                                         });
                                     } else {
                                         batch.update(lobbyRef, {
@@ -70,7 +88,7 @@ exports.onUserInfoChanged = functions.firestore.document('Users/{uid}')
                                     } else {
                                         batch.update(lobbyRef, {
                                             users: tempUsers,
-                                            hostUserID: inGameUsers[0]
+                                            hostUserID: inGameUsers[0].uid
                                         });
                                     }
                                 } else {
@@ -103,4 +121,46 @@ exports.onUserInfoChanged = functions.firestore.document('Users/{uid}')
                 return true;
             }
         }
+    })
+
+exports.onLobbyInfoChanged = functions.firestore.document('Lobbies/{lobbyID}')
+    .onUpdate((change, context) => {
+        const beforeData = change.before.data();
+        const afterData = change.after.data();
+        const { params } = context;
+
+        if (afterData.startNextState) {
+            let state = afterData.state;
+            if (afterData.state < 2) {
+                state = state + 1;
+                admin.firestore().collection('Lobbies').doc(params.lobbyID)
+                    .update({
+                        startNextState: false,
+                        state
+                    })
+                    .catch(err => console.log('lobby update error', err))
+            } else {
+                state = 1;
+                const questionIndex = Math.floor(Math.random() * QUESTIONS.length);
+                const currentQ = QUESTIONS[questionIndex];
+                const tempUsers = afterData.users;
+
+                afterData.users.forEach(element => {
+                    const index = tempUsers.findIndex(user => user.uid === element.currentVote);
+                    if (index !== -1) {
+                        tempUsers[index].points = tempUsers[index].points + 1;
+                    }
+                })
+
+                admin.firestore().collection('Lobbies').doc(params.lobbyID)
+                    .update({
+                        startNextState: false,
+                        state,
+                        currentQ,
+                        users: tempUsers
+                    })
+                    .catch(err => console.log('lobby update error', err))
+            }
+        }
+        return true;
     })

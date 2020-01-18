@@ -1,89 +1,119 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, Image, ScrollView, Dimensions, FlatList, ToastAndroid } from "react-native";
 import { firestoreConnect } from 'react-redux-firebase';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
+import CountdownCircle from 'react-native-countdown-circle'
+
 import firebase from 'react-native-firebase';
 
+import PlayerCard from "../PlayerCard/PlayerCard";
 import Globals from '../../Globals';
 import { scale, verticalScale } from '../../utility/Scale';
+
+const WINDOW_WIDTH = Dimensions.get('window').width;
+const WINDOW_HEIGHT = Dimensions.get('window').height;
 
 const { DATABASE } = Globals;
 
 class VoteAnswer extends Component {
-    // these methods are not good, use better functions if past alpha
-    // issue if rejoin capabilities are involved
-    uploadAnswer = (type) => {
-        const { lobbyInfo } = this.props.GameReducer;
-        const { currentUser } = this.props.firebase.auth();
-        if (lobbyInfo.currentA1UID === currentUser.uid ||
-            lobbyInfo.currentA2UID === currentUser.uid) {
-            return null;
-        }
-
-        const index = lobbyInfo.users.findIndex(user => user.uid === currentUser.uid);
-        const updateUsers = lobbyInfo.users;
-        console.log('voteUser debug', index, updateUsers, lobbyInfo, currentUser.uid);
-        updateUsers[index].currentVote = type;
-        this.props.firebase.firestore()
-            .collection(DATABASE.LOBBIES)
-            .doc(lobbyInfo.id)
-            .update({
-                users: updateUsers
-            });
+    constructor(props) {
+        super(props);
+        this.state = {
+            selectedVote: undefined
+        };
     }
-    render() {
-        const { users, minUsers, status, currentQA } = this.props.GameReducer.lobbyInfo;
-        const user = users.find(user => user.uid === this.props.firebase.auth().currentUser.uid);
+
+    uploadVote = () => {
+        const { lobbyInfo } = this.props.GameReducer;
+        const lobbyRef = this.props.firebase.firestore()
+            .collection(DATABASE.LOBBIES)
+            .doc(lobbyInfo.id);
+        const { users, hostUserID } = lobbyInfo;
+        const index = users.findIndex(user => user.uid === this.props.firebase.auth().currentUser.uid);
+        if (this.state.selectedVote !== undefined) {
+            users[index] = { ...users[index], interactionEnabled: true, currentVote: this.state.selectedVote };
+        } else {
+            users[index] = { ...users[index], interactionEnabled: false, currentVote: null };
+        }
+        if (this.props.firebase.auth().currentUser.uid === hostUserID) {
+            lobbyRef.update({
+                users,
+                startNextState: true
+            });
+        } else {
+            lobbyRef.update({
+                users
+            });
+        }
+    }
+
+
+    voteCard = (user, backgroundColor, borderColor, transform) => {
+        console.log('vote user', user);
+        let bColor = backgroundColor;
+        if (user !== undefined) {
+            if (!user.inGame) {
+                bColor = '#FF0000';
+            }
+        }
         return (
-            <View style={styles.container}>
-                <View style={{
+            <View style={{
+                ...styles.postedNote,
+                backgroundColor: bColor,
+                borderColor: this.state.selectedVote === user.uid ? '#000' : borderColor,
+                transform
+            }} >
+                {user !== undefined ? <Image
+                    style={{ ...styles.imageNote, transform }}
+                    resizeMode={'contain'}
+                    source={{ uri: user.currentDrawingURL }} /> : null}
+            </View>
+        );
+    }
+
+    renderItem = ({ item }) => (
+        <TouchableOpacity onPress={() => { this.setState({ selectedVote: item.uid }) }}>
+            {this.voteCard(item, '#FFC767', '#FFC767', [{ rotate: '0deg' }])}
+        </TouchableOpacity>
+    )
+    render() {
+        const { users, minUsers, status, currentQA, hostUserID } = this.props.GameReducer.lobbyInfo;
+        console.log('voteUsers', users);
+        const timer = hostUserID === this.props.firebase.auth().currentUser.uid ? 15 : 15;
+        return (
+            <ScrollView
+                contentContainerStyle={{
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                }}
+                style={{
                     backgroundColor: '#fff',
+                    opacity: 1,
                     position: 'absolute',
                     alignSelf: 'center',
-                    top: scale(16),
-                    borderStyle: 'dashed',
-                    borderWidth: 1,
-                    borderColor: '#000'
-                }}>
-                    <Image style={{
-                        height: scale(100),
-                        width: scale(100)
-                    }}
-
-                        source={{ uri: currentQA.q }} />
-                </View>
-                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                    <TouchableOpacity
-                        style={{
-                            backgroundColor: '#fff',
-                            marginRight: scale(5),
-                            borderWidth: user.currentVote === "a1" ? 1 : 0,
-                            borderColor: '#000'
-                        }}
-                        onPress={() => this.uploadAnswer("a1")}>
-                        <Image style={{
-                            height: scale(100),
-                            width: scale(100)
-                        }}
-
-                            source={{ uri: currentQA.a1 }} />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={{
-                        backgroundColor: '#fff',
-                        marginLeft: scale(5),
-                        borderWidth: user.currentVote === "a2" ? 1 : 0,
-                        borderColor: '#000'
-                    }} onPress={() => this.uploadAnswer("a2")}>
-                        <Image style={{
-                            height: scale(100),
-                            width: scale(100)
-                        }}
-
-                            source={{ uri: currentQA.a2 }} />
-                    </TouchableOpacity>
-                </View>
-            </View >
+                    flexDirection: 'column',
+                    height: WINDOW_HEIGHT,
+                    width: WINDOW_WIDTH - 16
+                }} >
+                <FlatList
+                    style={{ flex: 1 }}
+                    extraData={this.state}
+                    numColumns={4}
+                    data={users.filter(user => user.currentDrawingURL !== null && user.uid !== this.props.firebase.auth().currentUser.uid)}
+                    keyExtractor={(item) => item.uid}
+                    renderItem={this.renderItem}
+                />
+                <CountdownCircle
+                    style={{ position: 'absolute', bottom: 0, left: WINDOW_WIDTH / 2 }}
+                    seconds={timer}
+                    radius={30}
+                    borderWidth={8}
+                    color="#ff003f"
+                    bgColor="#fff"
+                    textStyle={{ fontSize: scale(30) }}
+                    onTimeElapsed={() => { this.uploadVote() }} />
+            </ScrollView >
         );
 
     }
@@ -96,10 +126,16 @@ export default compose(firestoreConnect(), connect(mapStateToProps))(VoteAnswer)
 
 const styles = StyleSheet.create({
     container: {
+        marginTop: 8,
+        backgroundColor: '#fff',
+        height: WINDOW_HEIGHT - 16,
+        width: WINDOW_WIDTH - 16,
+        position: 'absolute',
+        alignSelf: 'center',
         flex: 1,
-        flexDirection: 'column',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        opacity: 0.8
     },
     innerContainer: {
         width: scale(255.36),
@@ -117,6 +153,25 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: scale(30)
+    },
+    postedNote: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        aspectRatio: 1,
+        height: scale(100),
+        width: scale(100),
+        borderWidth: scale(1),
+        borderTopLeftRadius: scale(0),
+        borderTopRightRadius: scale(1),
+        borderBottomLeftRadius: scale(5),
+        margin: "3%",
+        padding: '0%'
+    },
+    imageNote: {
+        //position: 'absolute',
+        height: scale(80),
+        width: scale(80)
     },
     drawCard: {
         backgroundColor: "white",

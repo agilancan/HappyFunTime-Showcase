@@ -25,6 +25,18 @@ export default class PlayerCard extends Component {
                     style={{ ...styles.imageNote, transform }}
                     resizeMode={'contain'}
                     source={{ uri: user.avatarURL }} /> : <Text style={styles.waitingTxt}>Waiting...</Text>}
+                {
+                    user !== undefined ? <View style={{
+                        position: "absolute", top: 1.5, right: 1.5, backgroundColor: '#fff',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: scale(20),
+                        height: scale(20),
+                        borderRadius: scale(10)
+                    }}>
+                        <Text style={{ fontSize: scale(15) }}>{user.roundsWon}</Text>
+                    </View> : null
+                }
             </View>
         );
     }

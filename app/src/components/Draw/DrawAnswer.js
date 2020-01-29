@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, Image, ScrollView, FlatList, Dimensions } from "react-native";
 import { firestoreConnect } from 'react-redux-firebase';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
@@ -10,9 +10,18 @@ import CountdownCircle from 'react-native-countdown-circle'
 import Globals from '../../Globals';
 import { scale, verticalScale } from '../../utility/Scale';
 
+const WINDOW_WIDTH = Dimensions.get('window').width;
+const WINDOW_HEIGHT = Dimensions.get('window').height;
 const { DATABASE } = Globals;
 
 class DrawAnswer extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            showWinner: true
+        }
+    }
+
     uploadAnswer = (path, type) => {
         const { lobbyInfo } = this.props.GameReducer;
         const { users, hostUserID } = lobbyInfo;
@@ -26,17 +35,38 @@ class DrawAnswer extends Component {
                     .collection(DATABASE.LOBBIES)
                     .doc(lobbyInfo.id);
 
-                const index = users.findIndex(user => user.uid === this.props.firebase.auth().currentUser.uid);
-                users[index] = { ...users[index], votingEnabled: true, currentDrawingURL: uploadedFile.downloadURL };
+                const lobbyUserRef = lobbyRef.collection('Users').doc(this.props.firebase.auth().currentUser.uid);
+
+                //const index = users.findIndex(user => user.uid === this.props.firebase.auth().currentUser.uid);
+                //users[index] = { ...users[index], votingEnabled: true, currentDrawingURL: uploadedFile.downloadURL };
                 if (this.props.firebase.auth().currentUser.uid === hostUserID) {
-                    lobbyRef.update({
-                        users,
+                    const batch = this.props.firebase.firestore().batch();
+                    batch.update(lobbyRef, {
                         startNextState: true
                     });
+                    batch.update(lobbyUserRef, {
+                        votingEnabled: true, currentDrawingURL: uploadedFile.downloadURL, currentVote: null
+                    })
+                    /*lobbyRef.update({
+                        users,
+                        startNextState: true
+                    });*/
+
+                    batch
+                        .commit()
+                        .then((result) => {
+                            console.log('Batch Commit success!', result);
+                        })
+                        .catch((err) => {
+                            console.log('Batch Commit failure:', err);
+                        });
                 } else {
-                    lobbyRef.update({
+                    lobbyUserRef.update({
+                        votingEnabled: true, currentDrawingURL: uploadedFile.downloadURL
+                    })
+                    /*lobbyRef.update({
                         users
-                    });
+                    });*/
                 }
 
             })
@@ -48,25 +78,112 @@ class DrawAnswer extends Component {
         const lobbyRef = this.props.firebase.firestore()
             .collection(DATABASE.LOBBIES)
             .doc(lobbyInfo.id);
+        const lobbyUserRef = lobbyRef.collection('Users').doc(this.props.firebase.auth().currentUser.uid);
 
         const index = users.findIndex(user => user.uid === this.props.firebase.auth().currentUser.uid);
         users[index] = { ...users[index], votingEnabled: false, interactionEnabled: false, currentDrawingURL: undefined };
         if (this.props.firebase.auth().currentUser.uid === hostUserID) {
-            lobbyRef.update({
-                users,
+            const batch = this.props.firebase.firestore().batch();
+            batch.update(lobbyRef, {
                 startNextState: true
             });
+            batch.update(lobbyUserRef, {
+                votingEnabled: true, currentDrawingURL: null, currentVote: null
+            })
+            /*lobbyRef.update({
+                users,
+                startNextState: true
+            });*/
+
+            batch
+                .commit()
+                .then((result) => {
+                    console.log('Batch Commit success!', result);
+                })
+                .catch((err) => {
+                    console.log('Batch Commit failure:', err);
+                });
+
+            /*lobbyRef.update({
+                users,
+                startNextState: true
+            });*/
         } else {
-            lobbyRef.update({
+            lobbyUserRef.update({
+                votingEnabled: true, currentDrawingURL: null, currentVote: null
+            })
+            /*lobbyRef.update({
                 users
-            });
+            });*/
         }
     }
+
+    winnerCard = (user, backgroundColor, borderColor, transform) => {
+        console.log('vote user', user);
+        let bColor = backgroundColor;
+        return (
+            <View style={{
+                ...styles.postedNote,
+                backgroundColor: bColor,
+                borderColor: this.state.selectedVote === user.uid ? '#000' : borderColor,
+                transform
+            }} >
+                <Image
+                    style={{ ...styles.imageNote, transform }}
+                    resizeMode={'contain'}
+                    source={{ uri: user.avatarURL }} />
+            </View>
+        );
+    }
+
+    renderWinnerItem = ({ item }) => (
+        <View>
+            {this.winnerCard(item, '#FFC767', '#FFC767', [{ rotate: '0deg' }])}
+        </View>
+    )
     render() {
-        const { lobbyInfo } = this.props.GameReducer;
-        const { users, minUsers, status, currentQ, hostUserID } = lobbyInfo;
+        const { lobbyInfo, users } = this.props.GameReducer;
+        const { minUsers, status, currentQ, hostUserID } = lobbyInfo;
         const timer = hostUserID === this.props.firebase.auth().currentUser.uid ? 30 : 30;
         console.log('drawanswer lobbyInfo', lobbyInfo);
+        if (this.state.showWinner && lobbyInfo.winners.length > 0) {
+            return (
+                <ScrollView
+                    contentContainerStyle={{
+                        marginTop: 100,
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}
+                    style={{
+                        backgroundColor: '#fff',
+                        opacity: 1,
+                        position: 'absolute',
+                        alignSelf: 'center',
+                        flexDirection: 'column',
+                        height: WINDOW_HEIGHT,
+                        width: WINDOW_WIDTH - 16
+                    }} >
+                    <Text style={{ fontSize: 16, color: '#000' }}>Winners for last round</Text>
+                    <FlatList
+                        style={{ flex: 1 }}
+                        extraData={this.state}
+                        numColumns={4}
+                        data={lobbyInfo.winners}
+                        keyExtractor={(item) => item.uid}
+                        renderItem={this.renderWinnerItem}
+                    />
+                    <CountdownCircle
+                        style={{ position: 'absolute', bottom: 0, left: WINDOW_WIDTH / 2 }}
+                        seconds={5}
+                        radius={30}
+                        borderWidth={8}
+                        color="#ff003f"
+                        bgColor="#fff"
+                        textStyle={{ fontSize: scale(30) }}
+                        onTimeElapsed={() => { this.setState({ showWinner: false }) }} />
+                </ScrollView >
+            )
+        }
         return (
             <View style={styles.container}>
                 <View style={{
@@ -220,5 +337,24 @@ const styles = StyleSheet.create({
         borderBottomColor: 'rgba(0, 0, 0, 0.12)',
         borderBottomWidth: 0.5,
         letterSpacing: 2
+    },
+    postedNote: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        aspectRatio: 1,
+        height: scale(100),
+        width: scale(100),
+        borderWidth: scale(1),
+        borderTopLeftRadius: scale(0),
+        borderTopRightRadius: scale(1),
+        borderBottomLeftRadius: scale(5),
+        margin: "3%",
+        padding: '0%'
+    },
+    imageNote: {
+        //position: 'absolute',
+        height: scale(80),
+        width: scale(80)
     }
 });

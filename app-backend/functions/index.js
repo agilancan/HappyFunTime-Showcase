@@ -49,19 +49,25 @@ exports.onUserInfoChanged = functions.firestore.document('Users/{uid}')
             } else {
                 if (afterData.currentGameID !== null) {
                     const lobbyRef = admin.firestore().collection('Lobbies').doc(afterData.currentGameID);
-                    console.log('after lobby user data', afterData, 'before lobby user data', beforeData);
-                    lobbyRef.get()
+                    const userLobbyRef = lobbyRef.collection('Users').doc(params.uid);
+                    return lobbyRef.get()
                         .then(doc => {
                             const batch = admin.firestore().batch();
-                            console.log('lobby doc', doc.data(), doc.data().hostUserID !== params.uid, params);
+                            const index = doc.data().users.findIndex(
+                                (element) => { return element.uid === params.uid })
+                            let inGameUsers = [];
+                            if (doc.data().users.length > 1) {
+                                inGameUsers = doc.data().users.splice(index, 1);
+                            }
+                            console.log('users', doc.data().users, 'inGameUsers', inGameUsers);
                             if (doc.data().status === "Pending") {
-                                if (doc.data().users.length < 2) {
-                                    batch.delete(lobbyRef);
+                                if (inGameUsers.length < 1) {
+                                    batch.update(lobbyRef, {
+                                        hostUserID: null,
+                                        users: inGameUsers
+                                    });
                                 } else {
-                                    const index = doc.data().users.findIndex(
-                                        (element) => { return element.uid === params.uid })
-                                    const inGameUsers = doc.data().users.splice(index, 1);
-                                    if (doc.data().hostUserID !== params.uid) {
+                                    if (doc.data().hostUserID === params.uid) {
                                         batch.update(lobbyRef, {
                                             users: inGameUsers,
                                             hostUserID: inGameUsers[0].uid
@@ -73,35 +79,33 @@ exports.onUserInfoChanged = functions.firestore.document('Users/{uid}')
                                     }
                                 }
                             } else {
-                                if (doc.data().hostUserID !== params.uid) {
-                                    const index = doc.data().users.findIndex(
-                                        (element) => { return element.uid === params.uid })
-                                    const tempUsers = doc.data().users;
-                                    tempUsers[index] = { ...tempUsers[index], inGame: false }
-                                    const inGameUsers = tempUsers.filter(user => user.inGame);
-                                    if (inGameUsers.length <= 1) {
+                                if (doc.data().hostUserID === params.uid) {
+                                    if (inGameUsers.length < 1) {
                                         batch.update(lobbyRef, {
-                                            users: tempUsers,
+                                            users: inGameUsers,
                                             hostUserID: null,
-                                            status: 'FinishedNoPlayers'
+                                            status: 'Pending'
+                                        });
+                                    } else if (inGameUsers.length < 2) {
+                                        batch.update(lobbyRef, {
+                                            users: inGameUsers,
+                                            hostUserID: inGameUsers[0].uid,
+                                            status: 'Pending'
                                         });
                                     } else {
                                         batch.update(lobbyRef, {
-                                            users: tempUsers,
+                                            users: inGameUsers,
                                             hostUserID: inGameUsers[0].uid
                                         });
                                     }
                                 } else {
-                                    const index = doc.data().users.findIndex(
-                                        (element) => { return element.uid === params.uid })
-                                    const tempUsers = doc.data().users;
-                                    tempUsers[index] = { ...tempUsers[index], inGame: false }
                                     batch.update(lobbyRef, {
-                                        users: tempUsers
+                                        users: inGameUsers
                                     });
                                 }
                             }
 
+                            batch.delete(userLobbyRef);
                             const userRef = admin.firestore().collection('Users').doc(params.uid);
                             batch.update(userRef, {
                                 currentGameID: null
@@ -129,38 +133,49 @@ exports.onLobbyInfoChanged = functions.firestore.document('Lobbies/{lobbyID}')
         const afterData = change.after.data();
         const { params } = context;
 
+        const lobbyRef = admin.firestore().collection('Lobbies').doc(params.lobbyID);
+        const lobbyUsersRef = lobbyRef.collection('Users');
+
         if (afterData.startNextState) {
             let state = afterData.state;
             if (afterData.state < 2) {
                 state = state + 1;
-                admin.firestore().collection('Lobbies').doc(params.lobbyID)
-                    .update({
-                        startNextState: false,
-                        state
-                    })
-                    .catch(err => console.log('lobby update error', err))
+                lobbyRef.update({
+                    startNextState: false,
+                    state
+                })
             } else {
                 state = 1;
                 const questionIndex = Math.floor(Math.random() * QUESTIONS.length);
                 const currentQ = QUESTIONS[questionIndex];
-                const tempUsers = afterData.users;
-
-                afterData.users.forEach(element => {
-                    const index = tempUsers.findIndex(user => user.uid === element.currentVote);
-                    if (index !== -1) {
-                        tempUsers[index].points = tempUsers[index].points + 1;
-                    }
-                })
-
-                admin.firestore().collection('Lobbies').doc(params.lobbyID)
-                    .update({
-                        startNextState: false,
-                        state,
-                        currentQ,
-                        users: tempUsers
+                const batch = admin.firestore().batch();
+                afterData.users.forEach(user => {
+                    const userRef = lobbyUsersRef.doc(user.uid);
+                    batch.update(userRef, {
+                        currentVote: null
                     })
-                    .catch(err => console.log('lobby update error', err))
+                })
+                batch.update(lobbyRef, {
+                    startNextState: false,
+                    state,
+                    currentQ
+                })
+                batch
+                    .commit()
+                    .then((result) => {
+                        console.log('lobby update Batch Commit success!: ', result);
+                    })
+                    .catch((error) => {
+                        console.log('lobby update Batch Commit error!: ', error);
+                    });
             }
         }
-        return true;
+        if (afterData.hostUserID === null && afterData.users.length > 0) {
+            admin.firestore().collection('Lobbies').doc(params.lobbyID)
+                .update({
+                    hostUserID: afterData.users[0].uid
+                })
+                .catch(err => console.log('lobby update error', err))
+        }
+        return true
     })

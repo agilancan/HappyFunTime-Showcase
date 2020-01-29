@@ -129,8 +129,8 @@ android {
         targetSdkVersion 28
         missingDimensionStrategy "RNN.reactNativeVersion", "reactNative60"
         multiDexEnabled true
-        versionCode 3
-        versionName "0.05"
+        versionCode 6
+        versionName "0.06"
         manifestPlaceholders = [
                 tipsiStripeRedirectScheme: "my_custom_scheme_tipsi"
         ]
@@ -216,6 +216,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-wallet:16.0.1'
     implementation 'com.google.android.gms:play-services-base:16.1.0'
     implementation 'com.google.android.gms:play-services-maps:16.1.0'
+    implementation 'com.google.android.gms:play-services-ads:17.2.1'
     implementation "com.google.firebase:firebase-invites:17.0.0"
     implementation "com.google.firebase:firebase-auth:17.0.0"
     implementation "com.google.firebase:firebase-config:17.0.0"
@@ -225,6 +226,7 @@ dependencies {
     implementation 'me.leolin:ShortcutBadger:1.1.21@aar'
     implementation "com.google.firebase:firebase-perf:17.0.2"
     implementation "com.google.firebase:firebase-storage:17.0.0"
+    implementation "com.google.firebase:firebase-ads:17.2.1"
     implementation("com.google.android.gms:play-services-vision:16.2.0") {
         force = true;
     }

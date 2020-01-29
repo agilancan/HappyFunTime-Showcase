@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { Navigation } from 'react-native-navigation';
 import { firestoreConnect } from 'react-redux-firebase';
+import firebase from 'react-native-firebase';
 import PropTypes from 'prop-types';
 
 import PlayerCard from '../PlayerCard/PlayerCard';
@@ -41,12 +42,34 @@ export default class MainMenu extends Component {
         })
     }
 
+    showAd = () => {
+        const advert = firebase.admob().interstitial('ca-app-pub-8552251867519242/6963160064');
+        const AdRequest = firebase.admob.AdRequest;
+        const request = new AdRequest();
+        request.addKeyword('games');
+        advert.loadAd(request.build());
+        advert.on('onAdLoaded', () => {
+            console.log('Advert ready to show.');
+            setTimeout(() => {
+                console.log('advert loaded', advert.isLoaded());
+                if (advert.isLoaded()) {
+                    advert.show();
+                } else {
+                    // Unable to show interstitial - not loaded yet.
+                }
+            }, 1000);
+        });
+
+
+    }
+
     signIn = () => {
-        Navigation.showModal({
+        this.showAd();
+        /*Navigation.showModal({
             component: {
                 name: 'Login'
             }
-        })
+        })*/
     }
 
     render() {
@@ -78,14 +101,7 @@ export default class MainMenu extends Component {
                         source={require('../../../assets/Play/round_play_circle_filled_black_48dp.png')}
                     />
                 </TouchableOpacity>
-                <View style={styles.innerContainer3}>
-                    <TouchableOpacity
-                        style={styles.innerContainer3Box}
-                        onPress={this.signIn}
-                    >
-                        <Text style={styles.innerContainer3Text}>SIGN IN</Text>
-                    </TouchableOpacity>
-                </View>
+
                 <View style={styles.innerContainer4}>
                     <TouchableOpacity
                         onPress={() => { }}
@@ -107,14 +123,6 @@ export default class MainMenu extends Component {
                         style={styles.innerContainer4Google}
                     >
                         <Text style={styles.innerContainer4Text}>G</Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.innerContainer5}>
-                    <TouchableOpacity
-                        onPress={this.createAccount}
-                        style={styles.innerContainer5Button}
-                    >
-                        <Text style={styles.innerContainer5Text}>Create Account</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.innerContainer6}>

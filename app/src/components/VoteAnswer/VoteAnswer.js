@@ -29,6 +29,7 @@ class VoteAnswer extends Component {
         const lobbyRef = this.props.firebase.firestore()
             .collection(DATABASE.LOBBIES)
             .doc(lobbyInfo.id);
+        const lobbyUsersRef = lobbyRef.collection('Users');
         const { users, hostUserID } = lobbyInfo;
         const index = users.findIndex(user => user.uid === this.props.firebase.auth().currentUser.uid);
         if (this.state.selectedVote !== undefined) {
@@ -37,26 +38,76 @@ class VoteAnswer extends Component {
             users[index] = { ...users[index], interactionEnabled: false, currentVote: null };
         }
         if (this.props.firebase.auth().currentUser.uid === hostUserID) {
-            lobbyRef.update({
-                users,
-                startNextState: true
-            });
-        } else {
-            lobbyRef.update({
-                users
-            });
+            lobbyUsersRef.get()
+                .then(snapshot => {
+                    const batch = this.props.firebase.firestore().batch();
+                    const roundVotes = [];
+                    let mostPoints = 0;
+                    snapshot.forEach((doc) => {
+                        if (doc.data().currentVote !== null) {
+                            const index = roundVotes.findIndex(vote => vote.uid === doc.data().currentVote);
+                            if (index === -1) {
+                                roundVotes.push({ uid: doc.data().currentVote, points: 1, avatarURL: doc.data().avatarURL })
+                                if (mostPoints === 0) {
+                                    mostPoints = 1;
+                                }
+                            } else {
+                                roundVotes[index].points = roundVotes[index].points + 1;
+                                if (mostPoints < roundVotes[index].points) {
+                                    mostPoints = roundVotes[index].points;
+                                }
+                            }
+                            const userVoteRef = lobbyUsersRef.doc(doc.data().currentVote);
+                            batch.update(userVoteRef, {
+                                points: firebase.firestore.FieldValue.increment(1)
+                            })
+                        }
+                    });
+                    const winners = [];
+                    if (mostPoints > 0) {
+                        roundVotes.forEach(roundVote => {
+                            if (mostPoints === roundVote.points) {
+                                winners.push(roundVote)
+                            }
+                        })
+                    }
+                    winners.forEach(winner => {
+                        batch.update(lobbyUsersRef.doc(winner.uid), {
+                            roundsWon: firebase.firestore.FieldValue.increment(1)
+                        });
+                    })
+                    batch.update(lobbyRef, {
+                        startNextState: true,
+                        winners
+                    });
+                    batch
+                        .commit()
+                        .then((result) => {
+                            console.log('Batch Commit success!', result);
+                        })
+                        .catch((err) => {
+                            console.log('Batch Commit failure:', err);
+                        });
+                })
+
         }
+    }
+
+    uploadQuickVote = (currentVote) => {
+        const { lobbyInfo } = this.props.GameReducer;
+        const lobbyRef = this.props.firebase.firestore()
+            .collection(DATABASE.LOBBIES)
+            .doc(lobbyInfo.id);
+        lobbyRef.collection('Users').doc(this.props.firebase.auth().currentUser.uid)
+            .update({
+                currentVote
+            })
     }
 
 
     voteCard = (user, backgroundColor, borderColor, transform) => {
         console.log('vote user', user);
         let bColor = backgroundColor;
-        if (user !== undefined) {
-            if (!user.inGame) {
-                bColor = '#FF0000';
-            }
-        }
         return (
             <View style={{
                 ...styles.postedNote,
@@ -73,17 +124,22 @@ class VoteAnswer extends Component {
     }
 
     renderItem = ({ item }) => (
-        <TouchableOpacity onPress={() => { this.setState({ selectedVote: item.uid }) }}>
+        <TouchableOpacity onPress={() => {
+            this.setState({ selectedVote: item.uid })
+            this.uploadQuickVote(item.uid)
+        }}>
             {this.voteCard(item, '#FFC767', '#FFC767', [{ rotate: '0deg' }])}
         </TouchableOpacity>
     )
     render() {
-        const { users, minUsers, status, currentQA, hostUserID } = this.props.GameReducer.lobbyInfo;
+        const { users, lobbyInfo } = this.props.GameReducer;
+        const { minUsers, status, currentQA, hostUserID } = lobbyInfo;
         console.log('voteUsers', users);
         const timer = hostUserID === this.props.firebase.auth().currentUser.uid ? 15 : 15;
         return (
             <ScrollView
                 contentContainerStyle={{
+                    marginTop: 100,
                     justifyContent: 'center',
                     alignItems: 'center'
                 }}
@@ -96,6 +152,7 @@ class VoteAnswer extends Component {
                     height: WINDOW_HEIGHT,
                     width: WINDOW_WIDTH - 16
                 }} >
+                <Text style={{ fontSize: 16, color: '#000' }}>Tap to vote for the best picture</Text>
                 <FlatList
                     style={{ flex: 1 }}
                     extraData={this.state}

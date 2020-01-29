@@ -13,6 +13,8 @@ import GLOBAL from '../../Globals';
 
 const { GAMESTATE, DATABASE } = GLOBAL;
 
+const advert = firebase.admob().interstitial('ca-app-pub-8552251867519242/6963160064');
+
 class App extends React.Component {
     static options(passProps) {
         return {
@@ -53,6 +55,9 @@ class App extends React.Component {
     componentWillUnmount() {
         if (this.lobbyRef !== undefined) {
             this.lobbyRef();
+        }
+        if (this.userRef !== undefined) {
+            this.userRef();
         }
     }
 
@@ -115,6 +120,44 @@ class App extends React.Component {
                 .onSnapshot(docSnapshot => {
                     this.onLobbyChange(docSnapshot);
                 })
+            this.userRef = lobbiesRef
+                .doc(ref.id)
+                .collection('Users')
+                .onSnapshot(dataSnapshot => {
+                    let data = [...this.props.GameReducer.users];
+                    dataSnapshot.docChanges.forEach((change) => {
+                        if (change.type === 'added') {
+                            data = [change.doc.data(), ...data];
+                        }
+                        if (change.type === 'modified') {
+                            const index = data.findIndex((user) => user.uid === change.doc.data().uid);
+                            data.splice(index, 1);
+                            data = [change.doc.data(), ...data];
+                        }
+                        if (change.type === 'removed') {
+                            const index = data.findIndex((user) => user.uid === change.doc.data().uid);
+                            data.splice(index, 1);
+                        }
+                    })
+                    const users = data.sort((a, b) => {
+                        return a.roundsWon < b.roundsWon;
+                    });
+                    this.props.dispatch({
+                        type: 'SET_USERS',
+                        users
+                    });
+                    //this.onLobbyChange(docSnapshot);
+                })
+        }
+
+        const addUser = (ref, user) => {
+            this.props.firebase.firestore()
+                .collection(DATABASE.LOBBIES)
+                .doc(ref.id)
+                .collection('Users')
+                .doc(user.uid)
+                .set(user)
+                .catch(err => console.log('user add error ', err))
         }
         console.log('lobbiesRef ', lobbiesRef);
         lobbiesRef
@@ -131,17 +174,19 @@ class App extends React.Component {
                     currentDrawingURL: undefined,
                     currentVote: null,
                     rank: 0,
-                    points: 0
+                    points: 0,
+                    roundsWon: 0
                 };
                 console.log('lobby snapshot ', snapshot);
                 if (snapshot._docs.length > 0) {
                     lobbiesRef
                         .doc(snapshot._docs[0].id)
                         .update({
-                            users: firebase.firestore.FieldValue.arrayUnion(user)
+                            users: firebase.firestore.FieldValue.arrayUnion({ uid: currentUser.uid })
                         })
                         .then(ref => {
                             updateUserAndStartListener(snapshot._docs[0])
+                            addUser(snapshot._docs[0], user)
                         })
                         .catch(err => console.log('join lobby error ', err))
                 } else {
@@ -154,10 +199,11 @@ class App extends React.Component {
                                 lobbiesRef
                                     .doc(lobbySnapshot._docs[0].id)
                                     .update({
-                                        users: firebase.firestore.FieldValue.arrayUnion(user)
+                                        users: firebase.firestore.FieldValue.arrayUnion({ uid: currentUser.uid })
                                     })
                                     .then(ref => {
                                         updateUserAndStartListener(lobbySnapshot._docs[0])
+                                        addUser(lobbySnapshot._docs[0], user)
                                     })
                                     .catch(err => console.log('join inProgress lobby error ', err))
                             } else {
@@ -165,17 +211,19 @@ class App extends React.Component {
                                 const question = GLOBAL.QUESTIONS[questionIndex];
                                 lobbiesRef
                                     .add({
-                                        users: [user],
+                                        users: [{ uid: currentUser.uid }],
                                         hostUserID: currentUser.uid,
                                         minUsers: DATABASE.LOBBY_MIN_USERS,
                                         currentQ: question,
                                         status: DATABASE.LOBBY_STATUS.PENDING,
                                         round: 0,
                                         state: 0,
-                                        startNextState: false
+                                        startNextState: false,
+                                        winners: []
                                     })
                                     .then(ref => {
                                         updateUserAndStartListener(ref)
+                                        addUser(ref, user)
                                     })
                                     .catch(err => console.log('add lobby error ', err))
                             }

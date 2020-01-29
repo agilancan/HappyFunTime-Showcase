@@ -15,7 +15,8 @@ const { DATABASE } = Globals;
 
 class Lobby extends Component {
     msg = () => {
-        const { users, minUsers, status, state } = this.props.GameReducer.lobbyInfo;
+        const { users, lobbyInfo } = this.props.GameReducer;
+        const { minUsers, status, state } = lobbyInfo;
         if (status === undefined) return null;
         if (status === DATABASE.LOBBY_STATUS.PENDING && users.length < minUsers) {
             return (
@@ -47,47 +48,62 @@ class Lobby extends Component {
         }
         return null;
     }
+
+    topRightUI = () => {
+        <View style={{
+            position: 'absolute',
+            top: 40,
+            right: 40,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: '#fff',
+            borderColor: '#000',
+            opacity: 0.8
+        }}>
+            <Text>3</Text>
+        </View>
+    }
     render() {
-        const { lobbyInfo } = this.props.GameReducer;
+        const { lobbyInfo, users } = this.props.GameReducer;
         if (lobbyInfo === undefined) return null;
         return (
             <View style={{ flex: 1 }}>
                 <View style={styles.container}>
                     <View style={styles.innerContainer}>
-                        <PlayerCard transform={[{ rotate: '3deg' }]} user={lobbyInfo.users[0]} />
-                        <PlayerCard borderColor={'#FFC767'} backgroundColor={'#FFC767'} user={lobbyInfo.users[4]} />
-                        <PlayerCard borderColor={'#F3CBFF'} backgroundColor={'#F3CBFF'} transform={[{ rotate: '3deg' }]} user={lobbyInfo.users[8]} />
-                        <PlayerCard borderColor={'#FFC767'} backgroundColor={'#FFC767'} user={lobbyInfo.users[12]} />
-                        <PlayerCard borderColor={'#B2DF6D'} backgroundColor={'#B2DF6D'} transform={[{ rotate: '3deg' }]} user={lobbyInfo.users[16]} />
-                        <PlayerCard borderColor={'#F3CBFF'} backgroundColor={'#F3CBFF'} user={lobbyInfo.users[20]} />
-                        <PlayerCard transform={[{ rotate: '3deg' }]} user={lobbyInfo.users[24]} />
+                        <PlayerCard transform={[{ rotate: '3deg' }]} user={users[0]} />
+                        <PlayerCard borderColor={'#FFC767'} backgroundColor={'#FFC767'} user={users[4]} />
+                        <PlayerCard borderColor={'#F3CBFF'} backgroundColor={'#F3CBFF'} transform={[{ rotate: '3deg' }]} user={users[8]} />
+                        <PlayerCard borderColor={'#FFC767'} backgroundColor={'#FFC767'} user={users[12]} />
+                        <PlayerCard borderColor={'#B2DF6D'} backgroundColor={'#B2DF6D'} transform={[{ rotate: '3deg' }]} user={users[16]} />
+                        <PlayerCard borderColor={'#F3CBFF'} backgroundColor={'#F3CBFF'} user={users[20]} />
+                        <PlayerCard transform={[{ rotate: '3deg' }]} user={users[24]} />
                     </View>
                     <View style={styles.innerContainer}>
-                        <PlayerCard borderColor={'#FFE66A'} backgroundColor={'#FFE66A'} user={lobbyInfo.users[1]} />
-                        <PlayerCard borderColor={'#F3CBFF'} backgroundColor={'#F3CBFF'} transform={[{ rotate: '3deg' }]} user={lobbyInfo.users[5]} />
-                        <PlayerCard borderColor={'#B2DF6D'} backgroundColor={'#B2DF6D'} user={lobbyInfo.users[9]} />
-                        <PlayerCard borderColor={'#FFE66A'} backgroundColor={'#FFE66A'} transform={[{ rotate: '3deg' }]} user={lobbyInfo.users[13]} />
-                        <PlayerCard user={lobbyInfo.users[17]} />
-                        <PlayerCard borderColor={'#FFE66A'} backgroundColor={'#FFE66A'} transform={[{ rotate: '3deg' }]} user={lobbyInfo.users[21]} />
-                        <PlayerCard borderColor={'#FFC767'} backgroundColor={'#FFC767'} user={lobbyInfo.users[25]} />
+                        <PlayerCard borderColor={'#FFE66A'} backgroundColor={'#FFE66A'} user={users[1]} />
+                        <PlayerCard borderColor={'#F3CBFF'} backgroundColor={'#F3CBFF'} transform={[{ rotate: '3deg' }]} user={users[5]} />
+                        <PlayerCard borderColor={'#B2DF6D'} backgroundColor={'#B2DF6D'} user={users[9]} />
+                        <PlayerCard borderColor={'#FFE66A'} backgroundColor={'#FFE66A'} transform={[{ rotate: '3deg' }]} user={users[13]} />
+                        <PlayerCard user={users[17]} />
+                        <PlayerCard borderColor={'#FFE66A'} backgroundColor={'#FFE66A'} transform={[{ rotate: '3deg' }]} user={users[21]} />
+                        <PlayerCard borderColor={'#FFC767'} backgroundColor={'#FFC767'} user={users[25]} />
                     </View>
                     <View style={styles.innerContainer}>
-                        <PlayerCard transform={[{ rotate: '3deg' }]} user={lobbyInfo.users[2]} />
-                        <PlayerCard borderColor={'#FFC767'} backgroundColor={'#FFC767'} user={lobbyInfo.users[6]} />
-                        <PlayerCard borderColor={'#F3CBFF'} backgroundColor={'#F3CBFF'} transform={[{ rotate: '3deg' }]} user={lobbyInfo.users[10]} />
-                        <PlayerCard user={lobbyInfo.users[14]} />
-                        <PlayerCard borderColor={'#FFE66A'} backgroundColor={'#FFE66A'} transform={[{ rotate: '3deg' }]} user={lobbyInfo.users[18]} />
-                        <PlayerCard borderColor={'#FFC767'} backgroundColor={'#FFC767'} user={lobbyInfo.users[22]} />
-                        <PlayerCard borderColor={'#F3CBFF'} backgroundColor={'#F3CBFF'} transform={[{ rotate: '3deg' }]} user={lobbyInfo.users[26]} />
+                        <PlayerCard transform={[{ rotate: '3deg' }]} user={users[2]} />
+                        <PlayerCard borderColor={'#FFC767'} backgroundColor={'#FFC767'} user={users[6]} />
+                        <PlayerCard borderColor={'#F3CBFF'} backgroundColor={'#F3CBFF'} transform={[{ rotate: '3deg' }]} user={users[10]} />
+                        <PlayerCard user={users[14]} />
+                        <PlayerCard borderColor={'#FFE66A'} backgroundColor={'#FFE66A'} transform={[{ rotate: '3deg' }]} user={users[18]} />
+                        <PlayerCard borderColor={'#FFC767'} backgroundColor={'#FFC767'} user={users[22]} />
+                        <PlayerCard borderColor={'#F3CBFF'} backgroundColor={'#F3CBFF'} transform={[{ rotate: '3deg' }]} user={users[26]} />
                     </View>
                     <View style={styles.innerContainer}>
-                        <PlayerCard borderColor={'#B2DF6D'} backgroundColor={'#B2DF6D'} user={lobbyInfo.users[3]} />
-                        <PlayerCard transform={[{ rotate: '3deg' }]} user={lobbyInfo.users[7]} />
-                        <PlayerCard borderColor={'#FFE66A'} backgroundColor={'#FFE66A'} user={lobbyInfo.users[11]} />
-                        <PlayerCard borderColor={'#FFC767'} backgroundColor={'#FFC767'} transform={[{ rotate: '3deg' }]} user={lobbyInfo.users[15]} />
-                        <PlayerCard borderColor={'#F3CBFF'} backgroundColor={'#F3CBFF'} user={lobbyInfo.users[19]} />
-                        <PlayerCard transform={[{ rotate: '3deg' }]} user={lobbyInfo.users[23]} />
-                        <PlayerCard borderColor={'#B2DF6D'} backgroundColor={'#B2DF6D'} user={lobbyInfo.users[27]} />
+                        <PlayerCard borderColor={'#B2DF6D'} backgroundColor={'#B2DF6D'} user={users[3]} />
+                        <PlayerCard transform={[{ rotate: '3deg' }]} user={users[7]} />
+                        <PlayerCard borderColor={'#FFE66A'} backgroundColor={'#FFE66A'} user={users[11]} />
+                        <PlayerCard borderColor={'#FFC767'} backgroundColor={'#FFC767'} transform={[{ rotate: '3deg' }]} user={users[15]} />
+                        <PlayerCard borderColor={'#F3CBFF'} backgroundColor={'#F3CBFF'} user={users[19]} />
+                        <PlayerCard transform={[{ rotate: '3deg' }]} user={users[23]} />
+                        <PlayerCard borderColor={'#B2DF6D'} backgroundColor={'#B2DF6D'} user={users[27]} />
                     </View>
 
                 </View>

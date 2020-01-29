@@ -25,6 +25,8 @@ import io.invertase.firebase.storage.RNFirebaseStoragePackage; // Firebase Stora
 import io.invertase.firebase.firestore.RNFirebaseFirestorePackage;
 import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage;
 import io.invertase.firebase.fabric.crashlytics.RNFirebaseCrashlyticsPackage;
+import io.invertase.firebase.admob.RNFirebaseAdMobPackage;
+import com.google.android.gms.ads.MobileAds;
 
 import com.reactnativenavigation.NavigationApplication;
 import com.reactnativenavigation.react.NavigationReactNativeHost;
@@ -71,6 +73,7 @@ public class MainApplication extends NavigationApplication implements ReactAppli
         // FacebookSdk.sdkInitialize(getApplicationContext());
         // If you want to use AppEventsLogger to log events.
         // AppEventsLogger.activateApp(this);
+        MobileAds.initialize(this, "ca-app-pub-8552251867519242~7338371066");
         registerExternalComponent("RNNCustomComponent", new FragmentCreator());
     }
 
@@ -94,6 +97,7 @@ public class MainApplication extends NavigationApplication implements ReactAppli
         packages.add(new RNFirebasePerformancePackage());
         packages.add(new RNFirebaseStoragePackage());
         packages.add(new RNFirebaseFirestorePackage());
+        packages.add(new RNFirebaseAdMobPackage());
         packages.add(new VectorIconsPackage());
         return packages;
     }

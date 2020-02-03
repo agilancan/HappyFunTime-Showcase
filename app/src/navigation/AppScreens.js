@@ -5,6 +5,7 @@ import Tutorial from '../components/Tutorial/Tutorial';
 import DrawAvatar from '../components/Draw/DrawAvatar';
 import Register from '../components/Register/Register';
 import Login from '../components/Login/Login';
+import LeaderBoard from '../components/Leaderboard/Leaderboard';
 
 const AppScreens = (store, Provider) => {
   Navigation.registerComponentWithRedux('Welcome', () => Welcome, Provider, store);
@@ -14,5 +15,6 @@ const AppScreens = (store, Provider) => {
   Navigation.registerComponentWithRedux('DrawAvatar', () => DrawAvatar, Provider, store);
   Navigation.registerComponentWithRedux('Register', () => Register, Provider, store);
   Navigation.registerComponentWithRedux('Login', () => Login, Provider, store);
+  Navigation.registerComponentWithRedux('LeaderBoard', () => LeaderBoard, Provider, store);
 };
 export default AppScreens;

@@ -41,28 +41,44 @@ class DrawAvatar extends Component {
             .child('avatar.jpg')
             .putFile(path)
             .then((uploadedFile) => {
-                const { uid, displayName, providerId } = currentUser;
+                let { uid, displayName, providerId } = currentUser;
+                if (currentUser.providerData.length > 0) {
+                    providerId = currentUser.providerData[0].providerId;
+                }
+
                 currentUser
                     .updateProfile({
                         photoURL: uploadedFile.downloadURL
                     })
                     .then(() => {
-                        this.props.firebase.firestore()
+                        const userRef = this.props.firebase.firestore()
                             .collection(USERS)
-                            .doc(uid)
-                            .set({
-                                uid,
-                                displayName,
-                                status: "online",
-                                avatarURL: uploadedFile.downloadURL,
-                                currentGameID: undefined,
-                                providerId,
-                                created: firebase.firestore.FieldValue.serverTimestamp(),
-                                lastChanged: firebase.firestore.FieldValue.serverTimestamp()
-                            })
-                            .catch(err => console.log('user profile update error ', err))
-                        dispatch({ type: 'SET_GAME_STATE_LOBBY' });
-                        Navigation.dismissModal(componentId);
+                            .doc(uid);
+                        const info = {
+                            uid,
+                            displayName,
+                            status: "online",
+                            avatarURL: uploadedFile.downloadURL,
+                            currentGameID: undefined,
+                            providerId,
+                            created: firebase.firestore.FieldValue.serverTimestamp(),
+                            lastChanged: firebase.firestore.FieldValue.serverTimestamp()
+                        }
+                        userRef.get().then(doc => {
+                            if (doc.exists) {
+                                userRef.update(info)
+                                    .catch(err => console.log('user profile update error ', err))
+                            } else {
+                                userRef.set({
+                                    ...info,
+                                    points: 0,
+                                    roundsWon: 0
+                                })
+                                    .catch(err => console.log('user profile set error ', err))
+                            }
+                            dispatch({ type: 'SET_GAME_STATE_LOBBY' });
+                            Navigation.dismissModal(componentId);
+                        })
                     })
                     .catch(err => console.log('auth profile update error ', err))
             })
@@ -154,7 +170,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         height: verticalScale(441.86),
         width: scale(344.38),
-        borderRadius: 7
+        borderRadius: 100
     },
     titleText: {
         position: 'absolute',

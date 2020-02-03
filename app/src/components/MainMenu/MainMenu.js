@@ -7,8 +7,11 @@ import {
     TouchableOpacity
 } from 'react-native';
 import { Navigation } from 'react-native-navigation';
-import { firestoreConnect } from 'react-redux-firebase';
+import { isEmpty, firestoreConnect } from 'react-redux-firebase';
 import firebase from 'react-native-firebase';
+import { GoogleSignin } from 'react-native-google-signin';
+import { LoginManager, AccessToken } from 'react-native-fbsdk';
+import KeepAwake from 'react-native-keep-awake';
 import PropTypes from 'prop-types';
 
 import PlayerCard from '../PlayerCard/PlayerCard';
@@ -42,27 +45,6 @@ export default class MainMenu extends Component {
         })
     }
 
-    showAd = () => {
-        const advert = firebase.admob().interstitial('ca-app-pub-8552251867519242/6963160064');
-        const AdRequest = firebase.admob.AdRequest;
-        const request = new AdRequest();
-        request.addKeyword('games');
-        advert.loadAd(request.build());
-        advert.on('onAdLoaded', () => {
-            console.log('Advert ready to show.');
-            setTimeout(() => {
-                console.log('advert loaded', advert.isLoaded());
-                if (advert.isLoaded()) {
-                    advert.show();
-                } else {
-                    // Unable to show interstitial - not loaded yet.
-                }
-            }, 1000);
-        });
-
-
-    }
-
     signIn = () => {
         this.showAd();
         /*Navigation.showModal({
@@ -72,7 +54,119 @@ export default class MainMenu extends Component {
         })*/
     }
 
+    googleSignIn = async () => {
+        try {
+            await GoogleSignin.hasPlayServices();
+            const configUser = await GoogleSignin.configure({
+                scopes: ['https://www.googleapis.com/auth/drive.photos.readonly'],
+                webClientId: '244044054509-t51ol2lnvb5f3hd7hhr1ifvi4obj439m.apps.googleusercontent.com',
+                offlineAccess: false
+            });
+
+            await GoogleSignin.signIn().then((user) => {
+                console.log('configUser', configUser);
+                GoogleSignin.getTokens().then((res) => {
+                    console.log(res.accessToken);
+                    const creds = firebase.auth.GoogleAuthProvider.credential(user.idToken, res.accessToken);
+                    console.log('google creds: ', creds, 'accessToken: ', res.accessToken);
+                    this.props.firebase
+                        .auth()
+                        .signInWithCredential(creds)
+                        .then((data) => {
+                            console.log('google user: ', user);
+                            Navigation.showModal({
+                                stack: {
+                                    children: [{
+                                        component: {
+                                            name: 'DrawAvatar'
+                                        }
+                                    }]
+                                }
+                            });
+                        })
+                        .catch((err) => {
+                            console.log('google signin error: ', err);
+                            return Promise.reject(err);
+                        });
+                })
+                    .catch((err) => {
+                        console.log('getTokens error: ', err);
+                        return Promise.reject(err);
+                    });
+            });
+        } catch (e) {
+            console.error(e);
+        }
+    };
+
+    facebookSignIn = async () => {
+        try {
+            const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
+            if (result.isCancelled) {
+                throw new Error('User cancelled request'); // Handle this however fits the flow of your app
+            }
+
+            console.log(`Login success with permissions: ${result.grantedPermissions.toString()}`);
+
+            // get the access token
+            const data = await AccessToken.getCurrentAccessToken();
+            if (!data) {
+                throw new Error('Something went wrong obtaining the users access token');
+            }
+            // create a new firebase credential with the token
+            const credential = firebase.auth.FacebookAuthProvider.credential(data.accessToken);
+            // login with credential
+            const currentUser = await this.props.firebase
+                .auth()
+                .signInAndRetrieveDataWithCredential(credential)
+                .then((credData) => {
+                    Navigation.showModal({
+                        stack: {
+                            children: [{
+                                component: {
+                                    name: 'DrawAvatar'
+                                }
+                            }]
+                        }
+                    });
+                })
+                .catch((err) => {
+                    console.log({ logInWithReadPermissionsERR: err });
+                });
+        } catch (e) {
+            console.error(e);
+        }
+    };
+
+    disconnect = () => {
+        const { uid } = this.props.firebase.auth().currentUser;
+        this.props.firebase.auth().signOut().then(() => {
+            this.props.firebase.database().ref('/status/' + uid)
+                .onDisconnect().set({
+                    state: 'offline',
+                    last_changed: firebase.database.ServerValue.TIMESTAMP
+                })
+        })
+    }
+
+    loadLeaderBoard = () => {
+        Navigation.showModal({
+            stack: {
+                children: [{
+                    component: {
+                        name: 'LeaderBoard'
+                    }
+                }]
+            }
+        });
+    }
+
     render() {
+        let user = undefined;
+        if (!isEmpty(this.props.firebase.auth().currentUser)) {
+            user = { avatarURL: this.props.firebase.auth().currentUser.photoURL }
+        }
+
         return (
             <View style={styles.outerContainer}>
                 <View style={styles.innerContainer1}>
@@ -83,17 +177,17 @@ export default class MainMenu extends Component {
                         {' '}
                         ... good ... draw … :)
                     </Text>
-                    <View style={styles.innerContainer1Right}>
+                    <TouchableOpacity onPress={this.loadLeaderBoard} style={styles.innerContainer1Right}>
                         <View style={styles.innerContainer1Box}>
                             <View style={styles.innerContainer1BoxInner}>
-                                <PlayerCard style={styles.playerCard} />
+                                <PlayerCard user={user} style={styles.playerCard} />
                             </View>
                         </View>
                         <Image
                             style={styles.leaderboard}
                             source={require('../../../assets/Leaderboard/round_list_black_24dp.png')}
                         />
-                    </View>
+                    </TouchableOpacity>
                 </View>
                 <TouchableOpacity onPress={this.signInAnonymously} style={styles.innerContainer2}>
                     <Image
@@ -104,22 +198,13 @@ export default class MainMenu extends Component {
 
                 <View style={styles.innerContainer4}>
                     <TouchableOpacity
-                        onPress={() => { }}
+                        onPress={this.facebookSignIn}
                         style={styles.innerContainer4Facebook}
                     >
                         <Text style={styles.innerContainer4Text}>f</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        onPress={() => {
-                            const { uid } = this.props.firebase.auth().currentUser;
-                            this.props.firebase.auth().signOut().then(() => {
-                                this.props.firebase.database().ref('/status/' + uid)
-                                    .onDisconnect().set({
-                                        state: 'offline',
-                                        last_changed: firebase.database.ServerValue.TIMESTAMP
-                                    })
-                            })
-                        }}
+                        onPress={this.googleSignIn}
                         style={styles.innerContainer4Google}
                     >
                         <Text style={styles.innerContainer4Text}>G</Text>
@@ -132,6 +217,7 @@ export default class MainMenu extends Component {
                     <View style={{ ...styles.bar, backgroundColor: "#94E5FF" }} />
                     <View style={{ ...styles.bar, backgroundColor: "#FFE66A" }} />
                 </View>
+                <KeepAwake />
             </View>
         );
     }

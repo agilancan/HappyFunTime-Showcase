@@ -4,6 +4,7 @@ import { firestoreConnect } from 'react-redux-firebase';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { SketchCanvas } from '@gigasz/react-native-sketch-canvas';
+import firebase from 'react-native-firebase';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import CountdownCircle from 'react-native-countdown-circle'
 
@@ -18,7 +19,22 @@ class DrawAnswer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            showWinner: true
+            showWinner: true,
+            timer: 30
+        }
+    }
+
+    componentDidUpdate(prevProps) {
+        const { hostUserID, stateTimerStart } = this.props.GameReducer.lobbyInfo;
+        let timer = hostUserID === this.props.firebase.auth().currentUser.uid ? 31 : 30;
+        if (prevProps.GameReducer.lobbyInfo.stateTimerStart !== stateTimerStart && stateTimerStart !== null) {
+            console.log('answer update draw change before', prevProps.GameReducer.lobbyInfo.stateTimerStart, stateTimerStart);
+            const startDate = stateTimerStart.toDate();
+            const today = new Date();
+            const secondsElapsed = (today.getTime() - startDate.getTime()) / 1000;
+            timer = timer - secondsElapsed;
+            this.setState({ timer });
+            console.log('answer update draw change after', startDate, today, secondsElapsed, timer);
         }
     }
 
@@ -42,7 +58,8 @@ class DrawAnswer extends Component {
                 if (this.props.firebase.auth().currentUser.uid === hostUserID) {
                     const batch = this.props.firebase.firestore().batch();
                     batch.update(lobbyRef, {
-                        startNextState: true
+                        startNextState: true,
+                        stateTimerStart: firebase.firestore.FieldValue.serverTimestamp()
                     });
                     batch.update(lobbyUserRef, {
                         votingEnabled: true, currentDrawingURL: uploadedFile.downloadURL, currentVote: null
@@ -141,10 +158,10 @@ class DrawAnswer extends Component {
             {this.winnerCard(item, '#FFC767', '#FFC767', [{ rotate: '0deg' }])}
         </View>
     )
+
     render() {
         const { lobbyInfo, users } = this.props.GameReducer;
-        const { minUsers, status, currentQ, hostUserID } = lobbyInfo;
-        const timer = hostUserID === this.props.firebase.auth().currentUser.uid ? 30 : 30;
+
         console.log('drawanswer lobbyInfo', lobbyInfo);
         if (this.state.showWinner && lobbyInfo.winners.length > 0) {
             return (
@@ -180,7 +197,9 @@ class DrawAnswer extends Component {
                         color="#ff003f"
                         bgColor="#fff"
                         textStyle={{ fontSize: scale(30) }}
-                        onTimeElapsed={() => { this.setState({ showWinner: false }) }} />
+                        onTimeElapsed={() => {
+                            this.setState({ showWinner: false })
+                        }} />
                 </ScrollView >
             )
         }
@@ -195,7 +214,7 @@ class DrawAnswer extends Component {
                     borderRadius: 50,
                     height: scale(100),
                     width: scale(150),
-                    borderWidth: 1,
+                    borderWidth: 1.5,
                     borderColor: '#000'
                 }}>
                     <Text style={{ color: '#000', fontSize: scale(16), textAlign: 'center' }}>
@@ -265,7 +284,7 @@ class DrawAnswer extends Component {
                             backgroundColor: '#000'
                         }} >
                         <CountdownCircle
-                            seconds={timer}
+                            seconds={this.state.timer}
                             radius={30}
                             borderWidth={8}
                             color="#ff003f"
@@ -299,7 +318,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        opacity: 0.8
+        opacity: 0.9
     },
     innerContainer: {
         width: scale(255.36),

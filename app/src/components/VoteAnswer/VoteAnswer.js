@@ -1,11 +1,13 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, Image, ScrollView, Dimensions, FlatList, ToastAndroid } from "react-native";
+import {
+    StyleSheet, View, Text, TouchableOpacity, Image,
+    ScrollView, Dimensions, FlatList, ToastAndroid
+} from "react-native";
 import { firestoreConnect } from 'react-redux-firebase';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import CountdownCircle from 'react-native-countdown-circle'
-
 import firebase from 'react-native-firebase';
+import CountdownCircle from 'react-native-countdown-circle'
 
 import PlayerCard from "../PlayerCard/PlayerCard";
 import Globals from '../../Globals';
@@ -20,12 +22,31 @@ class VoteAnswer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedVote: undefined
+            selectedVote: undefined,
+            timer: 15,
+            updateTimer: false
         };
+    }
+
+    componentDidUpdate(prevProps) {
+        this.props.showAd();
+        const { stateTimerStart } = this.props.GameReducer.lobbyInfo;
+        let timer = 15;
+        if ((prevProps.GameReducer.lobbyInfo.stateTimerStart !== stateTimerStart && stateTimerStart !== null) || this.state.updateTimer) {
+            console.log('answer update vote change before', prevProps.GameReducer.lobbyInfo.stateTimerStart, stateTimerStart);
+            const startDate = stateTimerStart.toDate();
+            const today = new Date();
+            const secondsElapsed = (today.getTime() - startDate.getTime()) / 1000;
+            this.state.timer = timer - secondsElapsed;
+            this.setState({ timer, updateTimer: false });
+            console.log('answer update vote change', startDate, today, secondsElapsed, this.state.timer);
+        }
     }
 
     uploadVote = () => {
         const { lobbyInfo } = this.props.GameReducer;
+        const usersRef = this.props.firebase.firestore()
+            .collection(DATABASE.USERS);
         const lobbyRef = this.props.firebase.firestore()
             .collection(DATABASE.LOBBIES)
             .doc(lobbyInfo.id);
@@ -69,15 +90,22 @@ class VoteAnswer extends Component {
                             if (mostPoints === roundVote.points) {
                                 winners.push(roundVote)
                             }
+                            batch.update(usersRef.doc(roundVote.uid), {
+                                points: firebase.firestore.FieldValue.increment(roundVote.points)
+                            })
                         })
                     }
                     winners.forEach(winner => {
                         batch.update(lobbyUsersRef.doc(winner.uid), {
                             roundsWon: firebase.firestore.FieldValue.increment(1)
                         });
+                        batch.update(usersRef.doc(winner.uid), {
+                            roundsWon: firebase.firestore.FieldValue.increment(1)
+                        })
                     })
                     batch.update(lobbyRef, {
                         startNextState: true,
+                        stateTimerStart: firebase.firestore.FieldValue.serverTimestamp(),
                         winners
                     });
                     batch
@@ -132,10 +160,7 @@ class VoteAnswer extends Component {
         </TouchableOpacity>
     )
     render() {
-        const { users, lobbyInfo } = this.props.GameReducer;
-        const { minUsers, status, currentQA, hostUserID } = lobbyInfo;
-        console.log('voteUsers', users);
-        const timer = hostUserID === this.props.firebase.auth().currentUser.uid ? 15 : 15;
+        const { users } = this.props.GameReducer;
         return (
             <ScrollView
                 contentContainerStyle={{
@@ -163,7 +188,7 @@ class VoteAnswer extends Component {
                 />
                 <CountdownCircle
                     style={{ position: 'absolute', bottom: 0, left: WINDOW_WIDTH / 2 }}
-                    seconds={timer}
+                    seconds={this.state.timer}
                     radius={30}
                     borderWidth={8}
                     color="#ff003f"

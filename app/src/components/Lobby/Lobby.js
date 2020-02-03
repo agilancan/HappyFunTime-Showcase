@@ -1,9 +1,11 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, Image } from "react-native";
 import { firestoreConnect } from 'react-redux-firebase';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { Navigation } from 'react-native-navigation';
+import firebase from 'react-native-firebase';
+import BackgroundTimer from 'react-native-background-timer';
+import KeepAwake from 'react-native-keep-awake';
 
 import VoteAnswer from '../VoteAnswer/VoteAnswer';
 import DrawAnswer from '../Draw/DrawAnswer';
@@ -14,6 +16,51 @@ import Globals from '../../Globals';
 const { DATABASE } = Globals;
 
 class Lobby extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            profile: undefined
+        }
+    }
+    componentDidMount() {
+        BackgroundTimer.runBackgroundTimer(() => {
+            this.props.dispatch({
+                type: 'TOGGLE_AD',
+                showAd: true
+            });
+        },
+            60000);
+    }
+
+    showAd = () => {
+        if (this.props.GameReducer.showAd &&
+            this.props.GameReducer.lobbyInfo.hostUserID !==
+            this.props.firebase.auth().currentUser.uid
+        ) {
+            const advert = firebase.admob().interstitial('ca-app-pub-8552251867519242/6963160064');
+            const AdRequest = firebase.admob.AdRequest;
+            const request = new AdRequest();
+            request.addKeyword('games');
+            advert.loadAd(request.build());
+            advert.on('onAdLoaded', () => {
+                console.log('Advert ready to show.');
+                setTimeout(() => {
+                    console.log('advert loaded', advert.isLoaded());
+                    if (advert.isLoaded()) {
+                        advert.show();
+                        this.setState({ updateTimer: true })
+                    } else {
+                        // Unable to show interstitial - not loaded yet.
+                    }
+                }, 1000);
+            });
+            this.props.dispatch({
+                type: 'TOGGLE_AD',
+                showAd: false
+            });
+        }
+    }
+
     msg = () => {
         const { users, lobbyInfo } = this.props.GameReducer;
         const { minUsers, status, state } = lobbyInfo;
@@ -41,10 +88,10 @@ class Lobby extends Component {
             );
         }
         if (state === 1 && status === DATABASE.LOBBY_STATUS.IN_PROGRESS) {
-            return <DrawAnswer style={{ position: 'absolute', opacity: 0.8 }} />
+            return <DrawAnswer showAd={this.showAd} style={{ position: 'absolute', opacity: 0.8 }} />
         }
         if (state === 2 && status === DATABASE.LOBBY_STATUS.IN_PROGRESS) {
-            return <VoteAnswer style={{ position: 'absolute', opacity: 0.8 }} />;
+            return <VoteAnswer showAd={this.showAd} style={{ position: 'absolute', opacity: 0.8 }} />;
         }
         return null;
     }
@@ -64,8 +111,9 @@ class Lobby extends Component {
         </View>
     }
     render() {
-        const { lobbyInfo, users } = this.props.GameReducer;
+        const { lobbyInfo, users, profile } = this.props.GameReducer;
         if (lobbyInfo === undefined) return null;
+        const player = users.find(user => user.uid === this.props.firebase.auth().currentUser.uid);
         return (
             <View style={{ flex: 1 }}>
                 <View style={styles.container}>
@@ -108,6 +156,42 @@ class Lobby extends Component {
 
                 </View>
                 {this.msg()}
+                {player !== undefined ? <View style={{
+                    backgroundColor: '#fff',
+                    position: 'absolute', top: 0, right: 0, flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    aspectRatio: 1,
+                    height: scale(50),
+                    width: scale(50),
+                    borderWidth: scale(1),
+                    borderTopLeftRadius: scale(0),
+                    borderTopRightRadius: scale(1),
+                    borderBottomLeftRadius: scale(5),
+                    margin: "3%",
+                    padding: '0%'
+                }}>
+                    <Image
+                        style={{
+                            position: 'absolute',
+                            height: scale(40),
+                            width: scale(40)
+                        }}
+                        resizeMode={'contain'}
+                        source={{ uri: player.avatarURL }} />
+                    <View style={{
+                        position: "absolute", top: 1.5, right: 1.5, backgroundColor: '#fff',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: scale(20),
+                        height: scale(20),
+                        borderRadius: scale(10)
+                    }}>
+                        <Text style={{ fontSize: scale(15) }}>{player.points}</Text>
+                    </View>
+                </View>
+                    : null}
+                <KeepAwake />
             </View>
         );
     }

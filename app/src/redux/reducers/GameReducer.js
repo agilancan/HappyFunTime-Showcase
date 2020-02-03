@@ -1,6 +1,8 @@
 import GLOBAL from '../../Globals';
 const GameReducer = (
     state = {
+        profile: undefined,
+        showAd: false,
         gameState: GLOBAL.GAMESTATE.LOGIN,
         users: [],
         lobbyInfo: {
@@ -16,6 +18,18 @@ const GameReducer = (
     action
 ) => {
     switch (action.type) {
+        case 'SET_PROFILE': {
+            return {
+                ...state,
+                profile: action.profile
+            };
+        }
+        case 'TOGGLE_AD': {
+            return {
+                ...state,
+                showAd: action.showAd
+            };
+        }
         case 'SET_GAME_STATE': {
             return {
                 ...state,

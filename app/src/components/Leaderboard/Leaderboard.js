@@ -1,11 +1,15 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, FlatList } from "react-native";
+import { firestoreConnect } from 'react-redux-firebase';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+
 import { scale } from '../../utility/Scale';
 import GlobalScore from "../Leaderboard/GlobalScore";
-
-
+import GLOBAL from '../../Globals';
+const { GAMESTATE, DATABASE } = GLOBAL;
 // This class determines everything to do with the Question Card
-export default class Leaderboard extends Component {
+class Leaderboard extends Component {
     static options(passProps) {
         return {
             statusBar: {
@@ -23,6 +27,37 @@ export default class Leaderboard extends Component {
         };
     }
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            topUsers: []
+        };
+    }
+
+    componentDidMount() {
+        const usersRef = this.props.firebase
+            .firestore()
+            .collection(DATABASE.USERS);
+        usersRef
+            .where('providerId', '==', 'facebook.com')
+            .get()
+            .then(facebookUsersSnapshot => {
+                usersRef
+                    .where('providerId', '==', 'google.com')
+                    .get()
+                    .then(googleUsersSnapshot => {
+                        const users = facebookUsersSnapshot._docs.concat(googleUsersSnapshot._docs);
+                        this.setState({
+                            topUsers: users.sort((a, b) => {
+                                return a.points < b.points;
+                            })
+                        })
+                    })
+            })
+    }
+
+    renderItem = ({ item, index, separators }) => <GlobalScore user={{ ...item.data(), rank: index + 1 }} key={item.data().uid} />
+
     render() {
         return (
             <View style={styles.outerContainer}>
@@ -30,19 +65,23 @@ export default class Leaderboard extends Component {
                     <Text style={styles.innerContainer1Text}>Global leaderboard.</Text>
                 </View>
                 <View style={styles.innerContainer2}>
-                    <GlobalScore />
-                    <GlobalScore />
-                    <GlobalScore />
-                    <GlobalScore />
-                    <GlobalScore />
-                    <GlobalScore />
-                    <GlobalScore />
+                    <FlatList
+                        style={{ flex: 1 }}
+                        extraData={this.state}
+                        data={this.state.topUsers}
+                        keyExtractor={(item) => item.uid}
+                        renderItem={this.renderItem}
+                    />
                 </View>
             </View>
         );
     }
 }
-
+function mapStateToProps(state) {
+    const { GameReducer } = state;
+    return { GameReducer };
+}
+export default compose(firestoreConnect(), connect(mapStateToProps))(Leaderboard);
 
 // All the styles
 const styles = StyleSheet.create({
@@ -56,7 +95,7 @@ const styles = StyleSheet.create({
     innerContainer1: {
         flex: 3,
         flexDirection: 'row',
-        backgroundColor: "#FFFFFF",
+        backgroundColor: "#FFFFFF"
     },
     innerContainer1Text: {
         fontFamily: 'roboto_condensed_bold_italic',
@@ -69,6 +108,6 @@ const styles = StyleSheet.create({
     },
     innerContainer2: {
         flex: 6,
-        backgroundColor: "#FFFFFF",
-    },
+        backgroundColor: "#FFFFFF"
+    }
 });

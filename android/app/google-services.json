@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "244044054509-v39t3hkn9mdim7g9faca2eemkduvaaff.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.doohickey.happyfuntimes",
+            "certificate_hash": "b1dd0ef2c231e12677d705d28a807a91977dbd0f"
+          }
+        },
+        {
           "client_id": "244044054509-t51ol2lnvb5f3hd7hhr1ifvi4obj439m.apps.googleusercontent.com",
           "client_type": 3
         }

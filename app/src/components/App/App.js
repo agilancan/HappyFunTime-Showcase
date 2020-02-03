@@ -219,7 +219,8 @@ class App extends React.Component {
                                         round: 0,
                                         state: 0,
                                         startNextState: false,
-                                        winners: []
+                                        winners: [],
+                                        stateTimerStart: firebase.firestore.FieldValue.serverTimestamp()
                                     })
                                     .then(ref => {
                                         updateUserAndStartListener(ref)

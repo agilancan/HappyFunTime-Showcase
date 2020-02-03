@@ -9,11 +9,17 @@ export default class PlayerCard extends Component {
     render() {
         const { user, backgroundColor, borderColor, transform } = this.props;
         let bColor = backgroundColor;
-        if (user !== undefined) {
-            if (!user.inGame) {
-                bColor = '#FF0000';
-            }
+        if (user === undefined) {
+            return (<View style={{
+                ...styles.postedNote,
+                backgroundColor: bColor,
+                borderColor,
+                transform
+            }} >
+                <Text style={styles.waitingTxt}>Waiting...</Text>
+            </View>)
         }
+        const { roundsWon, avatarURL } = user;
         return (
             <View style={{
                 ...styles.postedNote,
@@ -21,12 +27,12 @@ export default class PlayerCard extends Component {
                 borderColor,
                 transform
             }} >
-                {user !== undefined ? <Image
+                {avatarURL !== undefined ? <Image
                     style={{ ...styles.imageNote, transform }}
                     resizeMode={'contain'}
-                    source={{ uri: user.avatarURL }} /> : <Text style={styles.waitingTxt}>Waiting...</Text>}
+                    source={{ uri: avatarURL }} /> : <Text style={styles.waitingTxt}>Waiting...</Text>}
                 {
-                    user !== undefined ? <View style={{
+                    roundsWon !== undefined ? <View style={{
                         position: "absolute", top: 1.5, right: 1.5, backgroundColor: '#fff',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -34,7 +40,7 @@ export default class PlayerCard extends Component {
                         height: scale(20),
                         borderRadius: scale(10)
                     }}>
-                        <Text style={{ fontSize: scale(15) }}>{user.roundsWon}</Text>
+                        <Text style={{ fontSize: scale(15) }}>{roundsWon}</Text>
                     </View> : null
                 }
             </View>

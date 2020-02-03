@@ -32,6 +32,9 @@ import com.reactnativenavigation.NavigationApplication;
 import com.reactnativenavigation.react.NavigationReactNativeHost;
 import com.reactnativenavigation.react.ReactGateway;
 
+import com.corbt.keepawake.KCKeepAwakePackage;
+import com.ocetnik.timer.BackgroundTimerPackage;
+
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
@@ -81,6 +84,8 @@ public class MainApplication extends NavigationApplication implements ReactAppli
     @Override
     public List<ReactPackage> createAdditionalReactPackages() {
         List<ReactPackage> packages = new ArrayList<>();
+        packages.add(new BackgroundTimerPackage());
+        packages.add(new KCKeepAwakePackage());
         packages.add(new SketchCanvasPackage());
         packages.add(new RNCViewPagerPackage());
         packages.add(new AsyncStoragePackage());

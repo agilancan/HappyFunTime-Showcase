@@ -7,14 +7,16 @@ import PlayerCard from '../PlayerCard/PlayerCard';
 // This class determines everything to do with the Posted Notes
 export default class GlobalScore extends Component {
     render() {
+        const { user } = this.props;
+        if (user === undefined) return null;
         return (
             <View style={styles.outerContainer}>
                 <View style={styles.rankContainer}>
-                    <Text style={styles.rankText}>1</Text>
+                    <Text style={styles.rankText}>{user.rank}</Text>
                 </View>
-                <PlayerCard style={styles.playerCard}/>
-                <Text style={styles.playerName}>AgilanCAN</Text>
-                <Text style={styles.playerScore}>123,432</Text>
+                <PlayerCard user={{ avatarURL: user.avatarURL }} style={styles.playerCard} />
+                <Text style={styles.playerName}>{user.displayName}</Text>
+                <Text style={styles.playerScore}>{user.points}</Text>
             </View>
         );
     }
@@ -27,7 +29,7 @@ export default class GlobalScore extends Component {
 const styles = StyleSheet.create({
     outerContainer: {
         flexDirection: 'row',
-        alignItems: 'center',
+        alignItems: 'center'
     },
     rankContainer: {
         flex: 1,
@@ -47,10 +49,10 @@ const styles = StyleSheet.create({
         fontSize: scale(16),
         fontWeight: 'bold',
         textAlign: 'center'
-    }, 
+    },
     playerCard: {
         flex: 1,
-        resizeMode: 'contain',
+        resizeMode: 'contain'
     },
     playerName: {
         flex: 2,
@@ -58,11 +60,11 @@ const styles = StyleSheet.create({
         fontSize: scale(16),
         fontWeight: 'bold',
         marginLeft: scale(20),
-        marginRight: scale(35),
+        marginRight: scale(35)
     },
     playerScore: {
         flex: 2,
         fontFamily: 'roboto_black',
-        fontSize: scale(16),
-    },
+        fontSize: scale(16)
+    }
 });

@@ -67,8 +67,9 @@ class VoteAnswer extends Component {
                     snapshot.forEach((doc) => {
                         if (doc.data().currentVote !== null) {
                             const index = roundVotes.findIndex(vote => vote.uid === doc.data().currentVote);
+                            const voteUser = this.props.GameReducer.users.find(user => user.uid === doc.data().currentVote);
                             if (index === -1) {
-                                roundVotes.push({ uid: doc.data().currentVote, points: 1, avatarURL: doc.data().avatarURL })
+                                roundVotes.push({ uid: voteUser.uid, points: 1, avatarURL: voteUser.avatarURL })
                                 if (mostPoints === 0) {
                                     mostPoints = 1;
                                 }
@@ -78,7 +79,7 @@ class VoteAnswer extends Component {
                                     mostPoints = roundVotes[index].points;
                                 }
                             }
-                            const userVoteRef = lobbyUsersRef.doc(doc.data().currentVote);
+                            const userVoteRef = lobbyUsersRef.doc(voteUser.uid);
                             batch.update(userVoteRef, {
                                 points: firebase.firestore.FieldValue.increment(1)
                             })

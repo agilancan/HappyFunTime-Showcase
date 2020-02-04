@@ -3,6 +3,6 @@
   <item>
     <bitmap
       android:gravity="center"
-      android:src="@drawable/hftLogo"/>
+      android:src="@drawable/hftlogo"/>
   </item>
 </layer-list>

@@ -16,9 +16,34 @@ import PropTypes from 'prop-types';
 
 import PlayerCard from '../PlayerCard/PlayerCard';
 import { scale } from '../../utility/Scale';
+import Globals from '../../Globals';
+
+const { DATABASE, APP_VERSION } = Globals;
 
 @firestoreConnect()
 export default class MainMenu extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            correctVersion: true
+        };
+    }
+
+    componentWillMount() {
+        // console.log('mount welcome', this.props.firebase.auth().currentUser, this.authLoaded);
+        this.props.firebase
+            .firestore()
+            .collection("Admin")
+            .doc("ApplicationInfo")
+            .get()
+            .then((doc) => {
+                if (doc.data().version !== APP_VERSION) {
+                    this.setState({ correctVersion: false });
+                    return Linking.openURL('market://details?id=com.doohickey.happyfuntimes');
+                }
+            })
+    }
+
     signInAnonymously = () => {
         return this.props.firebase
             .auth()
@@ -163,6 +188,13 @@ export default class MainMenu extends Component {
 
     render() {
         let user = undefined;
+        if (!this.state.correctVersion) {
+            return (
+                <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+                    <Text>Incorrect version please update</Text>
+                </View>
+            )
+        }
         if (!isEmpty(this.props.firebase.auth().currentUser)) {
             user = { avatarURL: this.props.firebase.auth().currentUser.photoURL }
         }

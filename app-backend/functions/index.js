@@ -9,15 +9,40 @@ admin.initializeApp({
 });
 
 const QUESTIONS = [
-    'Serious goldfish out for vengence',
+    'Serious goldfish out for revenge',
     'A tree knocking on wood',
     'Pencil at a crime scene',
     'Morning face',
     'Night time scary things',
-    'Cheese robbing a mouse',
-    'A humble whale fishing',
+    'Cheese robbing a mouse at gunpoint',
+    'Humble whale fishing by the river',
     'Confused duck in the desert',
-    'Caterpillar having an existential crisis'
+    'Caterpillar having an existential crisis',
+    'Stressed out snake with a knife',
+    'Make it rain',
+    'Creepy cloud staring at the ground',
+    'Flower feeling strong emotions',
+    'Fish with shades and a dream',
+    'The face of satisfaction',
+    'Pat on the should from your enemy',
+    'Keyboard warrior reaching final levels',
+    'Eating salad at a donut shop',
+    'Monster in the closet playing solitaire',
+    'The face of madness',
+    'Judgemental Owl looking through a window',
+    'A drunk spy revealing secrets',
+    'Pretending to laugh when the boss makes a joke',
+    'Fearful Banana being hunted by a gorilla',
+    'Stepping on a single Lego piece',
+    'Aliens',
+    'A disturbed frog by the river',
+    'A wacky bird trying to fit in',
+    'Doing taxes at gunpoint by a madman',
+    'Doing an exam with no sleep',
+    'A hero with an unusual fetish',
+    'Light under a satisfied face',
+    'Pointing and laughing at a confused moose',
+    'A dominant snail getting work done'
 ]
 
 exports.onUserStatusChanged = functions.database.ref('/status/{uid}').onUpdate(

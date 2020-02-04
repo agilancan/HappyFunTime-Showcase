@@ -1,4 +1,5 @@
 export default {
+    APP_VERSION: 1,
     GAMESTATE: {
         LOGIN: 'LOGIN',
         LOBBY: 'LOBBY',

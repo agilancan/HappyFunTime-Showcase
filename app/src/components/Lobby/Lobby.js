@@ -29,7 +29,7 @@ class Lobby extends Component {
                 showAd: true
             });
         },
-            60000);
+            300000);
     }
 
     showAd = () => {

@@ -129,8 +129,8 @@ android {
         targetSdkVersion 28
         missingDimensionStrategy "RNN.reactNativeVersion", "reactNative60"
         multiDexEnabled true
-        versionCode 9
-        versionName "0.09"
+        versionCode 10
+        versionName "0.10"
         manifestPlaceholders = [
                 tipsiStripeRedirectScheme: "my_custom_scheme_tipsi"
         ]

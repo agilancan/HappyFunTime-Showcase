@@ -8,7 +8,7 @@ import BackgroundTimer from 'react-native-background-timer';
 import KeepAwake from 'react-native-keep-awake';
 
 import VoteAnswer from '../VoteAnswer/VoteAnswer';
-import DrawAnswer from '../Draw/DrawAnswer';
+import DrawAnswer from '../Draw/DrawAnswer.android';
 import { scale } from '../../utility/Scale';
 import PlayerCard from "../PlayerCard/PlayerCard";
 import Globals from '../../Globals';
@@ -37,6 +37,7 @@ class Lobby extends Component {
             this.props.GameReducer.lobbyInfo.hostUserID !==
             this.props.firebase.auth().currentUser.uid
         ) {
+            // ios platform ca-app-pub-8552251867519242/8395515446
             const advert = firebase.admob().interstitial('ca-app-pub-8552251867519242/6963160064');
             const AdRequest = firebase.admob.AdRequest;
             const request = new AdRequest();

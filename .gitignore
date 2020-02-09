@@ -46,6 +46,9 @@ local.properties
 *.iml
 /android/app/build/
 
+# IOS
+/ios/build/
+
 # Node
 node_modules
 *.log
@@ -71,5 +74,5 @@ package-lock.json
 RNTester/build
 
 # CocoaPods
-/template/ios/Pods/
-/template/ios/Podfile.lock
+/ios/Pods/
+/ios/Podfile.lock

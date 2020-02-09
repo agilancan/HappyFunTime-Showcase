@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 
 import { scale } from '../../utility/Scale';
-import GlobalScore from "../Leaderboard/GlobalScore";
+import GlobalScore from "./GlobalScore.android";
 import GLOBAL from '../../Globals';
 const { GAMESTATE, DATABASE } = GLOBAL;
 // This class determines everything to do with the Question Card
@@ -98,7 +98,6 @@ const styles = StyleSheet.create({
         backgroundColor: "#FFFFFF"
     },
     innerContainer1Text: {
-        fontFamily: 'roboto_condensed_bold_italic',
         fontSize: scale(43),
         color: "rgba(0, 0, 0, 0.87)",
         transform: [{ rotate: '354deg' }],

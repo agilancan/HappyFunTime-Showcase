@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>244044054509-99nrhl21i1upqm01sauob7mmkr68f3ag.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.244044054509-99nrhl21i1upqm01sauob7mmkr68f3ag</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>244044054509-v39t3hkn9mdim7g9faca2eemkduvaaff.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyC35Qn7YaQDzczjGv-7ItV__U4KJmflxdU</string>
+	<key>GCM_SENDER_ID</key>
+	<string>244044054509</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.Doohickey.HappyFunTimes</string>
+	<key>PROJECT_ID</key>
+	<string>happyfuntimes-28813</string>
+	<key>STORAGE_BUCKET</key>
+	<string>happyfuntimes-28813.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:244044054509:ios:f106d49477cd926b4f31e4</string>
+	<key>DATABASE_URL</key>
+	<string>https://happyfuntimes-28813.firebaseio.com</string>
+</dict>
+</plist>

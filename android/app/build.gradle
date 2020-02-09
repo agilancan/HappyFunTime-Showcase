@@ -129,8 +129,8 @@ android {
         targetSdkVersion 28
         missingDimensionStrategy "RNN.reactNativeVersion", "reactNative60"
         multiDexEnabled true
-        versionCode 10
-        versionName "0.10"
+        versionCode 11
+        versionName "0.11"
         manifestPlaceholders = [
                 tipsiStripeRedirectScheme: "my_custom_scheme_tipsi"
         ]
@@ -206,6 +206,8 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-firebase')
+    implementation project(':@gigasz_react-native-sketch-canvas')
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation project(':react-native-navigation')
     implementation project(':react-native-keep-awake')

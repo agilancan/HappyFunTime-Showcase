@@ -1,10 +1,9 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
-import { firestoreConnect } from 'react-redux-firebase';
 import { connect } from 'react-redux';
-import { compose } from 'redux';
 import { SketchCanvas } from '@gigasz/react-native-sketch-canvas';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import firebase from 'react-native-firebase';
 
 import Globals from '../../Globals';
 import { scale, verticalScale } from '../../utility/Scale';
@@ -14,13 +13,13 @@ const { DATABASE } = Globals;
 class DrawQuestion extends Component {
     uploadQuestion = (path) => {
         const { lobbyInfo } = this.props.GameReducer;
-        this.props.firebase.storage()
+        firebase.storage()
             .ref(DATABASE.LOBBIES)
             .child(lobbyInfo.id)
             .child('question.jpg')
             .putFile(path)
             .then((uploadedFile) => {
-                this.props.firebase.firestore()
+                firebase.firestore()
                     .collection(DATABASE.LOBBIES)
                     .doc(lobbyInfo.id)
                     .update({
@@ -100,7 +99,7 @@ function mapStateToProps(state) {
     const { GameReducer } = state;
     return { GameReducer };
 }
-export default compose(firestoreConnect(), connect(mapStateToProps))(DrawQuestion);
+export default connect(mapStateToProps)(DrawQuestion);
 
 const styles = StyleSheet.create({
     container: {

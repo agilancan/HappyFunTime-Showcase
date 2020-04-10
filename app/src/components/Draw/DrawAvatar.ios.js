@@ -4,9 +4,7 @@ import { SketchCanvas } from '@gigasz/react-native-sketch-canvas';
 import { connect } from 'react-redux';
 import { Navigation } from 'react-native-navigation';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { compose } from 'redux';
 import firebase from 'react-native-firebase';
-import { firestoreConnect } from 'react-redux-firebase';
 
 import Global from '../../Globals';
 import { scale, verticalScale } from '../../utility/Scale';
@@ -34,8 +32,8 @@ class DrawAvatar extends Component {
 
     enterLobby = (path) => {
         const { dispatch, componentId } = this.props;
-        const { currentUser } = this.props.firebase.auth();
-        this.props.firebase.storage()
+        const { currentUser } = firebase.auth();
+        firebase.storage()
             .ref(USERS)
             .child(currentUser.uid)
             .child('avatar.jpg')
@@ -51,7 +49,7 @@ class DrawAvatar extends Component {
                         photoURL: uploadedFile.downloadURL
                     })
                     .then(() => {
-                        const userRef = this.props.firebase.firestore()
+                        const userRef = firebase.firestore()
                             .collection(USERS)
                             .doc(uid);
                         const info = {
@@ -150,7 +148,7 @@ class DrawAvatar extends Component {
         );
     }
 }
-export default compose(firestoreConnect(), connect())(DrawAvatar);
+export default connect()(DrawAvatar);
 
 const styles = StyleSheet.create({
     container: {

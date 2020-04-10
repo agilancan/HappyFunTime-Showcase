@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Text, TouchableOpacity, Image, ScrollView, FlatList, Dimensions } from "react-native";
-import { firestoreConnect } from 'react-redux-firebase';
 import { connect } from 'react-redux';
-import { compose } from 'redux';
 import { SketchCanvas } from '@gigasz/react-native-sketch-canvas';
 import firebase from 'react-native-firebase';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -26,7 +24,7 @@ class DrawAnswer extends Component {
 
     componentDidUpdate(prevProps) {
         const { hostUserID, stateTimerStart } = this.props.GameReducer.lobbyInfo;
-        let timer = hostUserID === this.props.firebase.auth().currentUser.uid ? 31 : 30;
+        let timer = hostUserID === firebase.auth().currentUser.uid ? 31 : 30;
         if (prevProps.GameReducer.lobbyInfo.stateTimerStart !== stateTimerStart && stateTimerStart !== null) {
             console.log('answer update draw change before', prevProps.GameReducer.lobbyInfo.stateTimerStart, stateTimerStart);
             const startDate = stateTimerStart.toDate();
@@ -41,22 +39,22 @@ class DrawAnswer extends Component {
     uploadAnswer = (path, type) => {
         const { lobbyInfo } = this.props.GameReducer;
         const { users, hostUserID } = lobbyInfo;
-        this.props.firebase.storage()
+        firebase.storage()
             .ref(DATABASE.LOBBIES)
             .child(lobbyInfo.id)
-            .child('answer' + this.props.firebase.auth().currentUser.uid + '.jpg')
+            .child('answer' + firebase.auth().currentUser.uid + '.jpg')
             .putFile(path)
             .then((uploadedFile) => {
-                const lobbyRef = this.props.firebase.firestore()
+                const lobbyRef = firebase.firestore()
                     .collection(DATABASE.LOBBIES)
                     .doc(lobbyInfo.id);
 
-                const lobbyUserRef = lobbyRef.collection('Users').doc(this.props.firebase.auth().currentUser.uid);
+                const lobbyUserRef = lobbyRef.collection('Users').doc(firebase.auth().currentUser.uid);
 
-                //const index = users.findIndex(user => user.uid === this.props.firebase.auth().currentUser.uid);
+                //const index = users.findIndex(user => user.uid === firebase.auth().currentUser.uid);
                 //users[index] = { ...users[index], votingEnabled: true, currentDrawingURL: uploadedFile.downloadURL };
-                if (this.props.firebase.auth().currentUser.uid === hostUserID) {
-                    const batch = this.props.firebase.firestore().batch();
+                if (firebase.auth().currentUser.uid === hostUserID) {
+                    const batch = firebase.firestore().batch();
                     batch.update(lobbyRef, {
                         startNextState: true,
                         stateTimerStart: firebase.firestore.FieldValue.serverTimestamp()
@@ -92,15 +90,15 @@ class DrawAnswer extends Component {
     uploadNoAnswer = () => {
         const { lobbyInfo } = this.props.GameReducer;
         const { users, hostUserID } = lobbyInfo;
-        const lobbyRef = this.props.firebase.firestore()
+        const lobbyRef = firebase.firestore()
             .collection(DATABASE.LOBBIES)
             .doc(lobbyInfo.id);
-        const lobbyUserRef = lobbyRef.collection('Users').doc(this.props.firebase.auth().currentUser.uid);
+        const lobbyUserRef = lobbyRef.collection('Users').doc(firebase.auth().currentUser.uid);
 
-        const index = users.findIndex(user => user.uid === this.props.firebase.auth().currentUser.uid);
+        const index = users.findIndex(user => user.uid === firebase.auth().currentUser.uid);
         users[index] = { ...users[index], votingEnabled: false, interactionEnabled: false, currentDrawingURL: undefined };
-        if (this.props.firebase.auth().currentUser.uid === hostUserID) {
-            const batch = this.props.firebase.firestore().batch();
+        if (firebase.auth().currentUser.uid === hostUserID) {
+            const batch = firebase.firestore().batch();
             batch.update(lobbyRef, {
                 startNextState: true
             });
@@ -309,7 +307,7 @@ function mapStateToProps(state) {
     const { GameReducer } = state;
     return { GameReducer };
 }
-export default compose(firestoreConnect(), connect(mapStateToProps))(DrawAnswer);
+export default connect(mapStateToProps)(DrawAnswer);
 
 const styles = StyleSheet.create({
     container: {

@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
-import { firestoreConnect } from 'react-redux-firebase';
 import ViewPager from "@react-native-community/viewpager";
 import { Navigation } from 'react-native-navigation';
 

@@ -1,11 +1,9 @@
 import React, { Component } from "react";
 import {
     StyleSheet, View, Text, TouchableOpacity, Image,
-    ScrollView, Dimensions, FlatList, ToastAndroid
+    ScrollView, Dimensions, FlatList
 } from "react-native";
-import { firestoreConnect } from 'react-redux-firebase';
 import { connect } from 'react-redux';
-import { compose } from 'redux';
 import firebase from 'react-native-firebase';
 import CountdownCircle from 'react-native-countdown-circle'
 
@@ -45,23 +43,23 @@ class VoteAnswer extends Component {
 
     uploadVote = () => {
         const { lobbyInfo } = this.props.GameReducer;
-        const usersRef = this.props.firebase.firestore()
+        const usersRef = firebase.firestore()
             .collection(DATABASE.USERS);
-        const lobbyRef = this.props.firebase.firestore()
+        const lobbyRef = firebase.firestore()
             .collection(DATABASE.LOBBIES)
             .doc(lobbyInfo.id);
         const lobbyUsersRef = lobbyRef.collection('Users');
         const { users, hostUserID } = lobbyInfo;
-        const index = users.findIndex(user => user.uid === this.props.firebase.auth().currentUser.uid);
+        const index = users.findIndex(user => user.uid === firebase.auth().currentUser.uid);
         if (this.state.selectedVote !== undefined) {
             users[index] = { ...users[index], interactionEnabled: true, currentVote: this.state.selectedVote };
         } else {
             users[index] = { ...users[index], interactionEnabled: false, currentVote: null };
         }
-        if (this.props.firebase.auth().currentUser.uid === hostUserID) {
+        if (firebase.auth().currentUser.uid === hostUserID) {
             lobbyUsersRef.get()
                 .then(snapshot => {
-                    const batch = this.props.firebase.firestore().batch();
+                    const batch = firebase.firestore().batch();
                     const roundVotes = [];
                     let mostPoints = 0;
                     snapshot.forEach((doc) => {
@@ -124,10 +122,10 @@ class VoteAnswer extends Component {
 
     uploadQuickVote = (currentVote) => {
         const { lobbyInfo } = this.props.GameReducer;
-        const lobbyRef = this.props.firebase.firestore()
+        const lobbyRef = firebase.firestore()
             .collection(DATABASE.LOBBIES)
             .doc(lobbyInfo.id);
-        lobbyRef.collection('Users').doc(this.props.firebase.auth().currentUser.uid)
+        lobbyRef.collection('Users').doc(firebase.auth().currentUser.uid)
             .update({
                 currentVote
             })
@@ -183,7 +181,7 @@ class VoteAnswer extends Component {
                     style={{ flex: 1 }}
                     extraData={this.state}
                     numColumns={4}
-                    data={users.filter(user => user.currentDrawingURL !== null && user.uid !== this.props.firebase.auth().currentUser.uid)}
+                    data={users.filter(user => user.currentDrawingURL !== null && user.uid !== firebase.auth().currentUser.uid)}
                     keyExtractor={(item) => item.uid}
                     renderItem={this.renderItem}
                 />
@@ -205,7 +203,7 @@ function mapStateToProps(state) {
     const { GameReducer } = state;
     return { GameReducer };
 }
-export default compose(firestoreConnect(), connect(mapStateToProps))(VoteAnswer);
+export default connect(mapStateToProps)(VoteAnswer);
 
 const styles = StyleSheet.create({
     container: {

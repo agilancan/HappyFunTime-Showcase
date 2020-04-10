@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, FlatList } from "react-native";
-import { firestoreConnect } from 'react-redux-firebase';
+import { StyleSheet, View, Text, FlatList } from "react-native";
 import { connect } from 'react-redux';
-import { compose } from 'redux';
+import firebase from 'react-native-firebase';
 
 import { scale } from '../../utility/Scale';
 import GlobalScore from "./GlobalScore.android";
@@ -35,7 +34,7 @@ class Leaderboard extends Component {
     }
 
     componentDidMount() {
-        const usersRef = this.props.firebase
+        const usersRef = firebase
             .firestore()
             .collection(DATABASE.USERS);
         usersRef
@@ -81,7 +80,7 @@ function mapStateToProps(state) {
     const { GameReducer } = state;
     return { GameReducer };
 }
-export default compose(firestoreConnect(), connect(mapStateToProps))(Leaderboard);
+export default connect(mapStateToProps)(Leaderboard);
 
 // All the styles
 const styles = StyleSheet.create({

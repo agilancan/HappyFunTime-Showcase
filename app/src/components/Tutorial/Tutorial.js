@@ -1,6 +1,5 @@
 import React from "react";
 import { View } from "react-native";
-import { firestoreConnect } from 'react-redux-firebase';
 import ViewPager from "@react-native-community/viewpager";
 import { Navigation } from 'react-native-navigation';
 
@@ -12,7 +11,6 @@ const tutorial3Img = require('../../../assets/Tutorial3/tutorial3.png');
 const tutorial4Img = require('../../../assets/Tutorial4/tutorial4.png');
 const tutorial5Img = require('../../../assets/Tutorial5/tutorial5.png');
 
-@firestoreConnect()
 export default class Tutorial extends React.Component {
     static options(passProps) {
         return {

@@ -1,11 +1,6 @@
 import React from "react";
-import { YellowBox } from "react-native";
-import { firestoreConnect } from 'react-redux-firebase';
 import { connect } from 'react-redux';
-import { compose } from 'redux';
 import firebase from 'react-native-firebase';
-import { Navigation } from 'react-native-navigation';
-
 
 import MainMenu from "../MainMenu/MainMenu";
 import Lobby from '../Lobby/Lobby';
@@ -35,11 +30,6 @@ class App extends React.Component {
 
     constructor(props) {
         super(props);
-        YellowBox.ignoreWarnings([
-            'Warning: componentWillMount is deprecated',
-            'Warning: componentWillReceiveProps is deprecated',
-            'Warning: componentWillUpdate is deprecated'
-        ]);
         this.state = {
             overlayType: 'LobbyMsgOverlay'
             //round: 0,
@@ -77,12 +67,12 @@ class App extends React.Component {
     }
 
     loadUserPersistence = () => {
-        this.props.firebase.auth().onAuthStateChanged(user => {
+        firebase.auth().onAuthStateChanged(user => {
             if (user) {
                 console.log('onAuthStateChanged user', user);
-                const uid = this.props.firebase.auth().currentUser.uid;
-                const userStatusDatabaseRef = this.props.firebase.database().ref('/status/' + uid);
-                this.props.firebase.database().ref('.info/connected').on('value', (snapshot) => {
+                const uid = firebase.auth().currentUser.uid;
+                const userStatusDatabaseRef = firebase.database().ref('/status/' + uid);
+                firebase.database().ref('.info/connected').on('value', (snapshot) => {
                     if (snapshot.val() == false) {
                         return;
                     };
@@ -102,12 +92,12 @@ class App extends React.Component {
 
     findLobby = () => {
         const { GameReducer } = this.props;
-        const { currentUser } = this.props.firebase.auth();
-        const lobbiesRef = this.props.firebase.firestore()
+        const { currentUser } = firebase.auth();
+        const lobbiesRef = firebase.firestore()
             .collection(DATABASE.LOBBIES);
 
         const updateUserAndStartListener = (ref) => {
-            this.props.firebase.firestore()
+            firebase.firestore()
                 .collection(DATABASE.USERS)
                 .doc(currentUser.uid)
                 .update({
@@ -151,7 +141,7 @@ class App extends React.Component {
         }
 
         const addUser = (ref, user) => {
-            this.props.firebase.firestore()
+            firebase.firestore()
                 .collection(DATABASE.LOBBIES)
                 .doc(ref.id)
                 .collection('Users')
@@ -248,8 +238,8 @@ class App extends React.Component {
         const info = { ...lobbyInfo, id: snapshot.id };
         this.props.dispatch({ type: 'SET_LOBBY_INFO', lobbyInfo: info });
 
-        if (lobbyInfo.hostUserID === this.props.firebase.auth().currentUser.uid) {
-            const lobbyRef = this.props.firebase.firestore()
+        if (lobbyInfo.hostUserID === firebase.auth().currentUser.uid) {
+            const lobbyRef = firebase.firestore()
                 .collection(DATABASE.LOBBIES)
                 .doc(snapshot.id);
             //This starts the game
@@ -297,4 +287,4 @@ function mapStateToProps(state) {
     const { GameReducer } = state;
     return { GameReducer };
 }
-export default compose(firestoreConnect(), connect(mapStateToProps))(App);
+export default connect(mapStateToProps)(App);

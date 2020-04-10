@@ -7,7 +7,6 @@ import {
     TouchableOpacity
 } from 'react-native';
 import { Navigation } from 'react-native-navigation';
-import { isEmpty, firestoreConnect } from 'react-redux-firebase';
 import firebase from 'react-native-firebase';
 import { GoogleSignin } from 'react-native-google-signin';
 import { LoginManager, AccessToken } from 'react-native-fbsdk';
@@ -20,18 +19,17 @@ import Globals from '../../Globals';
 
 const { DATABASE, APP_VERSION } = Globals;
 
-@firestoreConnect()
 export default class MainMenu extends Component {
     constructor(props) {
         super(props);
         this.state = {
             correctVersion: true
         };
+        this.checkAppInfo();
     }
 
-    componentWillMount() {
-        // console.log('mount welcome', this.props.firebase.auth().currentUser, this.authLoaded);
-        this.props.firebase
+    checkAppInfo = () => {
+        firebase
             .firestore()
             .collection("Admin")
             .doc("ApplicationInfo")
@@ -45,7 +43,7 @@ export default class MainMenu extends Component {
     }
 
     signInAnonymously = () => {
-        return this.props.firebase
+        return firebase
             .auth()
             .signInAnonymously()
             .then((user) => {
@@ -94,7 +92,7 @@ export default class MainMenu extends Component {
                     console.log(res.accessToken);
                     const creds = firebase.auth.GoogleAuthProvider.credential(user.idToken, res.accessToken);
                     console.log('google creds: ', creds, 'accessToken: ', res.accessToken);
-                    this.props.firebase
+                    firebase
                         .auth()
                         .signInWithCredential(creds)
                         .then((data) => {
@@ -141,7 +139,7 @@ export default class MainMenu extends Component {
             // create a new firebase credential with the token
             const credential = firebase.auth.FacebookAuthProvider.credential(data.accessToken);
             // login with credential
-            const currentUser = await this.props.firebase
+            const currentUser = await firebase
                 .auth()
                 .signInAndRetrieveDataWithCredential(credential)
                 .then((credData) => {
@@ -164,9 +162,9 @@ export default class MainMenu extends Component {
     };
 
     disconnect = () => {
-        const { uid } = this.props.firebase.auth().currentUser;
-        this.props.firebase.auth().signOut().then(() => {
-            this.props.firebase.database().ref('/status/' + uid)
+        const { uid } = firebase.auth().currentUser;
+        firebase.auth().signOut().then(() => {
+            firebase.database().ref('/status/' + uid)
                 .onDisconnect().set({
                     state: 'offline',
                     last_changed: firebase.database.ServerValue.TIMESTAMP
@@ -195,8 +193,8 @@ export default class MainMenu extends Component {
                 </View>
             )
         }
-        if (!isEmpty(this.props.firebase.auth().currentUser)) {
-            user = { avatarURL: this.props.firebase.auth().currentUser.photoURL }
+        if (firebase.auth().currentUser) {
+            user = { avatarURL: firebase.auth().currentUser.photoURL }
         }
 
         return (

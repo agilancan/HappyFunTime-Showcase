@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Text, Image } from "react-native";
-import { firestoreConnect } from 'react-redux-firebase';
 import { connect } from 'react-redux';
-import { compose } from 'redux';
 import firebase from 'react-native-firebase';
 import BackgroundTimer from 'react-native-background-timer';
 import KeepAwake from 'react-native-keep-awake';
@@ -35,7 +33,7 @@ class Lobby extends Component {
     showAd = () => {
         if (this.props.GameReducer.showAd &&
             this.props.GameReducer.lobbyInfo.hostUserID !==
-            this.props.firebase.auth().currentUser.uid
+            firebase.auth().currentUser.uid
         ) {
             // ios platform ca-app-pub-8552251867519242/8395515446
             const advert = firebase.admob().interstitial('ca-app-pub-8552251867519242/6963160064');
@@ -114,7 +112,7 @@ class Lobby extends Component {
     render() {
         const { lobbyInfo, users, profile } = this.props.GameReducer;
         if (lobbyInfo === undefined) return null;
-        const player = users.find(user => user.uid === this.props.firebase.auth().currentUser.uid);
+        const player = users.find(user => user.uid === firebase.auth().currentUser.uid);
         return (
             <View style={{ flex: 1 }}>
                 <View style={styles.container}>
@@ -201,7 +199,7 @@ function mapStateToProps(state) {
     const { GameReducer } = state;
     return { GameReducer };
 }
-export default compose(firestoreConnect(), connect(mapStateToProps))(Lobby);
+export default connect(mapStateToProps)(Lobby);
 
 const styles = StyleSheet.create({
     container: {

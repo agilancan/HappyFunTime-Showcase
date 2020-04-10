@@ -9,7 +9,6 @@ import com.facebook.react.ReactApplication;
 import com.gigasz.rnsketchcanvas.SketchCanvasPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
-import com.facebook.soloader.SoLoader;
 
 import com.oblador.vectoricons.VectorIconsPackage;
 import co.apptailor.googlesignin.RNGoogleSigninPackage;
@@ -35,9 +34,9 @@ import com.reactnativenavigation.react.ReactGateway;
 import com.corbt.keepawake.KCKeepAwakePackage;
 import com.ocetnik.timer.BackgroundTimerPackage;
 
+import com.facebook.react.PackageList;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
-import com.facebook.soloader.SoLoader;
 
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.reactnativecommunity.viewpager.RNCViewPagerPackage;
@@ -55,19 +54,39 @@ public class MainApplication extends NavigationApplication implements ReactAppli
         MultiDex.install(this);
     }
 
-    @Override
-    protected ReactNativeHost createReactNativeHost() {
-        return new NavigationReactNativeHost(this) {
-            @Override
-            protected String getJSMainModuleName() {
-                return "index";
-            }
-        };
-    }
+    private final ReactNativeHost mReactNativeHost =
+    new NavigationReactNativeHost(this) {
+        @Override
+        protected String getJSMainModuleName() {
+            return "index";
+        }
+
+        @Override
+        public boolean getUseDeveloperSupport() {
+            return BuildConfig.DEBUG;
+        }
+
+        @Override
+        public List<ReactPackage> getPackages() {
+            ArrayList<ReactPackage> packages = new PackageList(this).getPackages();
+            packages.add(new RNFirebaseCrashlyticsPackage());
+            packages.add(new RNFirebaseAnalyticsPackage());
+            packages.add(new RNFirebaseAuthPackage());
+            packages.add(new RNFirebaseRemoteConfigPackage());
+            packages.add(new RNFirebaseDatabasePackage());
+            packages.add(new RNFirebaseMessagingPackage());
+            packages.add(new RNFirebaseNotificationsPackage());
+            packages.add(new RNFirebasePerformancePackage());
+            packages.add(new RNFirebaseStoragePackage());
+            packages.add(new RNFirebaseFirestorePackage());
+            packages.add(new RNFirebaseAdMobPackage());
+            return packages;
+        }
+    };
 
     @Override
-    public boolean isDebug() {
-        return BuildConfig.DEBUG;
+    public ReactNativeHost getReactNativeHost() {
+        return mReactNativeHost;
     }
 
     @Override
@@ -78,32 +97,5 @@ public class MainApplication extends NavigationApplication implements ReactAppli
         // AppEventsLogger.activateApp(this);
         MobileAds.initialize(this, "ca-app-pub-8552251867519242~7338371066");
         registerExternalComponent("RNNCustomComponent", new FragmentCreator());
-    }
-
-    @Nullable
-    @Override
-    public List<ReactPackage> createAdditionalReactPackages() {
-        List<ReactPackage> packages = new ArrayList<>();
-        packages.add(new BackgroundTimerPackage());
-        packages.add(new KCKeepAwakePackage());
-        packages.add(new SketchCanvasPackage());
-        packages.add(new RNCViewPagerPackage());
-        packages.add(new AsyncStoragePackage());
-        packages.add(new FBSDKPackage());
-        packages.add(new RNGoogleSigninPackage());
-        packages.add(new RNFirebasePackage());
-        packages.add(new RNFirebaseCrashlyticsPackage());
-        packages.add(new RNFirebaseAnalyticsPackage());
-        packages.add(new RNFirebaseAuthPackage());
-        packages.add(new RNFirebaseRemoteConfigPackage());
-        packages.add(new RNFirebaseDatabasePackage());
-        packages.add(new RNFirebaseMessagingPackage());
-        packages.add(new RNFirebaseNotificationsPackage());
-        packages.add(new RNFirebasePerformancePackage());
-        packages.add(new RNFirebaseStoragePackage());
-        packages.add(new RNFirebaseFirestorePackage());
-        packages.add(new RNFirebaseAdMobPackage());
-        packages.add(new VectorIconsPackage());
-        return packages;
     }
 }

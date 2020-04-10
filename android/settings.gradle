@@ -3,7 +3,5 @@ include ':react-native-firebase'
 project(':react-native-firebase').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-firebase/android')
 include ':@gigasz_react-native-sketch-canvas'
 project(':@gigasz_react-native-sketch-canvas').projectDir = new File(rootProject.projectDir, '../node_modules/@gigasz/react-native-sketch-canvas/android')
-include ':react-native-navigation'
-project(':react-native-navigation').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-navigation/lib/android/app/')
 apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
 include ':app'

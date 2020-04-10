@@ -1,11 +1,11 @@
+import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import { Navigation } from 'react-native-navigation';
 import AppScreens from './app/src/navigation/AppScreens';
-import AppStore from './app/src/redux/store/AppStore';
+import makeRootReducer from './app/src/redux/reducers/reducers';
 
 Navigation.events().registerAppLaunchedListener(() => {
-  const initialState = { firebase: {} };
-  const store = AppStore(initialState);
+  const store = createStore(makeRootReducer());
   AppScreens(store, Provider);
   Navigation.setRoot({
     root: {

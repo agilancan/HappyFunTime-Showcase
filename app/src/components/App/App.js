@@ -69,7 +69,6 @@ class App extends React.Component {
     loadUserPersistence = () => {
         firebase.auth().onAuthStateChanged(user => {
             if (user) {
-                console.log('onAuthStateChanged user', user);
                 const uid = firebase.auth().currentUser.uid;
                 const userStatusDatabaseRef = firebase.database().ref('/status/' + uid);
                 firebase.database().ref('.info/connected').on('value', (snapshot) => {

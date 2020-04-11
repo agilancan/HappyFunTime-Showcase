@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+    Platform,
     StyleSheet,
     View,
     Text,
@@ -47,6 +48,7 @@ export default class MainMenu extends Component {
             .signInAnonymously()
             .then((user) => {
                 console.log('anonymous user: ', user);
+                //Platform.OS === 'ios' ? null : 
                 Navigation.showModal({
                     stack: {
                         children: [{
@@ -226,12 +228,15 @@ export default class MainMenu extends Component {
                 </TouchableOpacity>
 
                 <View style={styles.innerContainer4}>
-                    <TouchableOpacity
+                    {
+                        Platform.OS === 'ios' ? null : 
+                        <TouchableOpacity
                         onPress={this.facebookSignIn}
                         style={styles.innerContainer4Facebook}
-                    >
-                        <Text style={styles.innerContainer4Text}>f</Text>
-                    </TouchableOpacity>
+                        >
+                            <Text style={styles.innerContainer4Text}>f</Text>
+                        </TouchableOpacity>
+                    }
                     <TouchableOpacity
                         onPress={this.googleSignIn}
                         style={styles.innerContainer4Google}
@@ -275,7 +280,7 @@ const styles = StyleSheet.create({
         flex: 3,
         flexDirection: 'row',
         color: '#000000',
-        fontFamily: 'roboto',
+        fontFamily: Platform.OS === 'ios' ? 'system font' : 'Roboto',
         fontSize: scale(25),
         fontWeight: 'bold',
         paddingBottom: scale(20),

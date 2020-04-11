@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { Platform, StyleSheet, View, Text } from 'react-native';
 import { scale } from '../../utility/Scale';
 import PlayerCard from '../PlayerCard/PlayerCard';
 
@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
     },
     rankText: {
         color: 'white',
+        fontFamily: Platform.OS === 'ios' ? 'system font' : 'Roboto',
         fontSize: scale(16),
         fontWeight: 'bold',
         textAlign: 'center'
@@ -55,6 +56,7 @@ const styles = StyleSheet.create({
     },
     playerName: {
         flex: 2,
+        fontFamily: Platform.OS === 'ios' ? 'system font' : 'Roboto',
         fontSize: scale(16),
         fontWeight: 'bold',
         marginLeft: scale(20),
@@ -62,6 +64,7 @@ const styles = StyleSheet.create({
     },
     playerScore: {
         flex: 2,
+        fontFamily: Platform.OS === 'ios' ? 'system font' : 'roboto_black',
         fontSize: scale(16)
     }
 });

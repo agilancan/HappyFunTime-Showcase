@@ -27,7 +27,7 @@ export default class PlayerCard extends Component {
                 borderColor,
                 transform
             }} >
-                {avatarURL !== undefined ? <Image
+                {avatarURL !== undefined && avatarURL !== null ? <Image
                     style={{ ...styles.imageNote, transform }}
                     resizeMode={'contain'}
                     source={{ uri: avatarURL }} /> : <Text style={styles.waitingTxt}>Waiting...</Text>}

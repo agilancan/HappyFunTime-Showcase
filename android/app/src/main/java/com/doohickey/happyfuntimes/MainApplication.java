@@ -1,14 +1,15 @@
 package com.doohickey.happyfuntimes;
 
 import android.app.Application;
+import android.util.Log;
 import androidx.multidex.MultiDex;
 import android.content.Context;
 import android.content.Intent;
 
+import com.facebook.hermes.reactexecutor.HermesExecutorFactory;
+import com.facebook.react.bridge.JavaScriptExecutorFactory;
 import com.facebook.react.ReactApplication;
 import com.gigasz.rnsketchcanvas.SketchCanvasPackage;
-import com.facebook.react.ReactNativeHost;
-import com.facebook.react.ReactPackage;
 
 import com.oblador.vectoricons.VectorIconsPackage;
 import co.apptailor.googlesignin.RNGoogleSigninPackage;
@@ -28,8 +29,8 @@ import io.invertase.firebase.admob.RNFirebaseAdMobPackage;
 import com.google.android.gms.ads.MobileAds;
 
 import com.reactnativenavigation.NavigationApplication;
+import com.reactnativenavigation.react.NavigationPackage;
 import com.reactnativenavigation.react.NavigationReactNativeHost;
-import com.reactnativenavigation.react.ReactGateway;
 
 import com.corbt.keepawake.KCKeepAwakePackage;
 import com.ocetnik.timer.BackgroundTimerPackage;

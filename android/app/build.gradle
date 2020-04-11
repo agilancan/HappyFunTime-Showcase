@@ -128,10 +128,9 @@ android {
         applicationId "com.doohickey.happyfuntimes"
         minSdkVersion 21
         targetSdkVersion 28
-        missingDimensionStrategy "RNN.reactNativeVersion", "reactNative60"
         multiDexEnabled true
-        versionCode 12
-        versionName "0.12"
+        versionCode 13
+        versionName "0.13"
         manifestPlaceholders = [
                 tipsiStripeRedirectScheme: "my_custom_scheme_tipsi"
         ]

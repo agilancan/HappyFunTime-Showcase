@@ -1,12 +1,13 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, FlatList } from "react-native";
+import { Platform, StyleSheet, View, Text, FlatList } from "react-native";
 import { connect } from 'react-redux';
 import firebase from 'react-native-firebase';
 
 import { scale } from '../../utility/Scale';
-import GlobalScore from "./GlobalScore.android";
+import GlobalScore from "./GlobalScore";
 import GLOBAL from '../../Globals';
 const { GAMESTATE, DATABASE } = GLOBAL;
+
 // This class determines everything to do with the Question Card
 class Leaderboard extends Component {
     static options(passProps) {
@@ -97,6 +98,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#FFFFFF"
     },
     innerContainer1Text: {
+        fontFamily: Platform.OS === 'ios' ? 'system font' : 'roboto_condensed_bold_italic',
         fontSize: scale(43),
         color: "rgba(0, 0, 0, 0.87)",
         transform: [{ rotate: '354deg' }],

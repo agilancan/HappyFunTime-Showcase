@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Alert } from 'react-native';
+import { Platform, StyleSheet, View, Text, TouchableOpacity, SafeAreaView } from 'react-native';
 import { SketchCanvas } from '@gigasz/react-native-sketch-canvas';
 import { connect } from 'react-redux';
 import { Navigation } from 'react-native-navigation';
@@ -15,6 +15,7 @@ const { USERS } = Global.DATABASE;
 class DrawAvatar extends Component {
     static options(passProps) {
         return {
+            modalPresentationStyle: 'overCurrentContext',
             statusBar: {
                 backgroundColor: "transparent",
                 drawBehind: true,
@@ -84,6 +85,7 @@ class DrawAvatar extends Component {
 
     render() {
         return (
+        <View style={{ ...styles.container, backgroundColor: "green" }}>
             <View style={{ ...styles.container, backgroundColor: "green" }}>
                 <View style={{ ...styles.drawCard, overflow: 'visible', marginTop: verticalScale(98) }}>
                     <SketchCanvas
@@ -143,7 +145,7 @@ class DrawAvatar extends Component {
                         <Icon name="play-arrow" size={scale(30)} color="#FFF" />
                     </TouchableOpacity>
                 </View>
-
+            </View>
             </View>
         );
     }
@@ -175,6 +177,7 @@ const styles = StyleSheet.create({
         top: scale(25.5),
         color: '#000',
         opacity: 0.87,
+        fontFamily: Platform.OS === 'ios' ? 'system font' : 'Roboto',
         fontSize: scale(16),
         fontWeight: '500',
         textAlign: 'center',

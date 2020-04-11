@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, Image, ScrollView, FlatList, Dimensions } from "react-native";
+import { Platform, StyleSheet, View, Text, TouchableOpacity, Image, ScrollView, FlatList, Dimensions } from "react-native";
 import { connect } from 'react-redux';
 import { SketchCanvas } from '@gigasz/react-native-sketch-canvas';
 import firebase from 'react-native-firebase';
@@ -347,7 +347,7 @@ const styles = StyleSheet.create({
         top: scale(25.5),
         color: '#000',
         opacity: 0.87,
-        //fontFamily: 'Roboto',
+        fontFamily: Platform.OS === 'ios' ? 'system font' : 'Roboto',
         fontSize: scale(16),
         fontWeight: '500',
         textAlign: 'center',

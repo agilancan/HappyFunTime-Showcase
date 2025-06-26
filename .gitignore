@@ -76,3 +76,7 @@ RNTester/build
 # CocoaPods
 /ios/Pods/
 /ios/Podfile.lock
+
+
+
+.env
